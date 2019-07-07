@@ -100,7 +100,6 @@ $('document').ready(function () {
         }
 
 
-
     })
     $("#view").click(function () {
         event.preventDefault();
