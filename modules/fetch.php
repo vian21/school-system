@@ -63,13 +63,12 @@ if (isset($_GET['form_options'])) {
         $sub_form_Data['stream_name'] = $stream_names;
         $sub_form_Data['test_id'] = fetchTestsDone($row);
         $tests_done = fetchTestsDone($row);  //The ids of the tests done
-        if($tests_done!=0){
+        if ($tests_done != 0) {
             $test_names = fetchTestNames($tests_done);
-        }
-        else{
+        } else {
             $test_names = "";
         }
-        
+
 
         $sub_form_Data['test_name'] = $test_names;
         $form_Data[] = $sub_form_Data;
@@ -80,4 +79,20 @@ if (isset($_GET['form_options'])) {
     }
     echoJson($form_Data);
     //echo print_r($stream_ids);
+}
+if (isset($_POST['test'])) {
+    //if ($_POST['test'] !== "" and is_numeric($_POST['test'])) {
+        include 'functions.php';
+        $test_id = $_POST['test'];
+        $result = array(fetchStudentsMarks($test_id));
+        $form_data=array();
+        foreach ($result as $column) {
+            $student_id=$column['student_id'];
+            $sub_form_Data['id']=$student_id;
+            $sub_form_Data['name']=fetchName(2,$student_id);
+            $sub_form_Data['marks']=$column['marks'];
+            $form_Data[]=$sub_form_Data;
+         }
+         echoJson($form_Data);
+    //}
 }

@@ -83,7 +83,7 @@ function appendSubjectsToForm() {
 $('document').ready(function () {
     $("#subject").change(function () {
         var position = $(this).find('option:selected').attr('position');
-        console.log(position);
+        //console.log(position);
         if (position !== undefined) {
             var gradeId = Teacher.streamsTaughtIds[position];
             var grade = Teacher.streamsTaughtNames[position];
@@ -106,12 +106,49 @@ $('document').ready(function () {
         //Prevent form from being submitted if no options for test or its value is null(In case a subject does not have a test)
         if ($("#test").has('option').length > 0 && $("#test").find('option:selected').attr('value') !== "") {
             var subject = $("#subject").find('option:selected').attr('value');
-            var grade = $("#gradet").find('option:selected').attr('value');
+            var grade = $("#grade").find('option:selected').attr('value');
             var test = $("#test").find('option:selected').attr('value');
-            var formData = new FormData();
-            console.log("hoo")
+            /*var formData = new FormData();
+            formData.append('subject', subject);
+            formData.append('grade', grade);
+            formData.append('test', test);
+            //formData.append('',);*/
+            var formData={
+                subject:subject,
+                grade:grade,
+                test:test
+            }
+           
+            $.ajax({
+                url: "modules/fetch.php",
+                method: "post",
+                data:formData,
+                success: function (data) {
+                    appendMarks(data);
+                }
+            })
         }
 
 
     })
 });
+
+function appendMarks(json){
+    if(json!==""){
+        var jsonArray=JSON.parse(json);
+        var tableTemplate="<table><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
+        var i=0;
+        for(i=0;i<jsonArray.length;i++){
+            tableTemplate+="<tr>";
+            tableTemplate+="<td>"+jsonArray[i]['id']+"</td>";
+            tableTemplate+="<td>"+jsonArray[i]['name']+"</td>";
+            tableTemplate+="<td>"+jsonArray[i]['marks']+"</td>";
+            tableTemplate+="</tr>";
+            console.log(jsonArray[i]);
+        }
+        tableTemplate+="</table>";
+        $("#results").html("");
+        $("#results").append(tableTemplate);
+        console.log(tableTemplate)
+    }
+}

@@ -105,3 +105,8 @@ function fetchStreamName($stream_id)
     $select_stream_name = mysqli_fetch_assoc($connect->query("SELECT*FROM streams WHERE id=$stream_id"));
     return returnValue($select_stream_name);    //array(grade + stream)
 }
+function fetchStudentsMarks($id){
+    include 'config.php';
+    $getMarks=mysqli_fetch_assoc($connect->query("SELECT*FROM marks WHERE test_id=$id"));
+    return returnValue($getMarks);
+}
