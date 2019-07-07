@@ -81,7 +81,7 @@ if (isset($_GET['form_options'])) {
     //echo print_r($stream_ids);
 }
 if (isset($_POST['test'])) {
-    //if ($_POST['test'] !== "" and is_numeric($_POST['test'])) {
+    if ($_POST['test'] !== "" and is_numeric($_POST['test'])) {
         include 'functions.php';
         $test_id = $_POST['test'];
         $result = array(fetchStudentsMarks($test_id));
@@ -94,5 +94,5 @@ if (isset($_POST['test'])) {
             $form_Data[]=$sub_form_Data;
          }
          echoJson($form_Data);
-    //}
+    }
 }
