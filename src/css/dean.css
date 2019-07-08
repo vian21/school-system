@@ -1,0 +1,122 @@
+body {
+    margin: o;
+    font-family: arial;
+}
+
+#navBar {
+    width: 100%;
+    position: fixed;
+    background-color: blueviolet;
+}
+
+#dropdown {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    display: block;
+    float: left;
+}
+
+#logout {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    display: block;
+    float: right;
+}
+
+#main {
+    background-color: chocolate;
+    width: 100%;
+    display: flex;
+}
+
+#sidebar {
+    background-color: aquamarine;
+    margin-top: 40px;
+    width: 15%;
+    height: 688;
+}
+
+#user {
+    justify-content: center;
+    background-color: azure;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 500px;
+}
+
+#img {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    display: block;
+    align-self: center;
+}
+
+#username {
+    display: block;
+}
+
+#jobTitle {
+    display: block;
+}
+
+#workPlace {
+    background-color: green;
+    width: 85%;
+    margin-top: 40px;
+}
+
+#menubar {
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+#tab {
+    background-color: yellow;
+}
+
+#desk {
+    width: 95%;
+    margin-top: 10px;
+    margin-left: 20px;
+    display: flex;
+    background-color: blanchedalmond;
+}
+
+#form {
+    background-color: blue;
+    width: 20%;
+}
+
+#form select,
+button {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+#results {
+    width: 100%;
+    background-color: chartreuse;
+}
+#one{
+    width:100%;
+}
+#inputContainer{
+    margin-left: 20px;
+    margin-top:20px;
+}
+#info{
+    width:90%;
+}
+#schoolImage{
+    border-radius: 50%;
+}
+#info span{
+    padding-left: 30%;
+}
