@@ -110,3 +110,22 @@ function fetchStudentsMarks($id){
     $getMarks=mysqli_fetch_assoc($connect->query("SELECT*FROM marks WHERE test_id=$id"));
     return returnValue($getMarks);
 }
+function fetchAllStudents(){
+    include 'config.php';
+    $get_students=$connect->query("SELECT*FROM students");
+    $students=array();
+    while ($row = mysqli_fetch_assoc($get_students)) {
+        $students_array= array();
+        $students_array['id'] = $row['id'];
+        $students_array['name'] = $row['name'];
+        $students_array['image'] = $row['image'];
+        $students_array['email'] = $row['email'];
+        $students_array['tel'] = $row['tel'];
+        $students_array['grade'] = $row['grade'];
+        $students_array['DOB'] = $row['DOB'];
+        $students_array['status'] = $row['status'];
+        $students_array['account_status'] = $row['account_status']; 
+        $students[]=$students_array;
+    }
+    return returnValue($students);
+}

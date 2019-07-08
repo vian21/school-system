@@ -1,3 +1,6 @@
+<?php
+$id = $_SESSION['id'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +10,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php include './modules/config.php' ?>
     <?php include './modules/staticFiles.php' ?>
-    <link rel="stylesheet" href="src/css/teacher.css">
-    <title>Teacher</title>
+    <?php include './modules/functions.php' ?>
+    <link rel="stylesheet" href="src/css/dean.css">
+    <title>Dean</title>
 </head>
 
 <body>
@@ -25,18 +29,75 @@
     <div id="main">
         <div id="sidebar">
             <div id="user">
-                <center> <img src="src/img/user.png" alt="" id="img"></center>
-                <span id="username">Name : Me</span>
-                <span id="jobTitle">Job : Teacher</span>
+                <center><img src="src/img/<?php echo fetchImage(1, $id); ?>" alt="" id="img"></center>
+                <span id="username">Name :<?php echo fetchName(1, $id); ?></span>
+                <span id="jobTitle">Job : <?php echo fetchJobTitle($id); ?></span>
             </div>
         </div>
         <div id="workPlace">
-            <div menubar>
-                <button>Marks</button>
+            <div id="menubar">
+                <button id="tab1">Students</button>
+                <button id="tab2">Teachers</button>
+                <button id="tab3">Marks</button>
             </div>
-            <div id="desk"></div>
+            <div id="desk">
+                <!--
+                <form id="form">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Subject</label>
+                        <div class="col-sm-10">
+                            <select name="subject" id="subject">
+                                <option value="null"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Grade</label>
+                        <div class="col-sm-10">
+                            <select name="grade" id="grade">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Test</label>
+                        <div class="col-sm-10">
+                            <select name="test" id="test" required>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="view">View results</button>
+                </form>
+                
+                <div id="results"></div>
+                -->
+                <!-- Student start -->
+                <div id="one">
+                    <div id='inputContainer'>
+                        <input type="text" id="searchStudent" placeholder="Search student">
+                    </div>
+                    <div id="info">
+                        <center><img src="src/img/user.png" alt="" id="schoolImage"><br><br></center>
+                        <span>Number of students: 200</span><br>
+                        <span>Name: school</span><br>
+                        <span>Number of male students :100</span><br>
+                        <span>Number of female students :100</span><br>
+                        <span>Country :Burundi</span><br>
+                        <span>Nationalities :5</span><br>
+                        <span>Number of teachers :22</span><br>
+                    </div>
+                </div>
+                <!-- Teacher start -->
+                <div id="two" style="display:none">
+                    <h1>2</h1>
+                </div>
+                <!-- Marks start -->
+                <div id="three" style="display:none">
+                    <h1>3</h1>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+<script src="src/js/dean.js"></script>
 
 </html>
