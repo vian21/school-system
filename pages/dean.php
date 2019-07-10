@@ -93,7 +93,7 @@ $id = $_SESSION['id'];
                 </div>
                 <!-- Teacher start -->
                 <div id="two" style="display:none">
-                    <h1>2</h1>
+                    <button>Addd</button>
                 </div>
                 <!-- Marks start -->
                 <div id="three" style="display:none">
