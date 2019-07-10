@@ -62,10 +62,9 @@ function echoJson($data)
         echo " ";
     }
 }
-function fetchSubjectsTaughtId()
+function fetchSubjectsTaughtId($id)
 {
     include 'config.php';
-    $id = $_SESSION['id'];
     $subjects_taught_id = $connect->query("SELECT subject FROM teaches WHERE teacher=$id");
     $subjects_taught_array = array();
     while ($row = mysqli_fetch_assoc($subjects_taught_id)) {
@@ -81,7 +80,7 @@ function fetchTestsDone($subject_id)
 }
 function returnValue($data)
 {
-    if ($data != "") {
+    if (!empty($data)) {
         return $data;
     } else {
         return " ";
@@ -128,4 +127,40 @@ function fetchAllStudents(){
         $students[]=$students_array;
     }
     return returnValue($students);
+}
+//function to count students
+// 1 : count all students in the school
+// 2 : students in a certain grade
+function countStudents($in,$stream_id){
+    if($in==1){
+        include 'config.php';
+        $count=mysqli_num_rows($connect->query("SELECT*FROM students"));
+        return returnValue($count);
+    }
+    if($in==2){
+        $count=mysqli_num_rows($connect->query("SELECT*FROM students WHERE grade=$stream_id"));
+        return returnValue($count);
+    }
+}
+
+//function to count teachers
+function countTeachers(){
+    include 'config.php';
+        $count=mysqli_num_rows($connect->query("SELECT*FROM users WHERE type=2"));
+        return returnValue($count);
+}
+function fetchAllTeachers(){
+    include 'config.php';
+    $get_teachers=$connect->query("SELECT*FROM users WHERE type=2");
+    $teachers=array();
+    while ($row = mysqli_fetch_assoc($get_teachers)) {
+        $teacher_array= array();
+        $teacher_array['id'] = $row['id'];
+        $teacher_array['name'] = $row['name'];
+        $teacher_array['image'] = $row['image'];
+        $teacher_array['email'] = $row['email'];
+        $teacher_array['tel'] = $row['tel'];
+        $teachers[]=$teacher_array;
+    }
+    return returnValue($teachers);
 }

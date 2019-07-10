@@ -12,6 +12,7 @@ $id = $_SESSION['id'];
     <?php include './modules/staticFiles.php' ?>
     <?php include './modules/functions.php' ?>
     <link rel="stylesheet" href="src/css/dean.css">
+    <link rel="stylesheet" href="src/css/select2.css">
     <title>Dean</title>
 </head>
 
@@ -72,13 +73,17 @@ $id = $_SESSION['id'];
                 -->
                 <!-- Student start -->
                 <div id="one">
+                    <button id="addStudent">Add</button>
                     <div id='inputContainer'>
-                        <input type="text" id="searchStudent" placeholder="Search student">
+                        <select name="student" id="searchStudent">
+                            <option></option>
+                        </select>
                     </div>
                     <div id="info">
                         <center><img src="src/img/user.png" alt="" id="schoolImage"><br><br></center>
                         <span>Number of students: 200</span><br>
                         <span>Name: school</span><br>
+                        <span>Number of students :<?php echo countStudents(1, 0); ?></span><br>
                         <span>Number of male students :100</span><br>
                         <span>Number of female students :100</span><br>
                         <span>Country :Burundi</span><br>
@@ -97,7 +102,25 @@ $id = $_SESSION['id'];
             </div>
         </div>
     </div>
+    <!-- New student form -->
+    <div id="addStudentModal" style="display:none">
+        <form>
+            <h4>Name :</h4><br>
+            <input type="text" name="name" id="studentName"><br>
+            <h4>Student's email :</h4><br>
+            <input type="email" name="email" id="studentEmail"><br>
+            <h4>student's telephone number :</h4><br>
+            <input type="number" name="tel" id="studentTel"><br>
+            <h4>Grade :</h4><br>
+            <select name="grade" id="studentGrade"><br>
+                <option value=""></option>
+            </select><br>
+            <h4>Date of birth:</h4><br>
+            <input type="date" name="DOB" id="studentDOB"><br>
+        </form>
+    </div>
 </body>
+<script src="src/js/select2.js"></script>
 <script src="src/js/dean.js"></script>
 
 </html>
