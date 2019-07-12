@@ -119,24 +119,24 @@ if (isset($_GET['allStudents'])) {
     }
     echoJson($students);
 }
-if(isset($_GET['allteachers'])){
+if (isset($_GET['allteachers'])) {
     include 'functions.php';
-    $teachers=array();
-    $teachers_array=fetchAllTeachers();
-    foreach($teachers_array as $column){
-        $teachers_sub_array=array();
-        $teachers_sub_array['id']=$column['id'];
-        $teachers_sub_array['name']=$column['name'];
-        $teachers_sub_array['email']=$column['email'];
-        $teachers_sub_array['tel']=$column['tel'];
-        $teachers_sub_array['image']=$column['image'];
-        $teachers_sub_array['subjects']=array(fetchSubjectsTaughtId($column['id']));
-        $teachers_sub_array['type']=$column['type'];
-        $teachers[]=$teachers_sub_array;
+    $teachers = array();
+    $teachers_array = fetchAllTeachers();
+    foreach ($teachers_array as $column) {
+        $teachers_sub_array = array();
+        $teachers_sub_array['id'] = $column['id'];
+        $teachers_sub_array['name'] = $column['name'];
+        $teachers_sub_array['email'] = $column['email'];
+        $teachers_sub_array['tel'] = $column['tel'];
+        $teachers_sub_array['image'] = $column['image'];
+        $teachers_sub_array['subjects'] = array(fetchSubjectsTaughtId($column['id']));
+        $teachers_sub_array['type'] = $column['type'];
+        $teachers[] = $teachers_sub_array;
     }
     echoJson($teachers);
 }
-if(isset($_GET['streams'])){
+if (isset($_GET['streams'])) {
     include "functions.php";
     echoJson(fetchAllStreams());
 }

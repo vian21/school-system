@@ -113,16 +113,16 @@ $('document').ready(function () {
             formData.append('grade', grade);
             formData.append('test', test);
             //formData.append('',);*/
-            var formData={
-                subject:subject,
-                grade:grade,
-                test:test
+            var formData = {
+                subject: subject,
+                grade: grade,
+                test: test
             }
-           
+
             $.ajax({
                 url: "modules/fetch.php",
                 method: "post",
-                data:formData,
+                data: formData,
                 success: function (data) {
                     appendMarks(data);
                 }
@@ -133,20 +133,20 @@ $('document').ready(function () {
     })
 });
 
-function appendMarks(json){
-    if(json!==""){
-        var jsonArray=JSON.parse(json);
-        var tableTemplate="<table><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
-        var i=0;
-        for(i=0;i<jsonArray.length;i++){
-            tableTemplate+="<tr>";
-            tableTemplate+="<td>"+jsonArray[i]['id']+"</td>";
-            tableTemplate+="<td>"+jsonArray[i]['name']+"</td>";
-            tableTemplate+="<td>"+jsonArray[i]['marks']+"</td>";
-            tableTemplate+="</tr>";
+function appendMarks(json) {
+    if (json !== "") {
+        var jsonArray = JSON.parse(json);
+        var tableTemplate = "<table><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
+        var i = 0;
+        for (i = 0; i < jsonArray.length; i++) {
+            tableTemplate += "<tr>";
+            tableTemplate += "<td>" + jsonArray[i]['id'] + "</td>";
+            tableTemplate += "<td>" + jsonArray[i]['name'] + "</td>";
+            tableTemplate += "<td>" + jsonArray[i]['marks'] + "</td>";
+            tableTemplate += "</tr>";
             console.log(jsonArray[i]);
         }
-        tableTemplate+="</table>";
+        tableTemplate += "</table>";
         $("#results").html("");
         $("#results").append(tableTemplate);
         console.log(tableTemplate)

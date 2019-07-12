@@ -174,13 +174,13 @@ function fetchAllStreams()
 {
     include 'config.php';
     $get_streams = $connect->query("SELECT*FROM streams");
-    $streams=array();
-    while ($column = mysqli_fetch_assoc($get_streams)){
-    $stream_array=array();
-    $stream_array ['id'] = $column ['id'];
-    $stream_array ['grade'] = $column ['grade'];
-    $stream_array ['stream'] = $column ['stream'];
-    $streams[]=$stream_array;
+    $streams = array();
+    while ($column = mysqli_fetch_assoc($get_streams)) {
+        $stream_array = array();
+        $stream_array['id'] = $column['id'];
+        $stream_array['grade'] = $column['grade'];
+        $stream_array['stream'] = $column['stream'];
+        $streams[] = $stream_array;
     }
     return returnValue($streams);
 }

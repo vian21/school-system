@@ -7,11 +7,11 @@ if (isset($_GET['student'])) {
     //echo "ok";
     //echo $_POST['name'];
     //echo $_POST['grade'];
-    if (isset($_POST['name']) and isset($_POST['grade']) and $_POST['name']!="" and $_POST['grade']!="" and is_numeric($_POST['grade'])) {
+    if (isset($_POST['name']) and isset($_POST['grade']) and $_POST['name'] != "" and $_POST['grade'] != "" and is_numeric($_POST['grade'])) {
         //echo "ok";
         include 'config.php';
         include 'functions.php';
-        $name =strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
+        $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
         $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
         $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
         $grade = mysqli_real_escape_string($connect, $_POST['grade']);
@@ -25,30 +25,29 @@ if (isset($_GET['student'])) {
         }
     }
 }
-if(isset($_GET['staff'])){
+if (isset($_GET['staff'])) {
     //echo"test";
-    if(isset($_POST['type']) and is_numeric($_POST['type'])){
+    if (isset($_POST['type']) and is_numeric($_POST['type'])) {
         include 'config.php';
-        $name=strip_tags(mysqli_real_escape_string($connect,$_POST['name']));
-        $email=strip_tags(mysqli_real_escape_string($connect,$_POST['email']));
-        $tel=strip_tags(mysqli_real_escape_string($connect,$_POST['tel']));
-        $type=$_POST['type'];
+        $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
+        $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
+        $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
+        $type = $_POST['type'];
         //If new staff is a dean
-        if($type==1){
-            $insertDean=$connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','tel',$type)");
-            if(!$insertDean){
+        if ($type == 1) {
+            $insertDean = $connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','tel',$type)");
+            if (!$insertDean) {
                 echo "ko";
-            }
-            else{
+            } else {
                 echo "ok";
             }
         }
         //If new staff is a teacher
-        if($type==2){
-            $grade=$_POST['grade'];
-            $insertTeacher=$connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','tel',$type)");
-            $fetch_teacher_id=$connect->query();
-            $insertGrade=$connect->query();
+        if ($type == 2) {
+            $grade = $_POST['grade'];
+            $insertTeacher = $connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','tel',$type)");
+            $fetch_teacher_id = mysqli_fetch_assoc($connect->query("SELECT id FROM users where name='$name' and type='$type'"));
+            $insertGrade = $connect->query("INSERT INTO teaches()");
         }
     }
 }
