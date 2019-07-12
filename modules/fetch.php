@@ -131,7 +131,12 @@ if(isset($_GET['allteachers'])){
         $teachers_sub_array['tel']=$column['tel'];
         $teachers_sub_array['image']=$column['image'];
         $teachers_sub_array['subjects']=array(fetchSubjectsTaughtId($column['id']));
-        $teachers[]=$teachers_array;
+        $teachers_sub_array['type']=$column['type'];
+        $teachers[]=$teachers_sub_array;
     }
     echoJson($teachers);
+}
+if(isset($_GET['streams'])){
+    include "functions.php";
+    echoJson(fetchAllStreams());
 }

@@ -104,17 +104,19 @@ function fetchStreamName($stream_id)
     $select_stream_name = mysqli_fetch_assoc($connect->query("SELECT*FROM streams WHERE id=$stream_id"));
     return returnValue($select_stream_name);    //array(grade + stream)
 }
-function fetchStudentsMarks($id){
+function fetchStudentsMarks($id)
+{
     include 'config.php';
-    $getMarks=mysqli_fetch_assoc($connect->query("SELECT*FROM marks WHERE test_id=$id"));
+    $getMarks = mysqli_fetch_assoc($connect->query("SELECT*FROM marks WHERE test_id=$id"));
     return returnValue($getMarks);
 }
-function fetchAllStudents(){
+function fetchAllStudents()
+{
     include 'config.php';
-    $get_students=$connect->query("SELECT*FROM students");
-    $students=array();
+    $get_students = $connect->query("SELECT*FROM students");
+    $students = array();
     while ($row = mysqli_fetch_assoc($get_students)) {
-        $students_array= array();
+        $students_array = array();
         $students_array['id'] = $row['id'];
         $students_array['name'] = $row['name'];
         $students_array['image'] = $row['image'];
@@ -123,44 +125,62 @@ function fetchAllStudents(){
         $students_array['grade'] = $row['grade'];
         $students_array['DOB'] = $row['DOB'];
         $students_array['status'] = $row['status'];
-        $students_array['account_status'] = $row['account_status']; 
-        $students[]=$students_array;
+        $students_array['account_status'] = $row['account_status'];
+        $students[] = $students_array;
     }
     return returnValue($students);
 }
 //function to count students
 // 1 : count all students in the school
 // 2 : students in a certain grade
-function countStudents($in,$stream_id){
-    if($in==1){
+function countStudents($in, $stream_id)
+{
+    if ($in == 1) {
         include 'config.php';
-        $count=mysqli_num_rows($connect->query("SELECT*FROM students"));
+        $count = mysqli_num_rows($connect->query("SELECT*FROM students"));
         return returnValue($count);
     }
-    if($in==2){
-        $count=mysqli_num_rows($connect->query("SELECT*FROM students WHERE grade=$stream_id"));
+    if ($in == 2) {
+        $count = mysqli_num_rows($connect->query("SELECT*FROM students WHERE grade=$stream_id"));
         return returnValue($count);
     }
 }
 
 //function to count teachers
-function countTeachers(){
+function countTeachers()
+{
     include 'config.php';
-        $count=mysqli_num_rows($connect->query("SELECT*FROM users WHERE type=2"));
-        return returnValue($count);
+    $count = mysqli_num_rows($connect->query("SELECT*FROM users WHERE type=2"));
+    return returnValue($count);
 }
-function fetchAllTeachers(){
+function fetchAllTeachers()
+{
     include 'config.php';
-    $get_teachers=$connect->query("SELECT*FROM users WHERE type=2");
-    $teachers=array();
+    $get_teachers = $connect->query("SELECT*FROM users WHERE type=2");
+    $teachers = array();
     while ($row = mysqli_fetch_assoc($get_teachers)) {
-        $teacher_array= array();
+        $teacher_array = array();
         $teacher_array['id'] = $row['id'];
         $teacher_array['name'] = $row['name'];
         $teacher_array['image'] = $row['image'];
         $teacher_array['email'] = $row['email'];
         $teacher_array['tel'] = $row['tel'];
-        $teachers[]=$teacher_array;
+        $teacher_array['type'] = $row['type'];
+        $teachers[] = $teacher_array;
     }
     return returnValue($teachers);
+}
+function fetchAllStreams()
+{
+    include 'config.php';
+    $get_streams = $connect->query("SELECT*FROM streams");
+    $streams=array();
+    while ($column = mysqli_fetch_assoc($get_streams)){
+    $stream_array=array();
+    $stream_array ['id'] = $column ['id'];
+    $stream_array ['grade'] = $column ['grade'];
+    $stream_array ['stream'] = $column ['stream'];
+    $streams[]=$stream_array;
+    }
+    return returnValue($streams);
 }

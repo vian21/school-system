@@ -73,7 +73,7 @@ $id = $_SESSION['id'];
                 -->
                 <!-- Student start -->
                 <div id="one">
-                    <button id="addStudent">Add</button>
+                    <button id="addStudentButton">Add</button>
                     <div id='inputContainer'>
                         <select name="student" id="searchStudent">
                             <option></option>
@@ -93,7 +93,7 @@ $id = $_SESSION['id'];
                 </div>
                 <!-- Teacher start -->
                 <div id="two" style="display:none">
-                    <button>Addd</button>
+                    <!--<button id="addTeacherButton">Addd</button>-->
                 </div>
                 <!-- Marks start -->
                 <div id="three" style="display:none">
@@ -101,23 +101,6 @@ $id = $_SESSION['id'];
                 </div>
             </div>
         </div>
-    </div>
-    <!-- New student form -->
-    <div id="addStudentModal" style="display:none">
-        <form>
-            <h4>Name :</h4><br>
-            <input type="text" name="name" id="studentName"><br>
-            <h4>Student's email :</h4><br>
-            <input type="email" name="email" id="studentEmail"><br>
-            <h4>student's telephone number :</h4><br>
-            <input type="number" name="tel" id="studentTel"><br>
-            <h4>Grade :</h4><br>
-            <select name="grade" id="studentGrade"><br>
-                <option value=""></option>
-            </select><br>
-            <h4>Date of birth:</h4><br>
-            <input type="date" name="DOB" id="studentDOB"><br>
-        </form>
     </div>
 </body>
 <script src="src/js/select2.js"></script>
