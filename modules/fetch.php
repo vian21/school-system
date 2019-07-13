@@ -140,3 +140,7 @@ if (isset($_GET['streams'])) {
     include "functions.php";
     echoJson(fetchAllStreams());
 }
+if(isset($_GET['subjects'])){
+    include 'functions.php';
+    echoJson(fetchAllSubjects());
+}

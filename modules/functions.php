@@ -184,3 +184,18 @@ function fetchAllStreams()
     }
     return returnValue($streams);
 }
+function fetchAllSubjects()
+{
+    include 'config.php';
+    $get_subjects = $connect->query("SELECT*FROM subjects");
+    $subjects = array();
+    while ($row = mysqli_fetch_assoc($get_subjects)) { 
+        $subjects_array=array();
+        $subjects_array['id']=$row['id'];
+        $subjects_array['name']=$row['subject_name'];
+        $subjects_array['stream']=$row['stream'];
+        $subjects_array['type']=$row['type'];
+        $subjects[]=$subjects_array;
+    }
+    return returnValue($subjects);
+}

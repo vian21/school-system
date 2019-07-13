@@ -4,6 +4,8 @@ var studentsArray = [];
 var teachersArray = [];
 //Variable to contain all streams id
 var streams = [];
+//Variable to contain subjects and their streams
+var subjects = [];
 $("document").ready(function () {
     //Fecth all teachers and add them to and array and make a table using the array
     fetch(1);
@@ -11,6 +13,8 @@ $("document").ready(function () {
     fetch(2);
     //Fetch all streams id
     fetch(3);
+    //Fetch all subjects and their grades
+    fetch(4);
     $("#tab1").click(function () {
         $("#two").hide();
         $("#three").hide();
@@ -92,7 +96,9 @@ function fetch(what) {
     if (what == 3) {
         var url = "modules/fetch.php?streams=";
     }
-
+    if (what == 4) {
+        var url = "modules/fetch.php?subjects=";
+    }
     $.ajax({
         url: url,
         method: "get",
@@ -106,6 +112,9 @@ function fetch(what) {
                 }
                 if (what == 3) {
                     fetchedStreams(data);
+                }
+                if (what == 4) {
+                    fetchedSubjects(data);
                 }
             }
 
@@ -133,6 +142,9 @@ function addToForm() {
 function fetchedStudents(data) {
     studentsArray = JSON.parse(data);
     addToForm();
+}
+function fetchedSubjects(data) {
+    subjects = JSON.parse(data);
 }
 //Function to fire when teachers have been fetched
 function fetchedTeachers(data) {
@@ -224,7 +236,17 @@ function showStudentForm() {
     })
 }
 function showStaffForm() {
-    var form = "<div id='addTeacherModal' class='modal'><form id='addStaffForm'><h4>Name</h4><input type='text' name='name' id='staffName' required><h4>Email</h4><input type='email' name='email' id='staffEmail'><h4>Telephone</h4><input type='number' name='tel' id='staffTel'><h4>Type</h4><select id='staffType' required><option value='1'>Dean</option><option value='2'>Teacher</option></select><br><button id='cancelStaffForm'>Cancel</button><button type='submit' id='addStaff'>Add</button></form></div>";
+    var form = "<div id='addTeacherModal' class='modal'><form id='addStaffForm'>\
+    <h4>Name</h4><input type='text' name='name' id='staffName' required>\
+    <h4>Email</h4><input type='email' name='email' id='staffEmail'>\
+    <h4>Telephone</h4>\
+    <input type='number' name='tel' id='staffTel'>\
+    <h4>Type</h4>\
+    <select id='staffType'>\
+    <option value='1'>Dean</option>\
+    <option value='2'>Teacher</option></select><br>\
+    <button id='cancelStaffForm'>Cancel</button>\
+    <button type='submit' id='addStaff'>Add</button></form></div>";
     $('body').append(form);
     //These are here becuse they work only when the form is in the DOM but wheb when the oage loads it is not here, that is why it does not work any where else
     //Make the teacher form disappear when clicked on cancel button
@@ -234,10 +256,20 @@ function showStaffForm() {
     })
     $("#staffType").change(() => {
         if ($("#staffType").val() == 2) {
-            $("#staffType").after("<br><select id='grade'><option><option>" + streamsOptions() + "<select>");
+            $("#staffType").after("<select style='float:clear' id='grade' \
+            data-placeholder='Subject(s)' \
+            name='subjects[]' \
+            multiple class='select-subjects'>\
+            <option><option>" + subjects_gradeOptions() + "<select>");
+            //$(".multipleGrades").select2();
+            /*$(".multipleGrades").change(() => {
+                console.log($(".multipleGrades").select2('data'));
+            })*/
+            $("#grade").chosen();
         }
         if ($("#staffType").val() == 1) {
             $("#grade").remove();
+            $("#grade_chosen").remove();
         }
 
     })
@@ -248,7 +280,8 @@ function showStaffForm() {
         var type = $("#staffType").val();
         var email = $("#staffEmail").val();
         var tel = $("#staffTel").val();
-        var grade = $("#grade").val();
+        var grade = $("#grade").chosen().val()//values()//data('option-array-index');
+        console.log(grade);
         //var DOB = $("#studentDOB").val();
         var validName, validType, validGrade;
         if (name == "") {
@@ -394,4 +427,19 @@ function saveMsgResponse(who, msg) {
         fetch(2)
         //$("#saveSuccess").remove();
     }
+}
+function subjects_gradeOptions() {
+    var options = "";
+    for (var i = 0; i < subjects.length; i++) {
+        //var position=subjects[i]['stream'];
+        var stream = "";//streams[i][position];
+        for (var h = 0; h < streams.length; h++) {
+            if (streams[h]['id'] == subjects[i]['stream']) {
+                stream = streams[h]['grade'] + " " + streams[h]['stream']
+                break;
+            }
+        }
+        options += "<option id='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + " " + stream + "</option>"
+    }
+    return options;
 }
