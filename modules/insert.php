@@ -44,10 +44,30 @@ if (isset($_GET['staff'])) {
         }
         //If new staff is a teacher
         if ($type == 2) {
-            $grade = $_POST['grade'];
+            $grade = explode(',', $_POST['grade']);
             $insertTeacher = $connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','tel',$type)");
-            $fetch_teacher_id = mysqli_fetch_assoc($connect->query("SELECT id FROM users where name='$name' and type='$type'"));
-            $insertGrade = $connect->query("INSERT INTO teaches()");
+            if ($insertTeacher) {
+                echo 'o';
+            } else {
+                echo 'K';
+            }
+            $fetch_teacher_id = mysqli_fetch_assoc($connect->query("SELECT id FROM users where name='$name' and type='$type' LIMIT 1"));
+            $teacher_id = $fetch_teacher_id['id'];
+            foreach ($grade as $stream) {
+                $insertGrade = $connect->query("INSERT INTO teaches(subject,teacher,year) VALUES($stream,$teacher_id,1)");
+                if ($insertGrade) {
+                    $inserted = true;
+                } else {
+                    $inserted = false;
+                }
+                //echo $stream."\n";
+            }
+            if ($inserted == true) {
+                echo 'k';
+            } else {
+                echo 'o';
+            }
+            // print_r($grade);
         }
     }
 }

@@ -75,8 +75,25 @@ function fetchSubjectsTaughtId($id)
 function fetchTestsDone($subject_id)
 {
     include 'config.php';
-    $select_test = mysqli_fetch_assoc($connect->query("SELECT id FROM assessments WHERE subject=$subject_id"));
-    return returnValue($select_test['id']);
+    if ($subject_id == 'all') {
+        $select_test = $connect->query("SELECT * FROM assessments");
+        $tests_done = array();
+        while ($row = mysqli_fetch_assoc($select_test)) {
+            $tests_done_sub_array = array();
+            $tests_done_sub_array['id'] = $row['id'];
+            $tests_done_sub_array['period'] = $row['period'];
+            $tests_done_sub_array['name'] = $row['name'];
+            $tests_done_sub_array['month'] = $row['month'];
+            $tests_done_sub_array['subject'] = $row['subject'];
+            //$tests_done_sub_array['']=$row[''];
+            $tests_done[] = $tests_done_sub_array;
+        }
+        return returnValue($tests_done);
+    } else {
+
+        $select_test = mysqli_fetch_assoc($connect->query("SELECT id FROM assessments WHERE subject=$subject_id"));
+        return returnValue($select_test['id']);
+    }
 }
 function returnValue($data)
 {
@@ -189,13 +206,13 @@ function fetchAllSubjects()
     include 'config.php';
     $get_subjects = $connect->query("SELECT*FROM subjects");
     $subjects = array();
-    while ($row = mysqli_fetch_assoc($get_subjects)) { 
-        $subjects_array=array();
-        $subjects_array['id']=$row['id'];
-        $subjects_array['name']=$row['subject_name'];
-        $subjects_array['stream']=$row['stream'];
-        $subjects_array['type']=$row['type'];
-        $subjects[]=$subjects_array;
+    while ($row = mysqli_fetch_assoc($get_subjects)) {
+        $subjects_array = array();
+        $subjects_array['id'] = $row['id'];
+        $subjects_array['name'] = $row['subject_name'];
+        $subjects_array['stream'] = $row['stream'];
+        $subjects_array['type'] = $row['type'];
+        $subjects[] = $subjects_array;
     }
     return returnValue($subjects);
 }

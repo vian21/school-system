@@ -12,7 +12,7 @@ $id = $_SESSION['id'];
     <?php include './modules/staticFiles.php' ?>
     <?php include './modules/functions.php' ?>
     <link rel="stylesheet" href="src/css/dean.css">
-    <link rel="stylesheet" href="src/css/chosen.css">
+    <link rel="stylesheet" href="src/css/select2.css">
     <title>Dean</title>
 </head>
 
@@ -42,35 +42,6 @@ $id = $_SESSION['id'];
                 <button id="tab3">Marks</button>
             </div>
             <div id="desk">
-                <!--
-                <form id="form">
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Subject</label>
-                        <div class="col-sm-10">
-                            <select name="subject" id="subject">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Grade</label>
-                        <div class="col-sm-10">
-                            <select name="grade" id="grade">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Test</label>
-                        <div class="col-sm-10">
-                            <select name="test" id="test" required>
-                            </select>
-                        </div>
-                    </div>
-                    <button id="view">View results</button>
-                </form>
-                
-                <div id="results"></div>
-                -->
                 <!-- Student start -->
                 <div id="one">
                     <button id="addStudentButton">Add</button>
@@ -97,13 +68,38 @@ $id = $_SESSION['id'];
                 </div>
                 <!-- Marks start -->
                 <div id="three" style="display:none">
-                    <h1>3</h1>
+                    <form id="marksForm">
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Grade</label>
+                            <div class="col-sm-10">
+                                <select name="subject" id="marksGrade">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">subject</label>
+                            <div class="col-sm-10">
+                                <select name="grade" id="marksSubject">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Test</label>
+                            <div class="col-sm-10">
+                                <select name="test" id="marksTest" required>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="viewResults">View results</button>
+                    </form>
+                    <div id="results"></div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-<script src="src/js/chosen.js"></script>
+<script src="src/js/select2.js"></script>
 <script src="src/js/dean.js"></script>
 
 </html>

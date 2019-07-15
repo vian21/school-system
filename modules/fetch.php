@@ -1,48 +1,5 @@
 <?php
 session_start();
-/*if (isset($_GET['subjects'])) {
-    include 'config.php';
-    include 'functions.php';
-    $id = $_SESSION['id'];
-    $subjects_taught = $connect->query("SELECT subject FROM teaches WHERE teacher=$id");
-    $data = array();
-    foreach ($subjects_taught as $column) {
-        $data[] = $column['subject'];
-    }
-    echoJson($data);
-}
-
-if (isset($_GET['grades'])) {
-    include 'config.php';
-    include 'functions.php';
-    $id = $_SESSION['id'];
-    $subjects_taught = $connect->query("SELECT subject FROM teaches WHERE teacher=$id");
-    $data = array();
-    foreach ($subjects_taught as $column) {
-        $subject_id = $column['subject'];
-        $select_grade = $connect->query("SELECT stream FROM subjects WHERE id=$subject_id");
-        $sub_data=array();
-        foreach ($select_grade as $grade) { 
-            $stream=$grade['stream'];
-            $queryStream=$connect->query("SELECT* FROM streams WHERE id=$stream");
-            foreach($queryStream as $streams){
-                $sub_data[]=$streams['grade'];
-                $sub_data[]=$streams['stream'];
-                $data[]=$sub_data;
-            }
-        }
-    }
-    echoJson($data);
-}
-if(isset($_GET['tests'])){
-    include 'config.php';
-    include 'functions.php';
-    $subjects_taught = $connect->query("SELECT subject FROM teaches WHERE teacher=$id");
-    $data = array();
-    foreach ($subjects_taught as $column) {
-        
-    }
-}*/
 if (isset($_GET['form_options'])) {
     include 'config.php';
     include 'functions.php';
@@ -140,7 +97,11 @@ if (isset($_GET['streams'])) {
     include "functions.php";
     echoJson(fetchAllStreams());
 }
-if(isset($_GET['subjects'])){
+if (isset($_GET['subjects'])) {
     include 'functions.php';
     echoJson(fetchAllSubjects());
+}
+if (isset($_GET['tests'])) {
+    include 'functions.php';
+    echoJson(fetchTestsDone('all'));
 }

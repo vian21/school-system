@@ -6,6 +6,8 @@ var teachersArray = [];
 var streams = [];
 //Variable to contain subjects and their streams
 var subjects = [];
+//Variable to contain the tests done
+var testsDone = [];
 $("document").ready(function () {
     //Fecth all teachers and add them to and array and make a table using the array
     fetch(1);
@@ -15,6 +17,7 @@ $("document").ready(function () {
     fetch(3);
     //Fetch all subjects and their grades
     fetch(4);
+    fetch(5);
     $("#tab1").click(function () {
         $("#two").hide();
         $("#three").hide();
@@ -29,10 +32,15 @@ $("document").ready(function () {
         $("#one").hide();
         $("#two").hide();
         $("#three").css('display', 'block');
+        //Append the grades in the select grade input when user clicks on the marks tab
+        //console.log(1)
+        marks();
+        //        $("#marksSubject").html('<option></option>').append(streamsOptions());
     })
     $("#searchStudent").on("change", function () {
         //console.log($(this)/*.find("selected:option").attr("value")*/)
-        var position = $(this).children('option:selected').attr('value');
+        var position = $("#searchStudent").select2('val');
+        console.log(position)
         var studentSelected = studentsArray[position];
         var studentInfoTemplate = "";
         var studentSelectedImage = studentSelected['image'];
@@ -99,6 +107,9 @@ function fetch(what) {
     if (what == 4) {
         var url = "modules/fetch.php?subjects=";
     }
+    if (what == 5) {
+        var url = "modules/fetch.php?tests=";
+    }
     $.ajax({
         url: url,
         method: "get",
@@ -116,6 +127,9 @@ function fetch(what) {
                 if (what == 4) {
                     fetchedSubjects(data);
                 }
+                if (what == 5) {
+                    fetchedtests(data);
+                }
             }
 
         }
@@ -126,17 +140,26 @@ function fetch(what) {
 
 //add students to search form
 function addToForm() {
-    var options = "<option value=''></option>";
+    /*var options = "<option value=''></option>";
     for (var i = 0; i < studentsArray.length; i++) {
         options += "<option value='" + i + "'>" + studentsArray[i]['name'] + "</option>";
 
     }
     $("#searchStudent").html("");
-    $("#searchStudent").append(options);
+    $("#searchStudent").append(options);*/
     /*/Integrating select2 in options
     $("#searchStudent").select2({
         placeholder: "Search student"
     });*/
+    for (var i = 0; i < studentsArray.length; i++) {
+        $("#searchStudent").select2({
+            data: [
+                { id: i, text: studentsArray[i]['name'] + " " },
+                //subjects_gradeOptions()
+
+            ]
+        });
+    }
 }
 //Function to fire when students have been fetched
 function fetchedStudents(data) {
@@ -154,6 +177,9 @@ function fetchedTeachers(data) {
 //Function to fire when streams have been fetched
 function fetchedStreams(data) {
     streams = JSON.parse(data);
+}
+function fetchedtests(data) {
+    testsDone = JSON.parse(data);
 }
 function makeTeachersTable(array) {
     var teacherTableTemplate = "<button id='addTeacherButton'>Addd</button>";
@@ -256,20 +282,23 @@ function showStaffForm() {
     })
     $("#staffType").change(() => {
         if ($("#staffType").val() == 2) {
-            $("#staffType").after("<select style='float:clear' id='grade' \
-            data-placeholder='Subject(s)' \
+            $("#staffType").after("<select style='float:clear' id='grade'\
+            data-placeholder='Subject(s)'\
             name='subjects[]' \
-            multiple class='select-subjects'>\
-            <option><option>" + subjects_gradeOptions() + "<select>");
+            multiple class='select-subjects'><select>");
             //$(".multipleGrades").select2();
             /*$(".multipleGrades").change(() => {
                 console.log($(".multipleGrades").select2('data'));
             })*/
-            $("#grade").chosen();
+            $("#grade").select2({
+                data: [
+                    //{ id: '', text: ' ' },
+                    subjects_gradeOptions()]
+            });
         }
         if ($("#staffType").val() == 1) {
             $("#grade").remove();
-            $("#grade_chosen").remove();
+            $(".select2-container").remove();
         }
 
     })
@@ -280,7 +309,7 @@ function showStaffForm() {
         var type = $("#staffType").val();
         var email = $("#staffEmail").val();
         var tel = $("#staffTel").val();
-        var grade = $("#grade").chosen().val()//values()//data('option-array-index');
+        var grade = $("#grade").select2('val')//values()//data('option-array-index');
         console.log(grade);
         //var DOB = $("#studentDOB").val();
         var validName, validType, validGrade;
@@ -297,7 +326,8 @@ function showStaffForm() {
             validType = true;
         }
         if ($("#staffType").val() == 2) {
-            if (grade == "") {
+            //Check that a grade(s) was provided for the teacher to teach
+            if ($("#grade").select2('val') == null) {
                 alert("Please enter a grade");
             }
             else {
@@ -322,9 +352,11 @@ function showStaffForm() {
             }
             //info.append('DOB', DOB);
             //If adding teacher, a grade must be provided
+            //If staff is teacher handler
             if ($("#staffType").val() == 2) {
                 add(1, info);
             }
+            //If staff is dean handler
             if ($("#staffType").val() == 1) {
                 add(1, info);
             }
@@ -428,7 +460,7 @@ function saveMsgResponse(who, msg) {
         //$("#saveSuccess").remove();
     }
 }
-function subjects_gradeOptions() {
+/*function subjects_gradeOptions() {
     var options = "";
     for (var i = 0; i < subjects.length; i++) {
         //var position=subjects[i]['stream'];
@@ -442,4 +474,113 @@ function subjects_gradeOptions() {
         options += "<option id='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + " " + stream + "</option>"
     }
     return options;
+}*/
+function subjects_gradeOptions() {
+    //var array = "";
+    for (var i = 0; i < subjects.length; i++) {
+        //var position=subjects[i]['stream'];
+        var stream = "";//streams[i][position];
+        for (var h = 0; h < streams.length; h++) {
+            if (streams[h]['id'] == subjects[i]['stream']) {
+                stream = streams[h]['grade'] + " " + streams[h]['stream']
+                break;
+            }
+        }
+        /*array += "{";
+        array += "id:";
+        array += subjects[i]['id'];
+        array += ",";
+        array += "text:'";
+        array += subjects[i]['name'] + " " + stream;
+        array += "'},";*/
+        $("#grade").select2({
+            data: [
+                { id: subjects[i]['id'], text: subjects[i]['name'] + " " + stream },
+                //subjects_gradeOptions()
+
+            ]
+        });
+    }
+    //return array;
+}
+
+//Marks
+//Append all grades to form
+function marks() {
+    $("#marksGrade").html('<option></option>').append(streamsOptions());
+    $("#marksGrade").change(() => {
+        //console.log(1)
+        //If change grade clear all fields
+        $("#marksSubject").html('');
+        $("#marksTest").html('');
+        var streamId = $("#marksGrade").find("option:selected").attr('value');
+        //console.log(streamId)
+        var option = "<option></option>";
+        for (var i = 0; i < subjects.length; i++) {
+
+            if (subjects[i]['stream'] == streamId) {
+                option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
+            }
+        }
+        $("#marksSubject").html('').append(option);
+        $("#marksSubject").change(() => {
+            //If change subject clear the tests field
+            $("#marksTest").html('');
+            var subjectId = $("#marksSubject").find('option:selected').attr('value');
+            var option = "<option></option>";
+            for (var i = 0; i < testsDone.length; i++) {
+
+                if (testsDone[i]['subject'] == subjectId) {
+                    option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
+                }
+            }
+            $("#marksTest").html('').append(option);
+ 
+                $("#viewResults").click(() => {
+                    event.preventDefault();
+                    var subject = $("#marksSubject").find('option:selected').attr('value');
+                    var grade = $("#marksGrade").find('option:selected').attr('value');
+                    var test = $("#marksTest").find('option:selected').attr('value');
+                    var formData = {
+                        subject: subject,
+                        grade: grade,
+                        test: test
+                    }
+
+                    $.ajax({
+                        url: "modules/fetch.php",
+                        method: "post",
+                        data: formData,
+                        success: function (data) {
+                            appendMarks(data);
+                        }
+                    })
+                })
+         
+        })
+    })
+}
+function appendMarks(json) {
+    if (json !== "") {
+        var jsonArray = JSON.parse(json);
+        var tableTemplate = "<table><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
+        var i = 0;
+        for (i = 0; i < jsonArray.length; i++) {
+            tableTemplate += "<tr>";
+            tableTemplate += "<td>" + jsonArray[i]['id'] + "</td>";
+            tableTemplate += "<td>" + jsonArray[i]['name'] + "</td>";
+            tableTemplate += "<td><input class='mark' id='"+jsonArray[i]['id']+"' value=" + jsonArray[i]['marks'] + "></td>";
+            tableTemplate += "</tr>";
+            console.log(jsonArray[i]);
+        }
+        tableTemplate += "</table>";
+        $("#results").html("");
+        $("#results").append(tableTemplate);
+        $(".mark").change(()=>{
+            var studentId=event.target.attr('id')
+            console.log(studentId)
+            //saveMark(studentId,marks)
+        })
+        //console.log(tableTemplate)
+    }
 }
