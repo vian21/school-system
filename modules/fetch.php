@@ -41,9 +41,9 @@ if (isset($_POST['test'])) {
     if ($_POST['test'] !== "" and is_numeric($_POST['test'])) {
         include 'functions.php';
         $test_id = $_POST['test'];
-        $result = array(fetchStudentsMarks($test_id));
+        $result = fetchStudentsMarks($test_id);
         $form_data = array();
-        foreach ($result as $column) {
+        while ($column = mysqli_fetch_assoc($result)) {
             $student_id = $column['student_id'];
             $sub_form_Data['id'] = $student_id;
             $sub_form_Data['name'] = fetchName(2, $student_id);
@@ -104,4 +104,23 @@ if (isset($_GET['subjects'])) {
 if (isset($_GET['tests'])) {
     include 'functions.php';
     echoJson(fetchTestsDone('all'));
+}
+if(isset($_GET['all_academic_years'])){
+    include 'functions.php';
+    $academic_years=fetchAcademicYears();
+    $years=array();
+    while($row=mysqli_fetch_assoc($academic_years)){
+        $year_sub_array=array();
+        $year_sub_array['id']=$row['id'];
+        $year_sub_array['year']=$row['time'];
+        $years[]=$year_sub_array;
+    }
+    echoJson($years);
+}
+if (isset($_GET['periods'])) {
+    include 'functions.php';
+    $academic_years=fetchAcademicYears();
+   while($row=mysqli_fetch_assoc($academic_years)){
+
+   }
 }

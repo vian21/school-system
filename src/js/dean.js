@@ -8,6 +8,8 @@ var streams = [];
 var subjects = [];
 //Variable to contain the tests done
 var testsDone = [];
+var periods=[];
+var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
 $("document").ready(function () {
     //Fecth all teachers and add them to and array and make a table using the array
     fetch(1);
@@ -18,6 +20,7 @@ $("document").ready(function () {
     //Fetch all subjects and their grades
     fetch(4);
     fetch(5);
+    fetch(6)
     $("#tab1").click(function () {
         $("#two").hide();
         $("#three").hide();
@@ -109,6 +112,9 @@ function fetch(what) {
     }
     if (what == 5) {
         var url = "modules/fetch.php?tests=";
+    }
+    if (what == 6) {
+        var url = "modules/fetch.php?periods=";
     }
     $.ajax({
         url: url,
@@ -290,11 +296,11 @@ function showStaffForm() {
             /*$(".multipleGrades").change(() => {
                 console.log($(".multipleGrades").select2('data'));
             })*/
-            $("#grade").select2({
-                data: [
+            //$("#grade").select2({
+                //data: [
                     //{ id: '', text: ' ' },
-                    subjects_gradeOptions()]
-            });
+                    subjects_gradeOptions('grade')//]
+           // });
         }
         if ($("#staffType").val() == 1) {
             $("#grade").remove();
@@ -475,7 +481,7 @@ function saveMsgResponse(who, msg) {
     }
     return options;
 }*/
-function subjects_gradeOptions() {
+function subjects_gradeOptions(idOfElement) {
     //var array = "";
     for (var i = 0; i < subjects.length; i++) {
         //var position=subjects[i]['stream'];
@@ -493,7 +499,7 @@ function subjects_gradeOptions() {
         array += "text:'";
         array += subjects[i]['name'] + " " + stream;
         array += "'},";*/
-        $("#grade").select2({
+        $('#'+idOfElement).select2({
             data: [
                 { id: subjects[i]['id'], text: subjects[i]['name'] + " " + stream },
                 //subjects_gradeOptions()
@@ -507,6 +513,7 @@ function subjects_gradeOptions() {
 //Marks
 //Append all grades to form
 function marks() {
+    $('#createAssessment').click(showNewAssessmentForm)
     $("#marksGrade").html('<option></option>').append(streamsOptions());
     $("#marksGrade").change(() => {
         //console.log(1)
@@ -535,28 +542,27 @@ function marks() {
                 }
             }
             $("#marksTest").html('').append(option);
- 
-                $("#viewResults").click(() => {
-                    event.preventDefault();
-                    var subject = $("#marksSubject").find('option:selected').attr('value');
-                    var grade = $("#marksGrade").find('option:selected').attr('value');
-                    var test = $("#marksTest").find('option:selected').attr('value');
-                    var formData = {
-                        subject: subject,
-                        grade: grade,
-                        test: test
-                    }
 
-                    $.ajax({
-                        url: "modules/fetch.php",
-                        method: "post",
-                        data: formData,
-                        success: function (data) {
-                            appendMarks(data);
-                        }
-                    })
+            $("#viewResults").click(() => {
+                event.preventDefault();
+                var subject = $("#marksSubject").find('option:selected').attr('value');
+                var grade = $("#marksGrade").find('option:selected').attr('value');
+                var test = $("#marksTest").find('option:selected').attr('value');
+                var formData = {
+                    subject: subject,
+                    grade: grade,
+                    test: test
+                }
+
+                $.ajax({
+                    url: "modules/fetch.php",
+                    method: "post",
+                    data: formData,
+                    success: function (data) {
+                        appendMarks(data);
+                    }
                 })
-         
+            })
         })
     })
 }
@@ -569,18 +575,81 @@ function appendMarks(json) {
             tableTemplate += "<tr>";
             tableTemplate += "<td>" + jsonArray[i]['id'] + "</td>";
             tableTemplate += "<td>" + jsonArray[i]['name'] + "</td>";
-            tableTemplate += "<td><input class='mark' id='"+jsonArray[i]['id']+"' value=" + jsonArray[i]['marks'] + "></td>";
+            tableTemplate += "<td><input class='mark' id='" + jsonArray[i]['id'] + "' value=" + jsonArray[i]['marks'] + "></td>";
             tableTemplate += "</tr>";
-            console.log(jsonArray[i]);
+            //console.log(jsonArray[i]);
         }
         tableTemplate += "</table>";
         $("#results").html("");
         $("#results").append(tableTemplate);
-        $(".mark").change(()=>{
-            var studentId=event.target.attr('id')
-            console.log(studentId)
-            //saveMark(studentId,marks)
-        })
+        //marksChangeListener();
+        /*$(".mark").on('blur',()=>{
+            var newValue=$(this).attr();
+            console.log(newValue)
+        })*/
         //console.log(tableTemplate)
+        //Function 
+        
+        $('.mark').on('blur',function () {
+            var studentId = $(this).attr('id');
+            var newMark = $(this).val();
+            var msg = "<span id='saveMsg'>Data saved successfully</span>"
+            var failMsg="<span id='failedToSaveMsg'>Failed to save data</span>"
+            $.ajax({
+                url: "modules/update.php?marks=",
+                method: "post",
+                data: {
+                    student_id: studentId,
+                    mark: newMark,
+                },
+                success: function(data){
+                    if (data == "ok") {
+                        console.log(msg)
+                        $("#saveMsg").remove()
+                        $("#results").append(msg);
+                        $("#saveMsg").fadeIn().delay(2000).fadeOut();
+                    }
+                    if (data == "ko" || data=="") {
+                        $("#failedToSaveMsg").remove()
+                        $("#results").append(failMsg);
+                        $("#failedToSaveMsg").fadeIn().delay(2000).fadeOut();
+                    }
+                }
+            })
+        })
+    }
+}
+function showNewAssessmentForm(){
+    var form="<div class='modal'>\
+    <form id='newAssessmentForm'>\
+    <h4>Subject</h4>\
+    <select name='subject' id='subject'>\
+    <option><option>\
+    </select><br>\
+    <h4>Month</h4>\
+    <select name='month' id='month'>\
+    <option><option>\
+    </select><br>\
+    <h4><Type/h4>\
+    <select name='type' id='type'><br>\
+    <option value='1'>Test</option>\
+    <option value='2'>Exam</option>\
+    </select><br>\
+    <h4>Period</h4>\
+    <select name='period' id='period'></select><br>\
+    </form>";
+    $('body').append(form);
+    subjects_gradeOptions('subject')
+    createMonthOptions('month')
+}
+function createMonthOptions(idOfElement){
+    for (var i = 0; i < months.length; i++) {
+        $('#'+idOfElement).select2({
+            data: [
+                { id: i, text: months[i]},
+                //subjects_gradeOptions()
+
+            ]
+        });
     }
 }

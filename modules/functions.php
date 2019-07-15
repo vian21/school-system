@@ -124,7 +124,7 @@ function fetchStreamName($stream_id)
 function fetchStudentsMarks($id)
 {
     include 'config.php';
-    $getMarks = mysqli_fetch_assoc($connect->query("SELECT*FROM marks WHERE test_id=$id"));
+    $getMarks = $connect->query("SELECT*FROM marks WHERE test_id=$id");
     return returnValue($getMarks);
 }
 function fetchAllStudents()
@@ -215,4 +215,22 @@ function fetchAllSubjects()
         $subjects[] = $subjects_array;
     }
     return returnValue($subjects);
+}
+function fetchAcademicYears()
+{
+    include 'config.php';
+    $get_years = $connect->query("SELECT*FROM academic_year");
+    return returnValue($get_years);
+}
+function fetchPeriods($in)
+{
+    if($in=='all'){
+
+    }
+    else{
+        include 'config.php';
+        $get_periods = $connect->query("SELECT*FROM periods WHERE academic_year=$in");
+        return returnValue($get_periods);
+    }
+    
 }
