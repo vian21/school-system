@@ -8,9 +8,11 @@ var streams = [];
 var subjects = [];
 //Variable to contain the tests done
 var testsDone = [];
-var periods=[];
-var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-$("document").ready(function () {
+var periods = [];
+var currentYearId, currentYear, currentPeriodId, currentPeriod;
+var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+//$(document).ready(function () {
+    fetch(6)
     //Fecth all teachers and add them to and array and make a table using the array
     fetch(1);
     //fetch all student and add them to an array and add them to select option list using the student's array
@@ -20,25 +22,28 @@ $("document").ready(function () {
     //Fetch all subjects and their grades
     fetch(4);
     fetch(5);
-    fetch(6)
     $("#tab1").click(function () {
         $("#two").hide();
         $("#three").hide();
         $("#one").css('display', 'block');
+        //$(this).off('click');
     })
     $("#tab2").click(function () {
         $("#one").hide();
         $("#three").hide();
         $("#two").css('display', 'block');
+        //$(this).off('click')
+        
     })
-    $("#tab3").click(function () {
+    
+    $("#tab3").off('click','#tab').click(function () {
         $("#one").hide();
         $("#two").hide();
         $("#three").css('display', 'block');
         //Append the grades in the select grade input when user clicks on the marks tab
         //console.log(1)
-        marks();
-        //        $("#marksSubject").html('<option></option>').append(streamsOptions());
+        return marks();
+        //$(this).off('click')
     })
     $("#searchStudent").on("change", function () {
         //console.log($(this)/*.find("selected:option").attr("value")*/)
@@ -95,7 +100,7 @@ $("document").ready(function () {
     })*/
 
 
-})
+//})
 //Fetch all students and place them in array
 function fetch(what) {
     if (what == 1) {
@@ -136,13 +141,35 @@ function fetch(what) {
                 if (what == 5) {
                     fetchedtests(data);
                 }
+                if (what == 6) {
+                    fetchedPeriods(data);
+                }
             }
 
         }
     });
 }
+function fetchedPeriods(json) {
+    periods = JSON.parse(json);
+    setCurrentPeriod();
+}
+function setCurrentPeriod() {
+    var positionInArray;
+    for (var h = 0; h < periods.length; h++) {
+        currentYearId = periods[h]['id'];
+        currentYear = periods[h]['year'];
+        positionInArray = h;
+        //console.log(currentYear)
+    }
+    var arrayOfPeriods = periods[positionInArray]['periods'];
 
+    for (var i = 0; i < arrayOfPeriods.length; i++) {
+        currentPeriodId = arrayOfPeriods[i]['id'];
+        currentPeriod = arrayOfPeriods[i]['name'];
 
+    }
+
+}
 
 //add students to search form
 function addToForm() {
@@ -297,10 +324,10 @@ function showStaffForm() {
                 console.log($(".multipleGrades").select2('data'));
             })*/
             //$("#grade").select2({
-                //data: [
-                    //{ id: '', text: ' ' },
-                    subjects_gradeOptions('grade')//]
-           // });
+            //data: [
+            //{ id: '', text: ' ' },
+            subjects_gradeOptions('grade')//]
+            // });
         }
         if ($("#staffType").val() == 1) {
             $("#grade").remove();
@@ -499,7 +526,7 @@ function subjects_gradeOptions(idOfElement) {
         array += "text:'";
         array += subjects[i]['name'] + " " + stream;
         array += "'},";*/
-        $('#'+idOfElement).select2({
+        $('#' + idOfElement).select2({
             data: [
                 { id: subjects[i]['id'], text: subjects[i]['name'] + " " + stream },
                 //subjects_gradeOptions()
@@ -513,7 +540,9 @@ function subjects_gradeOptions(idOfElement) {
 //Marks
 //Append all grades to form
 function marks() {
-    $('#createAssessment').click(showNewAssessmentForm)
+    $('#createAssessment').click(()=>{
+        showNewAssessmentForm()
+    })
     $("#marksGrade").html('<option></option>').append(streamsOptions());
     $("#marksGrade").change(() => {
         //console.log(1)
@@ -589,12 +618,12 @@ function appendMarks(json) {
         })*/
         //console.log(tableTemplate)
         //Function 
-        
-        $('.mark').on('blur',function () {
+
+        $('.mark').on('blur', function () {
             var studentId = $(this).attr('id');
             var newMark = $(this).val();
             var msg = "<span id='saveMsg'>Data saved successfully</span>"
-            var failMsg="<span id='failedToSaveMsg'>Failed to save data</span>"
+            var failMsg = "<span id='failedToSaveMsg'>Failed to save data</span>"
             $.ajax({
                 url: "modules/update.php?marks=",
                 method: "post",
@@ -602,14 +631,14 @@ function appendMarks(json) {
                     student_id: studentId,
                     mark: newMark,
                 },
-                success: function(data){
+                success: function (data) {
                     if (data == "ok") {
                         console.log(msg)
                         $("#saveMsg").remove()
                         $("#results").append(msg);
                         $("#saveMsg").fadeIn().delay(2000).fadeOut();
                     }
-                    if (data == "ko" || data=="") {
+                    if (data == "ko" || data == "") {
                         $("#failedToSaveMsg").remove()
                         $("#results").append(failMsg);
                         $("#failedToSaveMsg").fadeIn().delay(2000).fadeOut();
@@ -619,37 +648,120 @@ function appendMarks(json) {
         })
     }
 }
-function showNewAssessmentForm(){
-    var form="<div class='modal'>\
+function showNewAssessmentForm() {
+    var form="";
+    var form = "<div class='modal'>\
     <form id='newAssessmentForm'>\
     <h4>Subject</h4>\
     <select name='subject' id='subject'>\
     <option><option>\
     </select><br>\
-    <h4>Month</h4>\
-    <select name='month' id='month'>\
-    <option><option>\
-    </select><br>\
-    <h4><Type/h4>\
+    <h4>Type</h4>\
     <select name='type' id='type'><br>\
+    <option value=''></option>\
     <option value='1'>Test</option>\
     <option value='2'>Exam</option>\
     </select><br>\
-    <h4>Period</h4>\
-    <select name='period' id='period'></select><br>\
+    <button id='cancel'>Cancel</button>\
+    <button id='create'>Create</button>\
     </form>";
     $('body').append(form);
     subjects_gradeOptions('subject')
-    createMonthOptions('month')
+    //createMonthOptions('month');
+    addListeners();
+
 }
-function createMonthOptions(idOfElement){
+function createMonthOptions(idOfElement) {
     for (var i = 0; i < months.length; i++) {
-        $('#'+idOfElement).select2({
+        $('#' + idOfElement).select2({
             data: [
-                { id: i, text: months[i]},
+                { id: i, text: months[i] },
                 //subjects_gradeOptions()
 
             ]
         });
+    }
+}
+function addListeners() {
+    $(document).on('click', '#cancel', () => {
+        event.preventDefault();
+        $('.modal').remove();
+
+    })
+    $(document).on('click', '#create', () => {
+        event.preventDefault();
+        validateAndsubmit();
+        
+    })
+    $(document).on('change', '#type', () => {
+        console.log($('#type').val())
+        if ($('#type').val() == 1) {
+            $('#type').after("<div id='monthOptions'>\
+            <h4>Month</h4>\
+            <select name='month' id='month'>\
+            <option><option>\
+            </select>\
+            </div>")
+            createMonthOptions('month');
+        }
+        else {
+            $('#monthOptions').remove();
+        }
+    })
+}
+function validateAndsubmit() {
+    var subject = $('#subject').val();
+    var type = $('#type').val();
+    var month;
+    var validSubject, validType, validMonth
+    if (type == 1) {
+        month = $('#month').val();
+    }
+    if (subject == "") {
+        alert("Enter a subject");
+    }
+    else {
+        validSubject = true;
+    }
+    if (type == "") {
+        alert("Enter an assessment type");
+    }
+    else {
+        validType = true;
+    }
+    if (type == 1) {
+        if (month == "") {
+            alert("Enter a month")
+        }
+        else {
+            validMonth = true;
+        }
+    }
+    if (validSubject == true && validType == true) {
+        var form=new FormData();
+        form.append('subject',subject);
+        form.append('type',type);
+        form.append('period',currentPeriodId);
+        form.append('name',currentPeriod);
+        if(type==1){
+            form.append('month',month);
+        }
+        $.ajax({
+            url:'modules/insert.php?assessment=',
+            method:"post",
+            enctype: 'multipart/form-data',
+            processData:false,
+            contentType:false,
+            data:form,
+            success:function(data){
+                if(data=="ok"){
+                    $(".modal").remove();
+                }
+                else{
+                    alert("Failed to create assessement");
+                }
+            }
+        })
+        
     }
 }

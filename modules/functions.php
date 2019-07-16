@@ -224,13 +224,20 @@ function fetchAcademicYears()
 }
 function fetchPeriods($in)
 {
-    if($in=='all'){
+    /*if($in=='all'){
 
     }
-    else{
+    else{*/
         include 'config.php';
         $get_periods = $connect->query("SELECT*FROM periods WHERE academic_year=$in");
-        return returnValue($get_periods);
-    }
+        $periods=array();
+        while($column=mysqli_fetch_assoc($get_periods)){
+            $sub_array=array();
+            $sub_array['id']=$column['id'];
+            $sub_array['name']=$column['name'];
+            $periods[]=$sub_array;
+        }
+        return returnValue($periods);
+    //}
     
 }

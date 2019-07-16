@@ -105,7 +105,7 @@ if (isset($_GET['tests'])) {
     include 'functions.php';
     echoJson(fetchTestsDone('all'));
 }
-if(isset($_GET['all_academic_years'])){
+/*if(isset($_GET['all_academic_years'])){
     include 'functions.php';
     $academic_years=fetchAcademicYears();
     $years=array();
@@ -116,11 +116,17 @@ if(isset($_GET['all_academic_years'])){
         $years[]=$year_sub_array;
     }
     echoJson($years);
-}
+}*/
 if (isset($_GET['periods'])) {
     include 'functions.php';
     $academic_years=fetchAcademicYears();
    while($row=mysqli_fetch_assoc($academic_years)){
-
+       //fetch periods in that year
+        $sub_array=array();
+        $sub_array['id']=$row['id'];
+        $sub_array['year']=$row['time'];
+        $sub_array['periods']=fetchPeriods($row['id']);
+        $periods[]=$sub_array;
    }
+   echoJson($periods);
 }
