@@ -11,7 +11,7 @@ var testsDone = [];
 var periods = [];
 var currentYearId, currentYear, currentPeriodId, currentPeriod;
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-//$(document).ready(function () {
+$(document).ready(function () {
     fetch(6)
     //Fecth all teachers and add them to and array and make a table using the array
     fetch(1);
@@ -21,7 +21,7 @@ var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'A
     fetch(3);
     //Fetch all subjects and their grades
     fetch(4);
-    fetch(5);
+   
     $("#tab1").click(function () {
         $("#two").hide();
         $("#three").hide();
@@ -33,17 +33,18 @@ var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'A
         $("#three").hide();
         $("#two").css('display', 'block');
         //$(this).off('click')
-        
+
     })
-    
-    $("#tab3").off('click','#tab').click(function () {
+
+    $("#tab3").unbind('click').click(function () {
         $("#one").hide();
         $("#two").hide();
         $("#three").css('display', 'block');
         //Append the grades in the select grade input when user clicks on the marks tab
         //console.log(1)
-        return marks();
+        marks();
         //$(this).off('click')
+        return false;
     })
     $("#searchStudent").on("change", function () {
         //console.log($(this)/*.find("selected:option").attr("value")*/)
@@ -100,7 +101,7 @@ var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'A
     })*/
 
 
-//})
+})
 //Fetch all students and place them in array
 function fetch(what) {
     if (what == 1) {
@@ -116,7 +117,7 @@ function fetch(what) {
         var url = "modules/fetch.php?subjects=";
     }
     if (what == 5) {
-        var url = "modules/fetch.php?tests=";
+        var url = "modules/fetch.php?tests="+currentPeriodId;
     }
     if (what == 6) {
         var url = "modules/fetch.php?periods=";
@@ -152,6 +153,36 @@ function fetch(what) {
 function fetchedPeriods(json) {
     periods = JSON.parse(json);
     setCurrentPeriod();
+    appendToSelectTerm();
+    generateTermOptions('termOptions')
+     //Fetch tests in current period
+     fetch(5);
+    return false;
+}
+function appendToSelectTerm() {
+    $('#termOptions').select2({
+        data: {
+
+        }
+    })
+    return false;
+}
+function generateTermOptions(idOfElement) {
+    for (var i = 0; i < periods.length; i++) {
+        var position = periods[i]['periods'];
+        //var periods = "";//streams[i][position];
+        var terms;
+        for (var h = 0; h < position.length; h++) {
+            //if (streams[h]['id'] == subjects[i]['stream']) {
+            var periodName = position[h]['name']
+
+            var newOption = new Option(periods[i]['year'] + " " + periodName, position[h]['id'], false, false);
+            $('#' + idOfElement).append(newOption)
+            console.log(position[h]['id'])
+
+        }
+
+    }
 }
 function setCurrentPeriod() {
     var positionInArray;
@@ -168,22 +199,11 @@ function setCurrentPeriod() {
         currentPeriod = arrayOfPeriods[i]['name'];
 
     }
-
+    return false;
 }
 
 //add students to search form
 function addToForm() {
-    /*var options = "<option value=''></option>";
-    for (var i = 0; i < studentsArray.length; i++) {
-        options += "<option value='" + i + "'>" + studentsArray[i]['name'] + "</option>";
-
-    }
-    $("#searchStudent").html("");
-    $("#searchStudent").append(options);*/
-    /*/Integrating select2 in options
-    $("#searchStudent").select2({
-        placeholder: "Search student"
-    });*/
     for (var i = 0; i < studentsArray.length; i++) {
         $("#searchStudent").select2({
             data: [
@@ -193,26 +213,32 @@ function addToForm() {
             ]
         });
     }
+    return false;
 }
 //Function to fire when students have been fetched
 function fetchedStudents(data) {
     studentsArray = JSON.parse(data);
     addToForm();
+    return false;
 }
 function fetchedSubjects(data) {
     subjects = JSON.parse(data);
+    return false;
 }
 //Function to fire when teachers have been fetched
 function fetchedTeachers(data) {
     teachersArray = JSON.parse(data);
     makeTeachersTable(teachersArray);
+    return false;
 }
 //Function to fire when streams have been fetched
 function fetchedStreams(data) {
     streams = JSON.parse(data);
+    return false;
 }
 function fetchedtests(data) {
     testsDone = JSON.parse(data);
+    return false;
 }
 function makeTeachersTable(array) {
     var teacherTableTemplate = "<button id='addTeacherButton'>Addd</button>";
@@ -239,6 +265,7 @@ function makeTeachersTable(array) {
     $("#two").append(teacherTableTemplate);
     //add a listener for click on add button
     $("#addTeacherButton").click(() => { showStaffForm() });
+    return false;
 }
 function showStudentForm() {
     var form = "<div id='addStudentModal' class='modal'><form enctype='multipart/form-data'><h4>Name :</h4><input type='text' name='name' id='studentName' required><h4>Student's email :</h4><input type='email' name='email' id='studentEmail'><h4>student's telephone number :</h4><input type='number' name='tel' id='studentTel'><h4>Grade :</h4><select name='grade' id='studentGrade' required><option value=''></option></select><h4>Date of birth:</h4><input type='date' name='DOB' id='studentDOB' required><br><button type='button' id='cancelStudentForm'>Cancel</button><button type='submit' id='addStudent'>Add</button></form></div>";
@@ -293,6 +320,7 @@ function showStudentForm() {
         }*/
 
     })
+    return false;
 }
 function showStaffForm() {
     var form = "<div id='addTeacherModal' class='modal'><form id='addStaffForm'>\
@@ -312,6 +340,7 @@ function showStaffForm() {
     $("#cancelStaffForm").click(() => {
         event.preventDefault();
         $("#addTeacherModal").remove();
+        return false;
     })
     $("#staffType").change(() => {
         if ($("#staffType").val() == 2) {
@@ -333,7 +362,7 @@ function showStaffForm() {
             $("#grade").remove();
             $(".select2-container").remove();
         }
-
+        return false;
     })
     //Submit the add student form
     $("#addStaff").click(() => {
@@ -345,12 +374,18 @@ function showStaffForm() {
         var grade = $("#grade").select2('val')//values()//data('option-array-index');
         console.log(grade);
         //var DOB = $("#studentDOB").val();
-        var validName, validType, validGrade;
+        var validName, valideEmail, validType, validGrade;
         if (name == "") {
             alert("Please enter a name");
         }
         else {
             validName = true;
+        }
+        if (email == "" || emailIsValid(email)!==true) {
+            alert("Please enter an email");
+        }
+        else {
+            valideEmail = true;
         }
         if (type == "") {
             alert("Please enter a type");
@@ -367,14 +402,7 @@ function showStaffForm() {
                 validGrade = true;
             }
         }
-
-        /*if (DOB == "") {
-            alert("Please enter a date of birth");
-        }
-        else {
-            validDOB = true;
-        }*/
-        if (validName == true && validType == true) {
+        if (validName == true && validType == true && valideEmail == true) {
             var info = new FormData();
             info.append('name', name);
             info.append('type', type);
@@ -398,9 +426,9 @@ function showStaffForm() {
         /*else {
             $("#addStudent").unbind('click');
         }*/
-
+        return false;
     })
-
+    return false;
 }
 function add(who, info) {
     if (who == 1) {
@@ -427,7 +455,9 @@ function add(who, info) {
                 insertMsg(2, data);
             }
         }
+
     });
+    return false;
 }
 function insertMsg(who, msg) {
     if (who == 1) {
@@ -451,7 +481,7 @@ function insertMsg(who, msg) {
             fetch(2);
         }
     }
-
+    return false;
 }
 function streamsOptions() {
     var optionsTemplate = "";
@@ -480,6 +510,7 @@ function save(who, id, what, as) {
 
         }
     });
+    return false;
 }
 function saveMsgResponse(who, msg) {
     var successMsg = "<span id='saveSuccess'><br>Data saved</span>";
@@ -492,22 +523,9 @@ function saveMsgResponse(who, msg) {
         fetch(2)
         //$("#saveSuccess").remove();
     }
+    return false;
 }
-/*function subjects_gradeOptions() {
-    var options = "";
-    for (var i = 0; i < subjects.length; i++) {
-        //var position=subjects[i]['stream'];
-        var stream = "";//streams[i][position];
-        for (var h = 0; h < streams.length; h++) {
-            if (streams[h]['id'] == subjects[i]['stream']) {
-                stream = streams[h]['grade'] + " " + streams[h]['stream']
-                break;
-            }
-        }
-        options += "<option id='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + " " + stream + "</option>"
-    }
-    return options;
-}*/
+
 function subjects_gradeOptions(idOfElement) {
     //var array = "";
     for (var i = 0; i < subjects.length; i++) {
@@ -519,29 +537,24 @@ function subjects_gradeOptions(idOfElement) {
                 break;
             }
         }
-        /*array += "{";
-        array += "id:";
-        array += subjects[i]['id'];
-        array += ",";
-        array += "text:'";
-        array += subjects[i]['name'] + " " + stream;
-        array += "'},";*/
+
         $('#' + idOfElement).select2({
             data: [
                 { id: subjects[i]['id'], text: subjects[i]['name'] + " " + stream },
-                //subjects_gradeOptions()
+
 
             ]
         });
     }
-    //return array;
+    return false;
 }
 
 //Marks
 //Append all grades to form
 function marks() {
-    $('#createAssessment').click(()=>{
+    $('#createAssessment').unbind('click').click(() => {
         showNewAssessmentForm()
+        return false
     })
     $("#marksGrade").html('<option></option>').append(streamsOptions());
     $("#marksGrade").change(() => {
@@ -577,26 +590,34 @@ function marks() {
                 var subject = $("#marksSubject").find('option:selected').attr('value');
                 var grade = $("#marksGrade").find('option:selected').attr('value');
                 var test = $("#marksTest").find('option:selected').attr('value');
-                var formData = {
-                    subject: subject,
-                    grade: grade,
-                    test: test
-                }
 
-                $.ajax({
-                    url: "modules/fetch.php",
-                    method: "post",
-                    data: formData,
-                    success: function (data) {
-                        appendMarks(data);
+                if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
+                    //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
+                    var formData = {
+                        subject: subject,
+                        grade: grade,
+                        test: test
                     }
-                })
+                    console.log(test);
+                    $.ajax({
+                        url: "modules/fetch.php",
+                        method: "post",
+                        data: formData,
+                        success: function (data) {
+                            appendMarks(data);
+                        }
+                    })
+                }
+                return false;
             })
+            return false;
         })
+        return false;
     })
+    return false
 }
 function appendMarks(json) {
-    if (json !== "") {
+    if (isJSON(json) && json !== "") {
         var jsonArray = JSON.parse(json);
         var tableTemplate = "<table><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
         var i = 0;
@@ -611,12 +632,7 @@ function appendMarks(json) {
         tableTemplate += "</table>";
         $("#results").html("");
         $("#results").append(tableTemplate);
-        //marksChangeListener();
-        /*$(".mark").on('blur',()=>{
-            var newValue=$(this).attr();
-            console.log(newValue)
-        })*/
-        //console.log(tableTemplate)
+
         //Function 
 
         $('.mark').on('blur', function () {
@@ -644,12 +660,18 @@ function appendMarks(json) {
                         $("#failedToSaveMsg").fadeIn().delay(2000).fadeOut();
                     }
                 }
+
             })
+            return false;
         })
     }
+    else {
+        return false;
+    }
+    return false;
 }
 function showNewAssessmentForm() {
-    var form="";
+    var form = "";
     var form = "<div class='modal'>\
     <form id='newAssessmentForm'>\
     <h4>Subject</h4>\
@@ -669,7 +691,7 @@ function showNewAssessmentForm() {
     subjects_gradeOptions('subject')
     //createMonthOptions('month');
     addListeners();
-
+    return false;
 }
 function createMonthOptions(idOfElement) {
     for (var i = 0; i < months.length; i++) {
@@ -681,17 +703,18 @@ function createMonthOptions(idOfElement) {
             ]
         });
     }
+    return false;
 }
 function addListeners() {
     $(document).on('click', '#cancel', () => {
         event.preventDefault();
         $('.modal').remove();
-
+        return false;
     })
-    $(document).on('click', '#create', () => {
+    $('#create').click(() => {
         event.preventDefault();
         validateAndsubmit();
-        
+        return false;
     })
     $(document).on('change', '#type', () => {
         console.log($('#type').val())
@@ -707,6 +730,7 @@ function addListeners() {
         else {
             $('#monthOptions').remove();
         }
+        return false;
     })
 }
 function validateAndsubmit() {
@@ -738,30 +762,54 @@ function validateAndsubmit() {
         }
     }
     if (validSubject == true && validType == true) {
-        var form=new FormData();
-        form.append('subject',subject);
-        form.append('type',type);
-        form.append('period',currentPeriodId);
-        form.append('name',currentPeriod);
-        if(type==1){
-            form.append('month',month);
+        var form = new FormData();
+        form.append('subject', subject);
+        form.append('type', type);
+        form.append('period', currentPeriodId);
+        
+        if (type == 1) {
+            var number=parseInt(month,10)+1;
+            var name="Test "+number;
+            console.log(number)
+            console.log(name);
+            form.append('month', month);
+            form.append('name', name);
+        }
+        else{
+            form.append('name', 'Exam');
         }
         $.ajax({
-            url:'modules/insert.php?assessment=',
-            method:"post",
+            url: 'modules/insert.php?assessment=',
+            method: "post",
             enctype: 'multipart/form-data',
-            processData:false,
-            contentType:false,
-            data:form,
-            success:function(data){
-                if(data=="ok"){
+            processData: false,
+            contentType: false,
+            data: form,
+            success: function (data) {
+                if (data == "ok") {
                     $(".modal").remove();
                 }
-                else{
+                else {
                     alert("Failed to create assessement");
                 }
             }
         })
-        
+
     }
+    return false;
+}
+function isJSON(something) {
+    if (typeof something != 'string')
+        something = JSON.stringify(something);
+
+    try {
+        JSON.parse(something);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+function emailIsValid(email) {
+    var regex = /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
+    return regex.test(email);
 }

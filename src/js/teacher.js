@@ -134,7 +134,7 @@ $('document').ready(function () {
 });
 
 function appendMarks(json) {
-    if (json !== "") {
+    if (isJSON(json) && json !== "") {
         var jsonArray = JSON.parse(json);
         var tableTemplate = "<table><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
         var i = 0;
@@ -150,5 +150,16 @@ function appendMarks(json) {
         $("#results").html("");
         $("#results").append(tableTemplate);
         console.log(tableTemplate)
+    }
+}
+function isJSON(something) {
+    if (typeof something != 'string')
+        something = JSON.stringify(something);
+
+    try {
+        JSON.parse(something);
+        return true;
+    } catch (e) {
+        return false;
     }
 }

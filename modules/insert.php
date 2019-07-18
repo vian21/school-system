@@ -72,23 +72,33 @@ if (isset($_GET['staff'])) {
     }
 }
 
-if(isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subject']) and is_numeric($_POST['subject']) and is_numeric($_POST['type']) and isset($_POST['period']) and is_numeric($_POST['period']) and isset($_POST['name']) and is_numeric($_POST['subject']) ){
-   // echo 'hello';
-   include 'config.php';
-   $subject=mysqli_real_escape_string($connect,$_POST['subject']);
-   $type=mysqli_real_escape_string($connect,$_POST['type']);
-   $period_id=mysqli_real_escape_string($connect,$_POST['period']);
-   $period_name=mysqli_real_escape_string($connect,$_POST['name']);
-   $month="";
-   if($type==1){
-       $month=mysqli_real_escape_string($connect,$_POST['month'])+1;
-   }
-   //echo $month;
-   $create_assessment=$connect->query("INSERT INTO assessments(period,name,month,type,subject) VALUES($period_id,'$period_name',$month,$type,$subject)");
-   if($create_assessment){
-       echo "ok";
-   }
-   {
-       echo "ko";
-   }
+if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subject']) and is_numeric($_POST['subject']) and is_numeric($_POST['type']) and isset($_POST['period']) and is_numeric($_POST['period']) and isset($_POST['name']) and is_numeric($_POST['subject'])) {
+    // echo 'hello';
+    include 'config.php';
+    include 'functions.php';
+    $subject = mysqli_real_escape_string($connect, $_POST['subject']);
+    $type = mysqli_real_escape_string($connect, $_POST['type']);
+    $period_id = mysqli_real_escape_string($connect, $_POST['period']);
+    $period_name = mysqli_real_escape_string($connect, $_POST['name']);
+    $students_taking_that_subject = fetchStudentsTaking($subject, $period_id);
+    $month = "";
+    if ($type == 1) {
+        $month = mysqli_real_escape_string($connect, $_POST['month']) + 1;
+    }
+    //echo $subject;
+    #echo $period_id;
+    //print_r($students_taking_that_subject);
+    //echo $month;
+    $create_assessment = $connect->query("INSERT INTO assessments(period,name,month,type,subject) VALUES($period_id,'$period_name',$month,$type,$subject)");
+    if ($create_assessment) {
+        echo "ok";
+    } else {
+        echo "ko";
+    }
+    //$select_creted_assement_id=$connect->query("SELECT id FROM assessments where ");
+    $test_id = $connect->insert_id;
+    foreach ($students_taking_that_subject as $student) {
+        $current_student = $student['id'];
+        $insert = $connect->query("INSERT INTO marks(student_id,test_id) VALUES($current_student,$test_id)");
+    }
 }

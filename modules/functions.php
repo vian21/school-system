@@ -56,7 +56,7 @@ function fetchSubjectName($subject_id)
 }
 function echoJson($data)
 {
-    if ($data != "") {
+    if (!empty($data)) {
         echo json_encode($data);
     } else {
         echo " ";
@@ -72,11 +72,11 @@ function fetchSubjectsTaughtId($id)
     }
     return returnValue($subjects_taught_array);
 }
-function fetchTestsDone($subject_id)
+function fetchTestsDone($subject_id,$period)
 {
     include 'config.php';
     if ($subject_id == 'all') {
-        $select_test = $connect->query("SELECT * FROM assessments");
+        $select_test = $connect->query("SELECT * FROM assessments Where period=$period");
         $tests_done = array();
         while ($row = mysqli_fetch_assoc($select_test)) {
             $tests_done_sub_array = array();
@@ -143,6 +143,17 @@ function fetchAllStudents()
         $students_array['DOB'] = $row['DOB'];
         $students_array['status'] = $row['status'];
         $students_array['account_status'] = $row['account_status'];
+        $students[] = $students_array;
+    }
+    return returnValue($students);
+}
+function fetchStudentsTaking($subject_id,$period){
+    include 'config.php';
+    $get_students = $connect->query("SELECT*FROM enrollment WHERE subject=$subject_id and period=$period");
+    $students = array();
+    while ($row = mysqli_fetch_assoc($get_students)) {
+        $students_array = array();
+        $students_array['id'] = $row['id'];
         $students[] = $students_array;
     }
     return returnValue($students);

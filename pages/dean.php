@@ -22,6 +22,10 @@ $id = $_SESSION['id'];
         <div id="dropdown">
             <span>==</span>
         </div>
+        <div id=term>
+            <select id=termOptions>
+            </select>
+        </div>
         <div id="logout">
             <span><a href="./modules/logout.php">Logout</a></span>
         </div>

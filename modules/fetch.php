@@ -43,14 +43,21 @@ if (isset($_POST['test'])) {
         $test_id = $_POST['test'];
         $result = fetchStudentsMarks($test_id);
         $form_data = array();
-        while ($column = mysqli_fetch_assoc($result)) {
-            $student_id = $column['student_id'];
-            $sub_form_Data['id'] = $student_id;
-            $sub_form_Data['name'] = fetchName(2, $student_id);
-            $sub_form_Data['marks'] = $column['marks'];
-            $form_Data[] = $sub_form_Data;
+        if(!empty($result)){
+            while ($column = mysqli_fetch_assoc($result)) {
+                $student_id = $column['student_id'];
+                $sub_form_Data['id'] = $student_id;
+                $sub_form_Data['name'] = fetchName(2, $student_id);
+                $sub_form_Data['marks'] = $column['marks'];
+                $form_Data[] = $sub_form_Data;
+            }
+            //echo $form_Data;
+            if(!empty($form_Data)){
+                echoJson($form_Data);
+            }
+            
         }
-        echoJson($form_Data);
+      
     }
 }
 
@@ -101,9 +108,11 @@ if (isset($_GET['subjects'])) {
     include 'functions.php';
     echoJson(fetchAllSubjects());
 }
-if (isset($_GET['tests'])) {
+if (isset($_GET['tests']) and $_GET['tests']!=="" and is_numeric($_GET['tests'])) {
     include 'functions.php';
-    echoJson(fetchTestsDone('all'));
+    include 'config.php';
+    $period=mysqli_real_escape_string($connect,$_GET['tests']);
+    echoJson(fetchTestsDone('all',$period));
 }
 /*if(isset($_GET['all_academic_years'])){
     include 'functions.php';
@@ -119,14 +128,14 @@ if (isset($_GET['tests'])) {
 }*/
 if (isset($_GET['periods'])) {
     include 'functions.php';
-    $academic_years=fetchAcademicYears();
-   while($row=mysqli_fetch_assoc($academic_years)){
-       //fetch periods in that year
-        $sub_array=array();
-        $sub_array['id']=$row['id'];
-        $sub_array['year']=$row['time'];
-        $sub_array['periods']=fetchPeriods($row['id']);
-        $periods[]=$sub_array;
-   }
-   echoJson($periods);
+    $academic_years = fetchAcademicYears();
+    while ($row = mysqli_fetch_assoc($academic_years)) {
+        //fetch periods in that year
+        $sub_array = array();
+        $sub_array['id'] = $row['id'];
+        $sub_array['year'] = $row['time'];
+        $sub_array['periods'] = fetchPeriods($row['id']);
+        $periods[] = $sub_array;
+    }
+    echoJson($periods);
 }

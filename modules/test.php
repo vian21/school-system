@@ -1,4 +1,4 @@
 <?php
 include 'config.php';
 include 'functions.php';
-echo fetchAllTeachers();
+print_r(fetchStudentsTaking(1,2));
