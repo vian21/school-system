@@ -12,6 +12,7 @@ $id = $_SESSION['id'];
     <?php include './modules/staticFiles.php' ?>
     <?php include './modules/functions.php' ?>
     <link rel="stylesheet" href="src/css/teacher.css">
+    <link rel="stylesheet" href="src/css/select2.css">
     <title>Teacher</title>
 </head>
 
@@ -69,6 +70,7 @@ $id = $_SESSION['id'];
         </div>
     </div>
 </body>
+<script src="src/js/select2.js"></script>
 <script src="src/js/teacher.js"></script>
 
 </html>

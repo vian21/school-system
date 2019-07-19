@@ -1,5 +1,5 @@
 //Fetch info about teacher and assign it to the Teacher object
-fetch(1);
+fetch(2);
 //Teacher object to contain all info about teacher, streams taught and tests done
 var Teacher = new Object;
 /*
@@ -7,30 +7,36 @@ var Teacher = new Object;
  * 2 : subjects taught
  * 3 : test
  */
+var currentYearId, currentYear, currentPeriodId, currentPeriod;
+var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 function fetch(what) {
     var url = "modules/fetch.php";
     if (what == 1) {
         url += "?form_options="
     }
-    /*if (what == 2) {
-        url += "?subjects="
+    if (what == 2) {
+        url += "?periods="
     }
-    if (what == 3) {
+    /*if (what == 3) {
         url += "?tests="
     }*/
     $.ajax({
         url: url,
         method: 'get',
+        data:{
+            teachers_period:1
+        },
         success: function (data) {
             if (data !== "") {
                 if (what == 1) {
                     assignProp(data);
 
                 }
-                /*if (what == 2) {
-                    subjects = JSON.parse(data);
+                if (what == 2) {
+                    fetchedPeriods(data);
                 }
-                if (what == 3) {
+                /*if (what == 3) {
                     tests = JSON.parse(data);
                 }*/
             }
@@ -38,6 +44,57 @@ function fetch(what) {
 
         }
     })
+}
+function fetchedPeriods(json) {
+    periods = JSON.parse(json);
+    setCurrentPeriod();
+    appendToSelectTerm();
+    generateTermOptions('termOptions')
+     //Fetch tests in current period
+     fetch(1);
+    return false;
+}
+function setCurrentPeriod() {
+    var positionInArray;
+    for (var h = 0; h < periods.length; h++) {
+        currentYearId = periods[h]['id'];
+        currentYear = periods[h]['year'];
+        positionInArray = h;
+        //console.log(currentYear)
+    }
+    var arrayOfPeriods = periods[positionInArray]['periods'];
+
+    for (var i = 0; i < arrayOfPeriods.length; i++) {
+        currentPeriodId = arrayOfPeriods[i]['id'];
+        currentPeriod = arrayOfPeriods[i]['name'];
+
+    }
+    return false;
+}
+function appendToSelectTerm() {
+    $('#termOptions').select2({
+        data: {
+
+        }
+    })
+    return false;
+}
+function generateTermOptions(idOfElement) {
+    for (var i = 0; i < periods.length; i++) {
+        var position = periods[i]['periods'];
+        //var periods = "";//streams[i][position];
+        var terms;
+        for (var h = 0; h < position.length; h++) {
+            //if (streams[h]['id'] == subjects[i]['stream']) {
+            var periodName = position[h]['name']
+
+            var newOption = new Option(periods[i]['year'] + " " + periodName, position[h]['id'], false, false);
+            $('#' + idOfElement).append(newOption)
+            console.log(position[h]['id'])
+
+        }
+
+    }
 }
 function assignProp(json) {
     if (json != "") {
@@ -142,15 +199,50 @@ function appendMarks(json) {
             tableTemplate += "<tr>";
             tableTemplate += "<td>" + jsonArray[i]['id'] + "</td>";
             tableTemplate += "<td>" + jsonArray[i]['name'] + "</td>";
-            tableTemplate += "<td>" + jsonArray[i]['marks'] + "</td>";
+            tableTemplate += "<td><input class='mark' id='" + jsonArray[i]['id'] + "' value=" + jsonArray[i]['marks'] + "></td>";
             tableTemplate += "</tr>";
-            console.log(jsonArray[i]);
+            //console.log(jsonArray[i]);
         }
         tableTemplate += "</table>";
         $("#results").html("");
         $("#results").append(tableTemplate);
-        console.log(tableTemplate)
+
+        //Function 
+
+        $('.mark').on('blur', function () {
+            var studentId = $(this).attr('id');
+            var newMark = $(this).val();
+            var msg = "<span id='saveMsg'>Data saved successfully</span>"
+            var failMsg = "<span id='failedToSaveMsg'>Failed to save data</span>"
+            $.ajax({
+                url: "modules/update.php?marks=",
+                method: "post",
+                data: {
+                    student_id: studentId,
+                    mark: newMark,
+                },
+                success: function (data) {
+                    if (data == "ok") {
+                        console.log(msg)
+                        $("#saveMsg").remove()
+                        $("#results").append(msg);
+                        $("#saveMsg").fadeIn().delay(2000).fadeOut();
+                    }
+                    if (data == "ko" || data == "") {
+                        $("#failedToSaveMsg").remove()
+                        $("#results").append(failMsg);
+                        $("#failedToSaveMsg").fadeIn().delay(2000).fadeOut();
+                    }
+                }
+
+            })
+            return false;
+        })
     }
+    else {
+        return false;
+    }
+    return false;
 }
 function isJSON(something) {
     if (typeof something != 'string')

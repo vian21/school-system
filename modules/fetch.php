@@ -14,12 +14,12 @@ if (isset($_GET['form_options'])) {
         $sub_form_Data['name'] = fetchSubjectName($row);    //The name of the subject taught
         $sub_form_Data['stream_id'] = fetchStreamsId($row);  //The id of the streams taught your subject
         $stream_ids = fetchStreamsId($row);
-
+        $period=mysqli_real_escape_string($connect,$_GET['teachers_period']);
         $stream_names = fetchStreamName($stream_ids);
 
         $sub_form_Data['stream_name'] = $stream_names;
-        $sub_form_Data['test_id'] = fetchTestsDone($row);
-        $tests_done = fetchTestsDone($row);  //The ids of the tests done
+        $sub_form_Data['test_id'] = fetchTestsDone($row,$period);
+        $tests_done = fetchTestsDone($row,$period);  //The ids of the tests done
         if ($tests_done != 0) {
             $test_names = fetchTestNames($tests_done);
         } else {
