@@ -14,12 +14,12 @@ if (isset($_GET['form_options'])) {
         $sub_form_Data['name'] = fetchSubjectName($row);    //The name of the subject taught
         $sub_form_Data['stream_id'] = fetchStreamsId($row);  //The id of the streams taught your subject
         $stream_ids = fetchStreamsId($row);
-        $period=mysqli_real_escape_string($connect,$_GET['teachers_period']);
+        $period = mysqli_real_escape_string($connect, $_GET['teachers_period']);
         $stream_names = fetchStreamName($stream_ids);
 
         $sub_form_Data['stream_name'] = $stream_names;
-        $sub_form_Data['test_id'] = fetchTestsDone($row,$period);
-        $tests_done = fetchTestsDone($row,$period);  //The ids of the tests done
+        $sub_form_Data['test_id'] = fetchTestsDone($row, $period);
+        $tests_done = fetchTestsDone($row, $period);  //The ids of the tests done
         if ($tests_done != 0) {
             $test_names = fetchTestNames($tests_done);
         } else {
@@ -43,7 +43,7 @@ if (isset($_POST['test'])) {
         $test_id = $_POST['test'];
         $result = fetchStudentsMarks($test_id);
         $form_data = array();
-        if(!empty($result)){
+        if (!empty($result)) {
             while ($column = mysqli_fetch_assoc($result)) {
                 $student_id = $column['student_id'];
                 $sub_form_Data['id'] = $student_id;
@@ -52,12 +52,10 @@ if (isset($_POST['test'])) {
                 $form_Data[] = $sub_form_Data;
             }
             //echo $form_Data;
-            if(!empty($form_Data)){
+            if (!empty($form_Data)) {
                 echoJson($form_Data);
             }
-            
         }
-      
     }
 }
 
@@ -83,6 +81,7 @@ if (isset($_GET['allStudents'])) {
     }
     echoJson($students);
 }
+
 if (isset($_GET['allteachers'])) {
     include 'functions.php';
     $teachers = array();
@@ -100,32 +99,24 @@ if (isset($_GET['allteachers'])) {
     }
     echoJson($teachers);
 }
+
 if (isset($_GET['streams'])) {
     include "functions.php";
     echoJson(fetchAllStreams());
 }
+
 if (isset($_GET['subjects'])) {
     include 'functions.php';
     echoJson(fetchAllSubjects());
 }
-if (isset($_GET['tests']) and $_GET['tests']!=="" and is_numeric($_GET['tests'])) {
+
+if (isset($_GET['tests']) and $_GET['tests'] !== "" and is_numeric($_GET['tests'])) {
     include 'functions.php';
     include 'config.php';
-    $period=mysqli_real_escape_string($connect,$_GET['tests']);
-    echoJson(fetchTestsDone('all',$period));
+    $period = mysqli_real_escape_string($connect, $_GET['tests']);
+    echoJson(fetchTestsDone('all', $period));
 }
-/*if(isset($_GET['all_academic_years'])){
-    include 'functions.php';
-    $academic_years=fetchAcademicYears();
-    $years=array();
-    while($row=mysqli_fetch_assoc($academic_years)){
-        $year_sub_array=array();
-        $year_sub_array['id']=$row['id'];
-        $year_sub_array['year']=$row['time'];
-        $years[]=$year_sub_array;
-    }
-    echoJson($years);
-}*/
+
 if (isset($_GET['periods'])) {
     include 'functions.php';
     $academic_years = fetchAcademicYears();

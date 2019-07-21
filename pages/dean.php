@@ -106,5 +106,6 @@ $id = $_SESSION['id'];
 </body>
 <script src="src/js/select2.js"></script>
 <script src="src/js/dean.js"></script>
-
+<script src="src/js/staff.js"></script>
+<script src="src/js/student.js"></script>
 </html>

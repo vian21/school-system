@@ -72,7 +72,7 @@ function fetchSubjectsTaughtId($id)
     }
     return returnValue($subjects_taught_array);
 }
-function fetchTestsDone($subject_id,$period)
+function fetchTestsDone($subject_id, $period)
 {
     include 'config.php';
     if ($subject_id == 'all') {
@@ -147,7 +147,8 @@ function fetchAllStudents()
     }
     return returnValue($students);
 }
-function fetchStudentsTaking($subject_id,$period){
+function fetchStudentsTaking($subject_id, $period)
+{
     include 'config.php';
     $get_students = $connect->query("SELECT*FROM enrollment WHERE subject=$subject_id and period=$period");
     $students = array();
@@ -239,16 +240,16 @@ function fetchPeriods($in)
 
     }
     else{*/
-        include 'config.php';
-        $get_periods = $connect->query("SELECT*FROM periods WHERE academic_year=$in");
-        $periods=array();
-        while($column=mysqli_fetch_assoc($get_periods)){
-            $sub_array=array();
-            $sub_array['id']=$column['id'];
-            $sub_array['name']=$column['name'];
-            $periods[]=$sub_array;
-        }
-        return returnValue($periods);
+    include 'config.php';
+    $get_periods = $connect->query("SELECT*FROM periods WHERE academic_year=$in");
+    $periods = array();
+    while ($column = mysqli_fetch_assoc($get_periods)) {
+        $sub_array = array();
+        $sub_array['id'] = $column['id'];
+        $sub_array['name'] = $column['name'];
+        $periods[] = $sub_array;
+    }
+    return returnValue($periods);
     //}
-    
+
 }
