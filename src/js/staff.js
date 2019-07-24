@@ -1,6 +1,6 @@
 function makeTeachersTable(array) {
     var teacherTableTemplate = "<button id='addTeacherButton'>Addd</button>";
-    teacherTableTemplate += "<select id='searchTeacherBox'><option></option></select>"
+    teacherTableTemplate += "<select id='searchTeacherBox'></select>"
     teacherTableTemplate += "<div id='teacherView'>"
     teacherTableTemplate += "<table id='teachersTable'><tr><th>#</th><th>Name</th><th>Email</th><th>Job</th></tr>";
     var number = 0;
@@ -53,8 +53,14 @@ function addTeacherChangeListeners(id) {
 }
 
 function addTeachersTosearchBox() {
-    $("#searchTeacherBox").append("<option></option>");
+    console.log(1)
     $("#searchTeacherBox").html('')
+    $("#searchTeacherBox").append("<option></option>");
+    //$("#searchTeacherBox").html('')
+    $("#searchTeacherBox").select2({
+        placeholder: "Select a state",
+        allowClear: true
+    });
     for (let i = 0; i < teachersArray.length; i++) {
         $("#searchTeacherBox").select2({
             data: [
@@ -62,7 +68,16 @@ function addTeachersTosearchBox() {
             ]
         });
     }
-
+    $("#searchTeacherBox").select2({
+        /* templateSelection: function (data) {
+           if (data.id === '') { // adjust for custom placeholder values
+             return 'Custom styled placeholder text';
+           }
+       
+           return data.text;
+         }*/
+        width: 'resolve'
+    });
     return false;
 }
 
@@ -78,7 +93,7 @@ function getTeacherInfo() {
         img = teachersArray[position]['image'];
     }
     teacherInfoTemplate += img + "'><br>";
-    teacherInfoTemplate += "<span>Name : </span><input id='teacherName' value=" + teachersArray[position]['name'] + "><br>";
+    teacherInfoTemplate += '<span>Name : </span><input id="teacherName" value="' + teachersArray[position]['name'] + '"><br>';
     teacherInfoTemplate += "<span>Email : </span><input id='teacherEmail' value=" + teachersArray[position]['email'] + "><br>";
     teacherInfoTemplate += "<span>Tel : </span><input id='teacherTel' value=" + teachersArray[position]['tel'] + "><br>";
     teacherInfoTemplate += "<div id='msgBoard'></div>"

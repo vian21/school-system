@@ -9,9 +9,11 @@ var subjects = [];
 //Variable to contain the tests done
 var testsDone = [];
 var periods = [];
-var currentYearId, currentYear, currentPeriodId, currentPeriod;
+//var currentYearPosition, currentYearId, currentYear, currentPeriodPosition, currentPeriodId, currentPeriod;
+var currentPeriodId, currentPeriod;
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 $(document).ready(function () {
+    //fetcth periods;
     fetch(6)
     //Fecth all teachers and add them to and array and make a table using the array
     fetch(1);
@@ -32,7 +34,6 @@ $(document).ready(function () {
         $("#one").hide();
         $("#three").hide();
         $("#two").css('display', 'block');
-        //$(this).off('click')
 
     })
 
@@ -41,7 +42,6 @@ $(document).ready(function () {
         $("#two").hide();
         $("#three").css('display', 'block');
         //Append the grades in the select grade input when user clicks on the marks tab
-        //console.log(1)
         marks();
         //$(this).off('click')
         return false;
@@ -93,15 +93,8 @@ $(document).ready(function () {
         })
     })
     $("#addStudentButton").click(() => { showStudentForm() });
-    //$("#addTeacherButton").click(() => { showStaffForm() });
-    /*$("#studentChangeListener").change(()=>{
-        $("document").click(()=>{
-            if($(this))
-        })
-    })*/
-
-
 })
+
 //Fetch all students and place them in array
 function fetch(what, round) {
     let url;
@@ -144,80 +137,87 @@ function fetch(what, round) {
                     fetchedtests(data);
                 }
                 if (what == 6) {
-                    fetchedPeriods(data,round);
+                    fetchedPeriods(data, round);
                 }
             }
 
         }
     });
-}
-function fetchedPeriods(json,round) {
-    periods = JSON.parse(json);
-    setCurrentPeriod();
-    appendToSelectTerm();
-    generateTermOptions('termOptions')
-    //Fetch tests in current period
-    //fetch(5);
     return false;
 }
-function appendToSelectTerm() {
-    //   $('#termOptions').select2({
-    //     data: {
-    //
-    //        }
-    // })
+
+function fetchedPeriods(json, round) {
+    periods = JSON.parse(json);
+
+    if (round !== 2) {
+        setCurrentPeriod();
+        generateTermOptions('termOptions')
+    }
+
+    changeTermListener();
+
+    return false;
+}
+
+function changeTermListener() {
     $('#termOptions').change(() => {
-        //console.log($('#termOptions').val())
-        let selectedTerm = $('#termOptions').val();
-        //if (selectedTerm !== currentPeriodId) {
-            currentPeriodId = selectedTerm;
-            //fetch new tests
+        let selectedTermValue = $('#termOptions').val()
+        //get first value == year's index in periods array
+        let selectedTermYear = selectedTermValue.split(',')[0];
+        //get second value == period's index in the periods array
+        let selectedTermArrayPosition = selectedTermValue.split(',')[1];
+        //get the periods array of a the selected year using the year's index and the index of the period array
+        let selectedPeriodArray = periods[selectedTermYear]['periods'][selectedTermArrayPosition]
+        let selectedTermId = selectedPeriodArray['id'];
+        let selectedTermName = selectedPeriodArray['name'];
+
+        if (selectedTermId !== currentPeriodId) {
+            currentPeriodId = selectedTermId;
+            currentPeriod = selectedTermName;
+
             fetch(5);
-            //fetch new periods for current term
-            fetch(6)
-       // }
+            marks();
+            alert("Term changed successfully")
+        }
+
+        return false;
     })
     return false;
 }
+
 function generateTermOptions(idOfElement) {
-    let lastElementId;
     for (let i = 0; i < periods.length; i++) {
         let position = periods[i]['periods'];
-       
         for (let h = 0; h < position.length; h++) {
             let periodName = position[h]['name']
-            //let newOption = new Option(periods[i]['year'] + " " + periodName, position[h]['id'], false, false);
-            //$('#' + idOfElement).append(newOption)
-            lastElementId=position[h]['id'];
+            infoArray = i + ',' + h;
             $('#' + idOfElement).select2({
-                data:[
-                    {id:position[h]['id'],text:periods[i]['year'] + " " + periodName}
-                ]})
-               //$('#' + idOfElement).select2('val',lastElementId);
-            //console.log(position[h]['id'])
-            //$('#' + idOfElement).val(periods[i]['id'])
+                data: [
+                    /*
+                     * Text format
+                     *
+                     * Year position
+                     * Period position
+                     */
+                    //{ id: position[h]['id'], text: periods[i]['year'] + " " + periodName }
+                    { id: infoArray, text: periods[i]['year'] + " " + periodName }
+                ]
+            })
         }
-
-
     }
-    //$('#' + idOfElement).select2('val',lastElementId);
-    //$('#' + idOfElement).select2().trigger('change')
+
+    $('#' + idOfElement).val(infoArray).trigger('change');
 }
 function setCurrentPeriod() {
-    let positionInArray;
-    for (let h = 0; h < periods.length; h++) {
-        currentYearId = periods[h]['id'];
-        currentYear = periods[h]['year'];
-        positionInArray = h;
-        //console.log(currentYear)
-    }
-    let arrayOfPeriods = periods[positionInArray]['periods'];
+    let lastYearPosition = periods.length - 1;
+    let periodsArray = periods[lastYearPosition]['periods'];
+    let lastPeriodPosition = periodsArray.length - 1;
+    let lastPeriodArray = periodsArray[lastPeriodPosition];
+    currentPeriod = lastPeriodArray['name'];
+    currentPeriodId = lastPeriodArray['id'];
+    //fetch tests in the current period
+    fetch(5);
 
-    for (let i = 0; i < arrayOfPeriods.length; i++) {
-        currentPeriodId = arrayOfPeriods[i]['id'];
-        currentPeriod = arrayOfPeriods[i]['name'];
-
-    }
     return false;
 }
 
@@ -230,7 +230,10 @@ function fetchedTeachers(data, round) {
     teachersArray = JSON.parse(data);
     if (round != 2) {
         makeTeachersTable(teachersArray);
+        addTeachersTosearchBox();
+
     }
+    addTeachersTosearchBox();
 
     return false;
 }
@@ -355,8 +358,10 @@ function saveMsgResponse(who, msg) {
         $("#msgBoard").append(successMsg);
         $("#saveSuccess").fadeIn().delay(2000).fadeOut();
         //Update the staff' array
-        new Promise(fetch(1, 2)).then(addTeachersTosearchBox());
-
+        fetch(1, 2)
+        //    addTeachersTosearchBox()
+        //}
+        //$.when(fetch(1, 2)).done(addTeachersTosearchBox());
         //$("#saveSuccess").remove();
     }
 
@@ -418,7 +423,10 @@ function marks() {
             }
         }
         $("#marksSubject").html('').append(option);
+        $("#marksTest").html('');
+        $("#marksTest").html('');
         $("#marksSubject").change(() => {
+            $("#marksTest").html('');
             //If change subject clear the tests field
             $("#marksTest").html('');
             let subjectId = $("#marksSubject").find('option:selected').attr('value');

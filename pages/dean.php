@@ -68,11 +68,11 @@ $id = $_SESSION['id'];
                 </div>
                 <!-- Teacher start -->
                 <div id="two" style="display:none">
-                    <!--<button id="addTeacherButton">Addd</button>-->
+
                 </div>
                 <!-- Marks start -->
                 <div id="three" style="display:none">
-                <button id="createAssessment">New assessment</button>
+                    <button id="createAssessment">New assessment</button>
                     <form id="marksForm">
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Grade</label>
@@ -108,4 +108,5 @@ $id = $_SESSION['id'];
 <script src="src/js/dean.js"></script>
 <script src="src/js/staff.js"></script>
 <script src="src/js/student.js"></script>
+
 </html>

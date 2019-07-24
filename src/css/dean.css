@@ -153,7 +153,7 @@ td {
 
 #three {
     width: 100%;
-    display:inline-flexbox;
+    display: inline-flexbox;
 }
 
 #marksForm {
@@ -171,4 +171,12 @@ button {
 #results {
     width: 80%;
     background-color: chartreuse;
+}
+
+#searchTeacherBox {
+    width: 200px;
+}
+
+.select2-container--default .select2-results__option {
+    white-space: pre;
 }
