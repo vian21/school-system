@@ -99,6 +99,7 @@ if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subje
     $test_id = $connect->insert_id;
     foreach ($students_taking_that_subject as $student) {
         $current_student = $student['id'];
-        $insert = $connect->query("INSERT INTO marks(student_id,test_id) VALUES($current_student,$test_id)");
+        $stream=getStudentInfo($student['id'])['stream'];
+        $insert = $connect->query("INSERT INTO marks(student_id,stream,test_id) VALUES($current_student,$stream,$test_id)");
     }
 }

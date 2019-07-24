@@ -253,3 +253,18 @@ function fetchPeriods($in)
     //}
 
 }
+
+function getStudentInfo($id)
+{
+    include 'config.php';
+    $get_info = mysqli_fetch_assoc($connect->query("SELECT*FROM students WHERE id=$id"));
+    $student_info = array();
+    $student_info['id'] = $get_info['id'];
+    $student_info['name'] = $get_info['name'];
+    $student_info['stream'] = $get_info['grade'];
+    $student_info['image'] = $get_info['image'];
+    $student_info['DOB'] = $get_info['DOB'];
+    $student_info['status'] = $get_info['status'];
+    $student_info['account_status'] = $get_info['account_status'];
+    return returnValue($student_info);
+}

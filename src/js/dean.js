@@ -642,6 +642,8 @@ function validateAndsubmit() {
             success: function (data) {
                 if (data == "ok") {
                     $(".modal").remove();
+                    fetch(5);
+                    alert("Assessment successfully created.")
                 }
                 else {
                     alert("Failed to create assessement");
