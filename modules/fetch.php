@@ -40,9 +40,11 @@ if (isset($_GET['form_options'])) {
 if (isset($_POST['test'])) {
     if ($_POST['test'] !== "" and is_numeric($_POST['test'])) {
         include 'functions.php';
+
         $test_id = $_POST['test'];
         $result = fetchStudentsMarks($test_id);
         $form_data = array();
+
         if (!empty($result)) {
             while ($column = mysqli_fetch_assoc($result)) {
                 $student_id = $column['student_id'];
@@ -51,7 +53,7 @@ if (isset($_POST['test'])) {
                 $sub_form_Data['marks'] = $column['marks'];
                 $form_Data[] = $sub_form_Data;
             }
-            //echo $form_Data;
+
             if (!empty($form_Data)) {
                 echoJson($form_Data);
             }
@@ -61,9 +63,10 @@ if (isset($_POST['test'])) {
 
 if (isset($_GET['allStudents'])) {
     include 'functions.php';
+
     $students = array();
-    $students_array = fetchAllStudents();
-    //print_r($students_array);
+    $students_array = fetchAllStudents('all');
+
     foreach ($students_array as $column) {
         $students_sub_array = array();
         $students_sub_array['id'] = $column['id'];
@@ -71,21 +74,22 @@ if (isset($_GET['allStudents'])) {
         $students_sub_array['image'] = $column['image'];
         $students_sub_array['email'] = $column['email'];
         $students_sub_array['tel'] = $column['tel'];
-        //$students_sub_array['stream_id'] = $column['grade'];
         $students_sub_array['stream'] = fetchStreamName($column['grade']);
         $students_sub_array['DOB'] = $column['DOB'];
         $students_sub_array['status'] = $column['status'];
         $students_sub_array['account_status'] = $column['account_status'];
         $students[] = $students_sub_array;
-        //unset($students_sub_array);
     }
+
     echoJson($students);
 }
 
 if (isset($_GET['allteachers'])) {
     include 'functions.php';
+
     $teachers = array();
     $teachers_array = fetchAllTeachers();
+
     foreach ($teachers_array as $column) {
         $teachers_sub_array = array();
         $teachers_sub_array['id'] = $column['id'];
@@ -97,29 +101,36 @@ if (isset($_GET['allteachers'])) {
         $teachers_sub_array['type'] = $column['type'];
         $teachers[] = $teachers_sub_array;
     }
+
     echoJson($teachers);
 }
 
 if (isset($_GET['streams'])) {
     include "functions.php";
+
     echoJson(fetchAllStreams());
 }
 
 if (isset($_GET['subjects'])) {
     include 'functions.php';
-    echoJson(fetchAllSubjects());
+
+    echoJson(fetchAllSubjects('all'));
 }
 
 if (isset($_GET['tests']) and $_GET['tests'] !== "" and is_numeric($_GET['tests'])) {
-    include 'functions.php';
     include 'config.php';
+    include 'functions.php';
+
     $period = mysqli_real_escape_string($connect, $_GET['tests']);
+
     echoJson(fetchTestsDone('all', $period));
 }
 
 if (isset($_GET['periods'])) {
     include 'functions.php';
+
     $academic_years = fetchAcademicYears();
+
     while ($row = mysqli_fetch_assoc($academic_years)) {
         //fetch periods in that year
         $sub_array = array();

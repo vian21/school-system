@@ -1,5 +1,7 @@
 //add students to search form
 function addToForm() {
+    $("#searchStudent").html('')
+    $("#searchStudent").append("<option></option>");
     for (var i = 0; i < studentsArray.length; i++) {
         $("#searchStudent").select2({
             data: [
@@ -27,35 +29,43 @@ function showStudentForm() {
         event.preventDefault();
         $("#addStudentModal").remove();
     })
+
     //Append streams in select
     $("#studentGrade").append(streamsOptions());
+
     //Submit the add student form
     $("#addStudent").click((event) => {
         event.preventDefault();
+
         var name = $("#studentName").val();
         var email = $("#studentEmail").val();
         var tel = $("#studentTel").val();
         var grade = $("#studentGrade").val();
         var DOB = $("#studentDOB").val();
         var validName, validGrade, validDOB;
+        var period = currentPeriodId;
+
         if (name == "") {
             alert("Please enter a name");
         }
         else {
             validName = true;
         }
+
         if (grade == "") {
             alert("Please enter a grade");
         }
         else {
             validGrade = true;
         }
+
         if (DOB == "") {
             alert("Please enter a date of birth");
         }
         else {
             validDOB = true;
         }
+
         if (validName == true && validGrade == true && validDOB == true) {
             var info = new FormData();
             info.append('name', name);
@@ -63,13 +73,10 @@ function showStudentForm() {
             info.append('tel', tel);
             info.append('grade', grade);
             info.append('DOB', DOB);
-            add(2, info);
-            //console.log(info)
-        }
-        /*else {
-            $("#addStudent").unbind('click');
-        }*/
+            info.append('period', period);
 
+            add(2, info);
+        }
     })
     return false;
 }

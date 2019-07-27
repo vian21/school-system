@@ -53,7 +53,7 @@ function addTeacherChangeListeners(id) {
 }
 
 function addTeachersTosearchBox() {
-    console.log(1)
+    //console.log(1)
     $("#searchTeacherBox").html('')
     $("#searchTeacherBox").append("<option></option>");
     //$("#searchTeacherBox").html('')

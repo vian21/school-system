@@ -1,30 +1,40 @@
 <?php
-//include 'config.php';
-//$hash=password_hash("123",PASSWORD_DEFAULT);
-//$connect->query("INSERT INTO users(name,email,image,password,type) VALUES('Admin','admin@gmail.com','user.png','$hash',1)");
-//echo "ok";
+
+//Creating a student
 if (isset($_GET['student'])) {
-    //echo "ok";
-    //echo $_POST['name'];
-    //echo $_POST['grade'];
     if (isset($_POST['name']) and isset($_POST['grade']) and $_POST['name'] != "" and $_POST['grade'] != "" and is_numeric($_POST['grade'])) {
         //echo "ok";
         include 'config.php';
         include 'functions.php';
+
         $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
         $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
         $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
         $grade = mysqli_real_escape_string($connect, $_POST['grade']);
         $DOB = $_POST['DOB'];
+        $period = mysqli_real_escape_string($connect, $_POST['period']);
+
         $insert = $connect->query("INSERT INTO students(name,email,tel,grade,DOB) VALUES('$name','$email','$tel','$grade','$DOB')");
+
         if (!$insert) {
             echo "ko";
         }
         if ($insert) {
             echo "ok";
         }
+
+        //id of newly created student
+        $id = $connect->insert_id;
+
+        $compulsary_courses = fetchCompulsarySubjects($grade);
+
+        foreach ($compulsary_courses as $subject) {
+            $connect->query("INSERT INTO enrollment(student_id,subject,period) VALUES($id,$subject,$period)");
+        }
     }
 }
+
+//Creating a new staff
 if (isset($_GET['staff'])) {
     //echo"test";
     if (isset($_POST['type']) and is_numeric($_POST['type'])) {
@@ -60,46 +70,46 @@ if (isset($_GET['staff'])) {
                 } else {
                     $inserted = false;
                 }
-                //echo $stream."\n";
             }
             if ($inserted == true) {
                 echo 'k';
             } else {
                 echo 'o';
             }
-            // print_r($grade);
         }
     }
 }
 
+//Creating a new assessement and records in the marks table
 if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subject']) and is_numeric($_POST['subject']) and is_numeric($_POST['type']) and isset($_POST['period']) and is_numeric($_POST['period']) and isset($_POST['name']) and is_numeric($_POST['subject'])) {
-    // echo 'hello';
     include 'config.php';
     include 'functions.php';
+
     $subject = mysqli_real_escape_string($connect, $_POST['subject']);
     $type = mysqli_real_escape_string($connect, $_POST['type']);
     $period_id = mysqli_real_escape_string($connect, $_POST['period']);
     $period_name = mysqli_real_escape_string($connect, $_POST['name']);
     $students_taking_that_subject = fetchStudentsTaking($subject, $period_id);
     $month = "";
+
     if ($type == 1) {
         $month = mysqli_real_escape_string($connect, $_POST['month']) + 1;
     }
-    //echo $subject;
-    #echo $period_id;
-    //print_r($students_taking_that_subject);
-    //echo $month;
+
     $create_assessment = $connect->query("INSERT INTO assessments(period,name,month,type,subject) VALUES($period_id,'$period_name',$month,$type,$subject)");
+
+    //get id of newly created test
+    $test_id = $connect->insert_id;
+
+
     if ($create_assessment) {
         echo "ok";
     } else {
         echo "ko";
     }
-    //$select_creted_assement_id=$connect->query("SELECT id FROM assessments where ");
-    $test_id = $connect->insert_id;
+
     foreach ($students_taking_that_subject as $student) {
-        $current_student = $student['id'];
-        $stream=getStudentInfo($student['id'])['stream'];
-        $insert = $connect->query("INSERT INTO marks(student_id,stream,test_id) VALUES($current_student,$stream,$test_id)");
+        //$stream = getStudentInfo($student['id'])['stream'];
+        $insert = $connect->query("INSERT INTO marks(student_id,stream,test_id) VALUES($student,$subject,$test_id)");
     }
 }

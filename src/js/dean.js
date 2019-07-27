@@ -125,7 +125,7 @@ function fetch(what, round) {
                     fetchedTeachers(data, round);
                 }
                 if (what == 2) {
-                    fetchedStudents(data);
+                    fetchedStudents(data, round);
                 }
                 if (what == 3) {
                     fetchedStreams(data);
@@ -230,7 +230,7 @@ function fetchedTeachers(data, round) {
     teachersArray = JSON.parse(data);
     if (round != 2) {
         makeTeachersTable(teachersArray);
-        addTeachersTosearchBox();
+        //addTeachersTosearchBox();
 
     }
     addTeachersTosearchBox();
@@ -250,16 +250,16 @@ function fetchedtests(data) {
     return false;
 }
 function add(who, info) {
-    let url; let
+    let url;
+
     if (who == 1) {
         url = "modules/insert.php?staff=";
     }
+
     if (who == 2) {
         url = "modules/insert.php?student=";
     }
-    /*for(var pair of info.entries()) {
-        console.log(pair[0]+ ', '+ pair[1]); 
-     }*/
+
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',
@@ -359,10 +359,6 @@ function saveMsgResponse(who, msg) {
         $("#saveSuccess").fadeIn().delay(2000).fadeOut();
         //Update the staff' array
         fetch(1, 2)
-        //    addTeachersTosearchBox()
-        //}
-        //$.when(fetch(1, 2)).done(addTeachersTosearchBox());
-        //$("#saveSuccess").remove();
     }
 
     if (who == 2 && msg == "ok") {
@@ -370,7 +366,7 @@ function saveMsgResponse(who, msg) {
         $("#msgBoard").append(successMsg);
         $("#saveSuccess").fadeIn().delay(2000).fadeOut();
         //Update the students' array
-        fetch(2)
+        fetch(2, 2)
         //$("#saveSuccess").remove();
     }
 
@@ -525,9 +521,12 @@ function appendMarks(json) {
     return false;
 }
 function showNewAssessmentForm() {
-    //let form = "";
     let form = "<div class='modal'>\
     <form id='newAssessmentForm'>\
+    <h4>Grade</h4>\
+    <select name='grade' id='grade'>\
+    <option><option>\
+    </select><br>\
     <h4>Subject</h4>\
     <select name='subject' id='subject'>\
     <option><option>\
@@ -541,8 +540,11 @@ function showNewAssessmentForm() {
     <button id='cancel'>Cancel</button>\
     <button id='create'>Create</button>\
     </form>";
+
     $('body').append(form);
-    subjects_gradeOptions('subject')
+    $("#grade").html(streamsOptions())
+    $("#grade").select2()
+
     //createMonthOptions('month');
     addListeners();
     return false;
@@ -551,27 +553,45 @@ function createMonthOptions(idOfElement) {
     for (let i = 0; i < months.length; i++) {
         $('#' + idOfElement).select2({
             data: [
-                { id: i, text: months[i] },
-                //subjects_gradeOptions()
-
+                { id: i, text: months[i] }
             ]
         });
     }
     return false;
 }
 function addListeners() {
-    $(document).on('click', '#cancel', () => {
+    $("#cancel").click(() => {
         event.preventDefault();
+
         $('.modal').remove();
+
         return false;
     })
     $('#create').click(() => {
         event.preventDefault();
+
         validateAndsubmit();
+
         return false;
     })
-    $(document).on('change', '#type', () => {
-        console.log($('#type').val())
+    //when user selects a grade
+    $("#grade").change(() => {
+        $("#subject").html('');
+        let streamId = $("#grade").find("option:selected").attr('value');
+        let option = "<option></option>";
+
+        //loop through subject array to get subjects taught in the selected grade
+        for (let i = 0; i < subjects.length; i++) {
+
+            if (subjects[i]['stream'] == streamId) {
+                option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
+            }
+        }
+        $("#subject").html('').append(option);
+        $("#subject").select2()
+
+    })
+    $("#type").change(() => {
         if ($('#type').val() == 1) {
             $('#type').after("<div id='monthOptions'>\
             <h4>Month</h4>\
@@ -579,6 +599,7 @@ function addListeners() {
             <option><option>\
             </select>\
             </div>")
+
             createMonthOptions('month');
         }
         else {
@@ -591,6 +612,7 @@ function validateAndsubmit() {
     let subject = $('#subject').val();
     let type = $('#type').val();
     let month;
+
     let validSubject, validType, validMonth
     if (type == 1) {
         month = $('#month').val();
