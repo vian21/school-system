@@ -206,7 +206,8 @@ function countTeachers()
 function fetchAllTeachers()
 {
     include 'config.php';
-    $get_teachers = $connect->query("SELECT*FROM users WHERE type=2");
+    // $get_teachers = $connect->query("SELECT*FROM users WHERE type=2");
+    $get_teachers = $connect->query("SELECT*FROM users");
     $teachers = array();
     while ($row = mysqli_fetch_assoc($get_teachers)) {
         $teacher_array = array();

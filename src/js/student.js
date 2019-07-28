@@ -80,3 +80,63 @@ function showStudentForm() {
     })
     return false;
 }
+
+
+//function to delete staff, students and results
+function deleteItem(level, id) {
+    //staff
+    let url = "modules/delete.php";
+    if (level == 1) {
+        url += "?staff=" + id;
+    }
+    //students
+    if (level == 2) {
+
+    }
+    //assessment
+    if (level == 3) {
+
+    }
+
+    $.ajax({
+        url: url,
+        success: function (data) {
+            deleted(data, level);
+        }
+    })
+}
+
+function deleted(response, level) {
+    if (response == 'ok') {
+        if (level == 1) {
+            fetchThis(1)
+            alert("Staff successfully deleted");
+
+
+            //makeTeachersTable();
+        }
+        //students
+        if (level == 2) {
+            alert("student successfully deleted");
+        }
+        //assessment
+        if (level == 3) {
+            alert("Assessment successfully deleted");
+            dashboard();
+        }
+    }
+    else {
+        if (level == 1) {
+            alert("Failed to delete staff");
+        }
+        //students
+        if (level == 2) {
+            alert("Failed to delete student");
+        }
+        //assessment
+        if (level == 3) {
+            alert("Failed to delete assessment");
+        }
+    }
+
+}

@@ -13,16 +13,17 @@ var periods = [];
 var currentPeriodId, currentPeriod;
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 $(document).ready(function () {
+    dashboard()
     //fetcth periods;
-    fetch(6)
+    fetchThis(6)
     //Fecth all teachers and add them to and array and make a table using the array
-    fetch(1);
+    fetchThis(1);
     //fetch all student and add them to an array and add them to select option list using the student's array
-    fetch(2);
+    fetchThis(2);
     //Fetch all streams id
-    fetch(3);
+    fetchThis(3);
     //Fetch all subjects and their grades
-    fetch(4);
+    fetchThis(4);
 
     $("#tab1").click(function () {
         $("#two").hide();
@@ -96,7 +97,7 @@ $(document).ready(function () {
 })
 
 //Fetch all students and place them in array
-function fetch(what, round) {
+function fetchThis(what, round) {
     let url;
     if (what == 1) {
         url = "modules/fetch.php?allteachers=";
@@ -175,7 +176,7 @@ function changeTermListener() {
             currentPeriodId = selectedTermId;
             currentPeriod = selectedTermName;
 
-            fetch(5);
+            fetchThis(5);
             marks();
             alert("Term changed successfully")
         }
@@ -216,7 +217,7 @@ function setCurrentPeriod() {
     currentPeriod = lastPeriodArray['name'];
     currentPeriodId = lastPeriodArray['id'];
     //fetch tests in the current period
-    fetch(5);
+    fetchThis(5);
 
     return false;
 }
@@ -295,11 +296,11 @@ function insertMsg(who, msg) {
         alert(person + " successfully inserted");
         if (who == 1) {
             $("#addTeacherModal").remove();
-            fetch(1);
+            fetchThis(1);
         }
         if (who == 2) {
             $("#addStudentModal").remove();
-            fetch(2);
+            fetchThis(2);
         }
     }
     return false;
@@ -358,7 +359,7 @@ function saveMsgResponse(who, msg) {
         $("#msgBoard").append(successMsg);
         $("#saveSuccess").fadeIn().delay(2000).fadeOut();
         //Update the staff' array
-        fetch(1, 2)
+        fetchThis(1, 2)
     }
 
     if (who == 2 && msg == "ok") {
@@ -366,7 +367,7 @@ function saveMsgResponse(who, msg) {
         $("#msgBoard").append(successMsg);
         $("#saveSuccess").fadeIn().delay(2000).fadeOut();
         //Update the students' array
-        fetch(2, 2)
+        fetchThis(2, 2)
         //$("#saveSuccess").remove();
     }
 
@@ -664,7 +665,7 @@ function validateAndsubmit() {
             success: function (data) {
                 if (data == "ok") {
                     $(".modal").remove();
-                    fetch(5);
+                    fetchThis(5);
                     alert("Assessment successfully created.")
                 }
                 else {
@@ -690,4 +691,61 @@ function isJSON(something) {
 function emailIsValid(email) {
     let regex = /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
     return regex.test(email);
+}
+
+
+function dashboard() {
+    $("#desk").html("<!-- Student start -->\
+    <div id='one'>\
+        <button id='addStudentButton'>Add</button>\
+        <div id='inputContainer'>\
+            <select name='student' id='searchStudent'>\
+                <option></option>\
+            </select>\
+        </div>\
+        <div id='info'>\
+            <center><img src='src/img/user.png' alt='' id='schoolImage'><br><br></center>\
+            <span>Number of students: 200</span><br>\
+            <span>Name: school</span><br>\
+            <span>Number of students :<?php echo countStudents(1, 0); ?></span><br>\
+            <span>Number of male students :100</span><br>\
+            <span>Number of female students :100</span><br>\
+            <span>Country :Burundi</span><br>\
+            <span>Nationalities :5</span><br>\
+            <span>Number of teachers :22</span><br>\
+        </div>\
+    </div>"+ '<!-- Teacher start -->\
+    <div id="two" style="display:none">\
+    </div>\
+    <!-- Marks start -->\
+    <div id="three" style="display:none">\
+        <button id="createAssessment">New assessment</button>\
+        <form id="marksForm">\
+            <div class="form-group row">\
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Grade</label>\
+                <div class="col-sm-10">\
+                    <select name="subject" id="marksGrade">\
+                    </select>\
+                </div>\
+            </div>\
+            <div class="form-group row">\
+                <label for="inputEmail3" class="col-sm-2 col-form-label">subject</label>\
+                <div class="col-sm-10">\
+                    <select name="grade" id="marksSubject">\
+                    </select>\
+                </div>\
+            </div>\
+            <div class="form-group row">\
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Test</label>\
+                <div class="col-sm-10">\
+                    <select name="test" id="marksTest" required>\
+                    </select>\
+                </div>\
+            </div>\
+            <button id="viewResults">View results</button>\
+        </form>\
+        <div id="results"></div>\
+    </div>\
+</div>');
+
 }
