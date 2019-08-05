@@ -1,4 +1,40 @@
 <?php
+//school info
+if(isset($_GET['school_name']) and isset($_GET['id'])){
+    include 'config.php';
+
+    $name=$_GET['school_name'];
+    $id=$_GET['id'];
+
+    $change=$connect->query("UPDATE info SET name='$name' WHERE id=$id");
+
+    if($change){
+        echo "ok";
+    }
+    else{
+        echo "ko";
+    }
+
+}
+
+if(isset($_GET['school_type']) and isset($_GET['id'])){
+    include 'config.php';
+
+    $type=$_GET['school_type'];
+    $id=$_GET['id'];
+
+    $change=$connect->query("UPDATE info SET type='$type' WHERE id=$id");
+
+    if($change){
+        echo "ok";
+    }
+    else{
+        echo "ko";
+    }
+
+}
+
+//stduents info
 if (isset($_GET['student_name']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['name'] != "") {
         include 'config.php';
@@ -25,6 +61,21 @@ if (isset($_GET['student_dob'])) {
         }
     }
 }
+
+if (isset($_GET['student_gender'])) {
+    if ($_GET['gender'] != "" and is_numeric($_GET['gender']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
+        include 'config.php';
+        $id = $_GET['id'];
+        $gender = $_GET['gender'];
+        $change_gender = $connect->query("UPDATE students SET gender=$gender WHERE id=$id");
+        if (!$change_gender) {
+            echo "ko";
+        } else {
+            echo "ok";
+        }
+    }
+}
+
 if (isset($_GET['student_grade'])) {
     if ($_GET['grade'] != "" and is_numeric($_GET['grade']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
         include 'config.php';
@@ -38,13 +89,14 @@ if (isset($_GET['student_grade'])) {
         }
     }
 }
+
 if (isset($_GET['marks']) and isset($_POST['student_id']) and isset($_POST['mark']) and is_numeric($_POST['mark']) and is_numeric($_POST['student_id'])) {
     //echo "ok";
     include 'config.php';
     $student_id = mysqli_real_escape_string($connect, $_POST['student_id']);
     $mark = mysqli_real_escape_string($connect, $_POST['mark']);
-
-    $update_marks = $connect->query("UPDATE marks SET marks=$mark where student_id=$student_id");
+    $test = mysqli_real_escape_string($connect, $_POST['test']);
+    $update_marks = $connect->query("UPDATE marks SET marks=$mark where student_id=$student_id and test_id=$test");
     if ($update_marks) {
         echo "ok";
     } else {
@@ -70,13 +122,27 @@ if (isset($_GET['staff_name']) and isset($_GET['id']) and is_numeric($_GET['id']
     }
 }
 
+if (isset($_GET['staff_gender']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
+    if ($_GET['gender'] != "") {
+        include 'config.php';
+        $gender = strip_tags(mysqli_real_escape_string($connect, $_GET['gender']));
+        $id = $_GET['id'];
+        $change_gender = $connect->query("UPDATE users SET gender='$gender' WHERE id=$id");
+        if (!$change_gender) {
+            echo "ko";
+        } else {
+            echo "ok";
+        }
+    }
+}
+
 if (isset($_GET['staff_email']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['email'] != "") {
         include 'config.php';
         $email = strip_tags(mysqli_real_escape_string($connect, $_GET['email']));
         $id = $_GET['id'];
-        $change_name = $connect->query("UPDATE users SET email='$email' WHERE id=$id");
-        if (!$change_name) {
+        $change_email = $connect->query("UPDATE users SET email='$email' WHERE id=$id");
+        if (!$change_email) {
             echo "ko";
         } else {
             echo "ok";
@@ -89,8 +155,23 @@ if (isset($_GET['staff_tel']) and isset($_GET['id']) and is_numeric($_GET['id'])
         include 'config.php';
         $tel = strip_tags(mysqli_real_escape_string($connect, $_GET['tel']));
         $id = $_GET['id'];
-        $change_name = $connect->query("UPDATE users SET tel='$tel' WHERE id=$id");
-        if (!$change_name) {
+        $change_tel = $connect->query("UPDATE users SET tel='$tel' WHERE id=$id");
+        if (!$change_tel) {
+            echo "ko";
+        } else {
+            echo "ok";
+        }
+    }
+}
+
+
+if (isset($_GET['staff_title']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
+    if ($_GET['title'] != "") {
+        include 'config.php';
+        $title = strip_tags(mysqli_real_escape_string($connect, $_GET['title']));
+        $id = $_GET['id'];
+        $change_title = $connect->query("UPDATE users SET type='$title' WHERE id=$id");
+        if (!$change_title) {
             echo "ko";
         } else {
             echo "ok";

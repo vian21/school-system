@@ -8,13 +8,14 @@ if (isset($_GET['student'])) {
         include 'functions.php';
 
         $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
+        $gender = mysqli_real_escape_string($connect, $_POST['gender']);
         $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
         $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
         $grade = mysqli_real_escape_string($connect, $_POST['grade']);
         $DOB = $_POST['DOB'];
         $period = mysqli_real_escape_string($connect, $_POST['period']);
 
-        $insert = $connect->query("INSERT INTO students(name,email,tel,grade,DOB) VALUES('$name','$email','$tel','$grade','$DOB')");
+        $insert = $connect->query("INSERT INTO students(name,gender,email,tel,grade,DOB) VALUES('$name',$gender,'$email','$tel','$grade','$DOB')");
 
         if (!$insert) {
             echo "ko";
@@ -40,12 +41,14 @@ if (isset($_GET['staff'])) {
     if (isset($_POST['type']) and is_numeric($_POST['type'])) {
         include 'config.php';
         $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
+        $gender = strip_tags(mysqli_real_escape_string($connect, $_POST['gender']));
+        $school_id = strip_tags(mysqli_real_escape_string($connect, $_POST['school']));
         $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
         $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
         $type = $_POST['type'];
         //If new staff is a dean
         if ($type == 1) {
-            $insertDean = $connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','tel',$type)");
+            $insertDean = $connect->query("INSERT INTO users(name,gender,email,tel,type,school) VALUES('$name',$gender,'$email','tel',$type,$school_id)");
             if (!$insertDean) {
                 echo "ko";
             } else {
@@ -111,5 +114,56 @@ if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subje
     foreach ($students_taking_that_subject as $student) {
         //$stream = getStudentInfo($student['id'])['stream'];
         $insert = $connect->query("INSERT INTO marks(student_id,stream,test_id) VALUES($student,$subject,$test_id)");
+    }
+}
+
+if (
+    isset($_GET['subject'])
+    && isset($_POST['name'])
+    && isset($_POST['grade'])
+    && isset($_POST['type'])
+    && isset($_POST['hours'])
+
+    && !empty($_POST['name'])
+    && !empty($_POST['grade'])
+    && !empty($_POST['type'])
+    && !empty($_POST['hours'])
+) {
+    $subject_name = $_POST['name'];
+    $grade = $_POST['grade'];
+    $hours = $_POST['hours'];
+    $type = $_POST['type'];
+
+    include 'config.php';
+
+    $insert = $connect->query("INSERT INTO subjects(subject_name,stream,hours,type) VALUES('$subject_name',$grade,$hours,$type)");
+
+    if ($insert) {
+        echo "ok";
+    } else {
+        echo "ko";
+    }
+}
+
+if (
+    isset($_GET['stream'])
+    && isset($_POST['grade'])
+    && isset($_POST['stream'])
+
+    && !empty($_POST['grade'])
+    && !empty($_POST['stream'])
+
+) {
+    $grade = $_POST['grade'];
+    $stream = $_POST['stream'];
+
+    include 'config.php';
+
+    $insert = $connect->query("INSERT INTO streams(grade,stream) VALUES($grade,'$stream')");
+
+    if ($insert) {
+        echo "ok";
+    } else {
+        echo "ko";
     }
 }

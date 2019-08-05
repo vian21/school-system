@@ -1,3 +1,8 @@
+var schoolId;
+var schoolName;
+var schoolType;
+var genders = ['Male', 'Female'];
+var schoolTypes = ['Day School', 'Boarding School'];
 //Variable to contain all students
 var studentsArray = [];
 //Variable to conatiner all teachers
@@ -9,101 +14,153 @@ var subjects = [];
 //Variable to contain the tests done
 var testsDone = [];
 var periods = [];
+var staffTypes = ['Dean', 'Teacher'];
 //var currentYearPosition, currentYearId, currentYear, currentPeriodPosition, currentPeriodId, currentPeriod;
 var currentPeriodId, currentPeriod;
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 $(document).ready(function () {
+    fetchThis(7)
     dashboard()
     //fetcth periods;
     fetchThis(6)
     //Fecth all teachers and add them to and array and make a table using the array
-    fetchThis(1);
+    //fetchThis(1);
     //fetch all student and add them to an array and add them to select option list using the student's array
-    fetchThis(2);
+    //fetchThis(2);
     //Fetch all streams id
     fetchThis(3);
     //Fetch all subjects and their grades
     fetchThis(4);
-
+    //
     $("#tab1").click(function () {
-        $("#two").hide();
-        $("#three").hide();
-        $("#one").css('display', 'block');
+        //$("#two").hide();
+        //$("#three").hide();
+        //$("#four").hide();
+        //$("#one").css('display', 'block');
         //$(this).off('click');
-    })
-    $("#tab2").click(function () {
-        $("#one").hide();
-        $("#three").hide();
-        $("#two").css('display', 'block');
+        $("#container").html("<button id='addStudentButton'>Add</button>\
+                                <select name='student' id='searchStudent'>\
+                                  <option></option>\
+                                </select>\
+                             <div id='info'>\
+                                 <center><img src='src/img/user.png' alt='' id='schoolImage'><br><br></center>\
+                                <span>Name: "+ schoolName + "</span><br>\
+                                <span>Number of students :"+ numberOfStudents + "</span><br>\
+                                <span>Number of male students :"+ numberOfMaleStudents + "</span><br>\
+                                <span>Number of female students :"+ numberOfFemaleStudents + "</span><br>\
+                                <span>Country :Burundi</span><br>\
+                                <span>Nationalities :5</span><br>\
+                                <span>Number of teachers :"+ numberOfTeachers + "</span><br>\
+                          </div>\
+    ")
+        addToForm();
 
+        $("#searchStudent").on("change", function () {
+            //console.log($(this)/*.find("selected:option").attr("value")*/)
+            var position = $("#searchStudent").select2('val');
+            console.log(position)
+            var studentSelected = studentsArray[position];
+            var studentInfoTemplate = "";
+            var studentSelectedImage = studentSelected['image'];
+            if (studentSelectedImage == "") {
+                studentSelectedImage = "src/img/user.png";
+            }
+            var studentSelectedName = studentSelected['name'];
+            var studentSelectedDOB = studentSelected['DOB'];
+            var studentSelectedEmail = studentSelected['email'];
+            var studentSelectedGrade = studentSelected['stream']['grade'] + ' ' + studentSelected['stream']['stream'];
+            studentInfoTemplate += "<center><img id='studentImage' src='" + studentSelectedImage + "'></center>";
+            studentInfoTemplate += "Name : <input type='text' id='studentInfoName'  value='" + studentSelectedName + "'></br>";
+
+            studentInfoTemplate += "Gender: <select id='studentInfoGender'>";
+            studentInfoTemplate += "<option value='0'>Male</option>";
+            studentInfoTemplate += "<option value='1'>Female</option>";
+            studentInfoTemplate += "</select><br>";
+
+            studentInfoTemplate += "DOB : <input type='date' id='studentInfoDOB'  value='" + studentSelectedDOB + "'></br>";
+            studentInfoTemplate += "Grade : ";
+            studentInfoTemplate += "<select id='studentInfoGrade'>";
+            studentInfoTemplate += "<option value='" + studentSelected['id'] + "'>" + studentSelectedGrade + "</option>"
+            studentInfoTemplate += "<option></option>"
+            studentInfoTemplate += streamsOptions();
+            studentInfoTemplate += "</select>";
+            studentInfoTemplate += "<button onclick='deleteItem(2," + studentSelected['id'] + ")'>Delete</button>";
+            studentInfoTemplate += "<div id='msgBoard'></div>"
+            $("#info").html(studentInfoTemplate);
+
+            //Make the gender selected
+            $("#studentInfoGender").val(studentSelected['gender']).trigger('change');
+
+            //Add listeners for change in student info
+            $("#studentInfoName").change(function () {
+                // console.log(1)
+                //$("document").click(function(){
+                save(2, studentSelected['id'], 'name', $("#studentInfoName").val());
+                //console.log(1)
+                //})
+            })
+
+            //change gender
+            $("#studentInfoGender").change(function () {
+                //$("body").click(function(){
+                console.log(1)
+                save(2, studentSelected['id'], 'gender', $("#studentInfoGender").val());
+                //})
+            })
+
+            $("#studentInfoGrade").change(function () {
+                //$("body").click(function(){
+                console.log(1)
+                save(2, studentSelected['id'], 'grade', $("#studentInfoGrade").val());
+                //})
+            })
+
+            $("#studentInfoDOB").change(function () {
+                //$("document").click(function(){
+                console.log(1)
+                save(2, studentSelected['id'], 'dob', $("#studentInfoDOB").val());
+                //})
+            })
+        })
+
+        $("#addStudentButton").click(function () { showStudentForm() });
+
+    })
+
+    $("#tab2").click(function () {
+
+        makeTeachersTable(teachersArray, 'container')
     })
 
     $("#tab3").unbind('click').click(function () {
-        $("#one").hide();
-        $("#two").hide();
+        $("#container").html('<button id="createAssessment">New assessment</button>\
+                              <button id="showMarksForm">Results</button>\
+                              <button id="showReportsForm">Reports</button>\
+                              <div id="marksDesk"></div>\
+                            ');
+
         $("#three").css('display', 'block');
         //Append the grades in the select grade input when user clicks on the marks tab
         marks();
         //$(this).off('click')
         return false;
     })
-    $("#searchStudent").on("change", function () {
-        //console.log($(this)/*.find("selected:option").attr("value")*/)
-        let position = $("#searchStudent").select2('val');
-        console.log(position)
-        let studentSelected = studentsArray[position];
-        let studentInfoTemplate = "";
-        let studentSelectedImage = studentSelected['image'];
-        if (studentSelectedImage == "") {
-            studentSelectedImage = "src/img/user.png";
-        }
-        let studentSelectedName = studentSelected['name'];
-        let studentSelectedDOB = studentSelected['DOB'];
-        let studentSelectedEmail = studentSelected['email'];
-        let studentSelectedGrade = studentSelected['stream']['grade'] + ' ' + studentSelected['stream']['stream'];
-        studentInfoTemplate += "<center><img id='studentImage' src='" + studentSelectedImage + "'></center>";
-        studentInfoTemplate += "Name : <input type='text' id='studentInfoName'  value='" + studentSelectedName + "'></br>";
-        studentInfoTemplate += "DOB : <input type='date' id='studentInfoDOB'  value='" + studentSelectedDOB + "'></br>";
-        studentInfoTemplate += "Grade : ";
-        studentInfoTemplate += "<select id='studentInfoGrade'>";
-        studentInfoTemplate += "<option value='" + studentSelected['id'] + "'>" + studentSelectedGrade + "</option>"
-        studentInfoTemplate += "<option></option>"
-        studentInfoTemplate += streamsOptions();
-        studentInfoTemplate += "</select>";
-        studentInfoTemplate += "<div id='msgBoard'></div>"
-        $("#info").html(studentInfoTemplate);
-        //Add listeners for change in student info
-        $("#studentInfoName").change(() => {
-            // console.log(1)
-            //$("document").click(() => {
-            save(2, studentSelected['id'], 'name', $("#studentInfoName").val());
-            //console.log(1)
-            //})
-        })
-        $("#studentInfoGrade").change(() => {
-            //$("body").click(() => {
-            console.log(1)
-            save(2, studentSelected['id'], 'grade', $("#studentInfoGrade").val());
-            //})
-        })
-        $("#studentInfoDOB").change(() => {
-            //$("document").click(() => {
-            console.log(1)
-            save(2, studentSelected['id'], 'dob', $("#studentInfoDOB").val());
-            //})
-        })
+
+    $("#tab4").click(function () {
+        misc('container');
+
+        return false;
     })
-    $("#addStudentButton").click(() => { showStudentForm() });
 })
 
 //Fetch all students and place them in array
 function fetchThis(what, round) {
-    let url;
+    var url;
     if (what == 1) {
-        url = "modules/fetch.php?allteachers=";
+        url = "modules/fetch.php?allteachers=&school_id=" + schoolId;
     }
     if (what == 2) {
-        url = "modules/fetch.php?allStudents=";
+        url = "modules/fetch.php?allStudents=&school_id=" + schoolId;
     }
     if (what == 3) {
         url = "modules/fetch.php?streams=";
@@ -117,6 +174,9 @@ function fetchThis(what, round) {
     if (what == 6) {
         url = "modules/fetch.php?periods=";
     }
+    if (what == 7) {
+        url = "modules/fetch.php?school_info=&user=" + userId;
+    }
     $.ajax({
         url: url,
         method: "get",
@@ -126,7 +186,7 @@ function fetchThis(what, round) {
                     fetchedTeachers(data, round);
                 }
                 if (what == 2) {
-                    fetchedStudents(data, round);
+                    fetchedStudents(data);
                 }
                 if (what == 3) {
                     fetchedStreams(data);
@@ -139,6 +199,9 @@ function fetchThis(what, round) {
                 }
                 if (what == 6) {
                     fetchedPeriods(data, round);
+                }
+                if (what == 7) {
+                    schoolInfo(data);
                 }
             }
 
@@ -159,18 +222,27 @@ function fetchedPeriods(json, round) {
 
     return false;
 }
-
+function schoolInfo(json) {
+    var info = JSON.parse(json);
+    schoolId = info['id'];
+    schoolName = info['name'];
+    schoolType = info['type'];
+    //Fecth all teachers and add them to and array and make a table using the array
+    fetchThis(1);
+    //fetch all student and add them to an array and add them to select option list using the student's array
+    fetchThis(2);
+}
 function changeTermListener() {
-    $('#termOptions').change(() => {
-        let selectedTermValue = $('#termOptions').val()
+    $('#termOptions').change(function () {
+        var selectedTermValue = $('#termOptions').val()
         //get first value == year's index in periods array
-        let selectedTermYear = selectedTermValue.split(',')[0];
+        var selectedTermYear = selectedTermValue.split(',')[0];
         //get second value == period's index in the periods array
-        let selectedTermArrayPosition = selectedTermValue.split(',')[1];
+        var selectedTermArrayPosition = selectedTermValue.split(',')[1];
         //get the periods array of a the selected year using the year's index and the index of the period array
-        let selectedPeriodArray = periods[selectedTermYear]['periods'][selectedTermArrayPosition]
-        let selectedTermId = selectedPeriodArray['id'];
-        let selectedTermName = selectedPeriodArray['name'];
+        var selectedPeriodArray = periods[selectedTermYear]['periods'][selectedTermArrayPosition]
+        var selectedTermId = selectedPeriodArray['id'];
+        var selectedTermName = selectedPeriodArray['name'];
 
         if (selectedTermId !== currentPeriodId) {
             currentPeriodId = selectedTermId;
@@ -187,10 +259,10 @@ function changeTermListener() {
 }
 
 function generateTermOptions(idOfElement) {
-    for (let i = 0; i < periods.length; i++) {
-        let position = periods[i]['periods'];
-        for (let h = 0; h < position.length; h++) {
-            let periodName = position[h]['name']
+    for (var i = 0; i < periods.length; i++) {
+        var position = periods[i]['periods'];
+        for (var h = 0; h < position.length; h++) {
+            var periodName = position[h]['name']
             infoArray = i + ',' + h;
             $('#' + idOfElement).select2({
                 data: [
@@ -210,10 +282,10 @@ function generateTermOptions(idOfElement) {
     $('#' + idOfElement).val(infoArray).trigger('change');
 }
 function setCurrentPeriod() {
-    let lastYearPosition = periods.length - 1;
-    let periodsArray = periods[lastYearPosition]['periods'];
-    let lastPeriodPosition = periodsArray.length - 1;
-    let lastPeriodArray = periodsArray[lastPeriodPosition];
+    var lastYearPosition = periods.length - 1;
+    var periodsArray = periods[lastYearPosition]['periods'];
+    var lastPeriodPosition = periodsArray.length - 1;
+    var lastPeriodArray = periodsArray[lastPeriodPosition];
     currentPeriod = lastPeriodArray['name'];
     currentPeriodId = lastPeriodArray['id'];
     //fetch tests in the current period
@@ -230,7 +302,7 @@ function fetchedSubjects(data) {
 function fetchedTeachers(data, round) {
     teachersArray = JSON.parse(data);
     if (round != 2) {
-        makeTeachersTable(teachersArray);
+        //makeTeachersTable(teachersArray);
         //addTeachersTosearchBox();
 
     }
@@ -250,17 +322,26 @@ function fetchedtests(data) {
 
     return false;
 }
-function add(who, info) {
-    let url;
+function add(what, info) {
+    var url = "modules/insert.php";
 
-    if (who == 1) {
-        url = "modules/insert.php?staff=";
+    if (what == 1) {
+        url += "?staff=";
     }
 
-    if (who == 2) {
-        url = "modules/insert.php?student=";
+    if (what == 2) {
+        url += "?student=";
     }
 
+    //add subject
+    if (what == 3) {
+        url += "?subject="
+    }
+
+    //add stream
+    if (what == 4) {
+        url += "?stream="
+    }
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',
@@ -269,76 +350,116 @@ function add(who, info) {
         method: "post",
         data: info,
         success: (data) => {
-            if (who == 1) {
-                insertMsg(1, data);
-            }
-            if (who == 2) {
-                insertMsg(2, data);
-            }
+            insertMsg(what, data);
         }
 
     });
     return false;
 }
-function insertMsg(who, msg) {
-    let person;
-    if (who == 1) {
-        person = "Staff";
+function insertMsg(what, msg) {
+    var object;
+    if (what == 1) {
+        object = "Staff";
     }
-    if (who == 2) {
-        person = "Student";
+    if (what == 2) {
+        object = "Student";
+    }
+    if (what == 3) {
+        object = "Subject";
+    }
+    if (what == 4) {
+        object = "Stream";
     }
 
     if (msg == "ko") {
-        alert("Failed to insert " + person);
+        alert("Failed to insert " + object);
     }
+
     if (msg == "ok") {
-        alert(person + " successfully inserted");
-        if (who == 1) {
-            $("#addTeacherModal").remove();
+        $(".modal").remove();
+
+        alert(object + " successfully inserted");
+
+        if (what == 1) {
+            // $("#addTeacherModal").remove();
             fetchThis(1);
+            //makeTeachersTable(teachersArray,'container')
+            $("#container").html('');
         }
-        if (who == 2) {
-            $("#addStudentModal").remove();
+        if (what == 2) {
+            // $("#addStudentModal").remove();
             fetchThis(2);
+        }
+        if (what == 3) {
+            fetchThis(4);
+        }
+        if (what == 4) {
+            fetchThis(3);
         }
     }
     return false;
 }
 function streamsOptions() {
     var optionsTemplate = "";
-    for (let i = 0; i < streams.length; i++) {
+    for (var i = 0; i < streams.length; i++) {
         optionsTemplate += "<option value='" + streams[i]['id'] + "'>Grade " + streams[i]['grade'] + ' ' + streams[i]['stream'] + "</option>";
     }
     return optionsTemplate;
 }
 function save(who, id, what, as) {
-    //For staff
-    let url;
-    if (who == 1 && what == 'name') {
-        url = "modules/update.php?staff_name=&id=" + id + "&name=" + as;
+    var url = "modules/update.php";
+    //school info
+    if (who == 0 && what == 'schoolName') {
+        url += "?school_name=" + as+"&id="+schoolId;
     }
+
+    if (who == 0 && what == 'schoolType') {
+        url += "?school_type=" + as+"&id="+schoolId;
+    }
+    //For staff
+
+    if (who == 1 && what == 'name') {
+        url += "?staff_name=&id=" + id + "&name=" + as;
+    }
+
+    if (who == 1 && what == 'gender') {
+        url += "?staff_gender=&id=" + id + "&gender=" + as;
+    }
+
     if (who == 1 && what == 'email') {
-        url = "modules/update.php?staff_email=&id=" + id + "&email=" + as;
+        url += "?staff_email=&id=" + id + "&email=" + as;
     }
     if (who == 1 && what == 'tel') {
-        url = "modules/update.php?staff_tel=&id=" + id + "&tel=" + as;
+        url += "?staff_tel=&id=" + id + "&tel=" + as;
+    }
+
+    if (who == 1 && what == 'title') {
+        url += "?staff_title=&id=" + id + "&title=" + as;
     }
 
     //For students
     if (who == 2 && what == 'name') {
-        url = "modules/update.php?student_name=&id=" + id + "&name=" + as;
+        url += "?student_name=&id=" + id + "&name=" + as;
     }
+
+    if (who == 2 && what == 'gender') {
+        url += "?student_gender=&id=" + id + "&gender=" + as;
+    }
+
     if (who == 2 && what == 'grade') {
-        url = "modules/update.php?student_grade=&id=" + id + "&grade=" + as;
+        url += "?student_grade=&id=" + id + "&grade=" + as;
     }
     if (who == 2 && what == 'dob') {
-        url = "modules/update.php?student_dob=&id=" + id + "&dob=" + as;
+        url += "?student_dob=&id=" + id + "&dob=" + as;
     }
     $.ajax({
         url: url,
         method: "get",
         success: function (msg) {
+            if (who == 0) {
+                saveMsgResponse(0, msg)
+            }
+
             if (who == 1) {
                 saveMsgResponse(1, msg)
             }
@@ -350,11 +471,21 @@ function save(who, id, what, as) {
     });
     return false;
 }
-function saveMsgResponse(who, msg) {
-    let successMsg = "<span id='saveSuccess'><br>Data saved</span>";
-    let failureMsg = "<span id='saveFail' style='display:none'><br>Failed to save data</span>";
+function saveMsgResponse(what, msg) {
+    var successMsg = "<span id='saveSuccess'><br>Data saved</span>";
+    var failureMsg = "<span id='saveFail' style='display:none'><br>Failed to save data</span>";
 
-    if (who == 1 && msg == "ok") {
+    if (what==0 && msg == "ok") {
+        $("#msgBoard").html("");
+        $("#msgBoard").append(successMsg);
+        $("#saveSuccess").fadeIn().delay(2000).fadeOut();
+        //Update the students' array
+        //fetchThis(2, 2)
+        //$("#saveSuccess").remove();
+    }
+
+
+    if (what == 1 && msg == "ok") {
         $("#msgBoard").html("");
         $("#msgBoard").append(successMsg);
         $("#saveSuccess").fadeIn().delay(2000).fadeOut();
@@ -362,7 +493,7 @@ function saveMsgResponse(who, msg) {
         fetchThis(1, 2)
     }
 
-    if (who == 2 && msg == "ok") {
+    if (what == 2 && msg == "ok") {
         $("#msgBoard").html("");
         $("#msgBoard").append(successMsg);
         $("#saveSuccess").fadeIn().delay(2000).fadeOut();
@@ -376,10 +507,10 @@ function saveMsgResponse(who, msg) {
 
 function subjects_gradeOptions(idOfElement) {
     //var array = "";
-    for (let i = 0; i < subjects.length; i++) {
+    for (var i = 0; i < subjects.length; i++) {
         //var position=subjects[i]['stream'];
-        let stream = "";//streams[i][position];
-        for (let h = 0; h < streams.length; h++) {
+        var stream = "";//streams[i][position];
+        for (var h = 0; h < streams.length; h++) {
             if (streams[h]['id'] == subjects[i]['stream']) {
                 stream = streams[h]['grade'] + " " + streams[h]['stream']
                 break;
@@ -388,9 +519,7 @@ function subjects_gradeOptions(idOfElement) {
 
         $('#' + idOfElement).select2({
             data: [
-                { id: subjects[i]['id'], text: subjects[i]['name'] + " " + stream },
-
-
+                { id: subjects[i]['id'], text: subjects[i]['name'] + " " + stream }
             ]
         });
     }
@@ -400,103 +529,55 @@ function subjects_gradeOptions(idOfElement) {
 //Marks
 //Append all grades to form
 function marks() {
-    $('#createAssessment').unbind('click').click(() => {
+    $('#createAssessment').unbind('click').click(function () {
         showNewAssessmentForm()
         return false
     })
-    $("#marksGrade").html('<option></option>').append(streamsOptions());
-    $("#marksGrade").change(() => {
-        //console.log(1)
-        //If change grade clear all fields
-        $("#marksSubject").html('');
-        $("#marksTest").html('');
-        let streamId = $("#marksGrade").find("option:selected").attr('value');
-        //console.log(streamId)
-        let option = "<option></option>";
-        for (let i = 0; i < subjects.length; i++) {
-
-            if (subjects[i]['stream'] == streamId) {
-                option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
-            }
-        }
-        $("#marksSubject").html('').append(option);
-        $("#marksTest").html('');
-        $("#marksTest").html('');
-        $("#marksSubject").change(() => {
-            $("#marksTest").html('');
-            //If change subject clear the tests field
-            $("#marksTest").html('');
-            let subjectId = $("#marksSubject").find('option:selected').attr('value');
-            let option = "<option></option>";
-            for (let i = 0; i < testsDone.length; i++) {
-
-                if (testsDone[i]['subject'] == subjectId) {
-                    option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
-                }
-            }
-            $("#marksTest").html('').append(option);
-
-            $("#viewResults").click(() => {
-                event.preventDefault();
-                let subject = $("#marksSubject").find('option:selected').attr('value');
-                let grade = $("#marksGrade").find('option:selected').attr('value');
-                let test = $("#marksTest").find('option:selected').attr('value');
-
-                if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
-                    //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
-                    let formData = {
-                        subject: subject,
-                        grade: grade,
-                        test: test
-                    }
-                    console.log(test);
-                    $.ajax({
-                        url: "modules/fetch.php",
-                        method: "post",
-                        data: formData,
-                        success: function (data) {
-                            appendMarks(data);
-                        }
-                    })
-                }
-                return false;
-            })
-            return false;
-        })
-        return false;
+    $('#showMarksForm').unbind('click').click(function () {
+        marksForm()
+        return false
+    })
+    $('#showReportsForm').unbind('click').click(function () {
+        reportsForm()
+        return false
     })
     return false
 }
-function appendMarks(json) {
+function appendMarks(json, testID) {
     if (isJSON(json) && json !== "") {
-        let jsonArray = JSON.parse(json);
-        let tableTemplate = "<table><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
-        let i = 0;
-        for (i = 0; i < jsonArray.length; i++) {
-            tableTemplate += "<tr>";
-            tableTemplate += "<td>" + jsonArray[i]['id'] + "</td>";
-            tableTemplate += "<td>" + jsonArray[i]['name'] + "</td>";
-            tableTemplate += "<td><input class='mark' id='" + jsonArray[i]['id'] + "' value=" + jsonArray[i]['marks'] + "></td>";
-            tableTemplate += "</tr>";
+        var jsonArray = JSON.parse(json);
+        var tabvaremplate = "<table id='marksTable'><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
+        var i = 0;
+        var number = 0;
+        for (i; i < jsonArray.length; i++) {
+            number++;
+
+            tabvaremplate += "<tr>";
+            tabvaremplate += "<td>" + number + "</td>";
+            tabvaremplate += "<td>" + jsonArray[i]['name'] + "</td>";
+            tabvaremplate += "<td><input class='mark' id='" + jsonArray[i]['id'] + "' value=" + jsonArray[i]['marks'] + "></td>";
+            tabvaremplate += "</tr>";
             //console.log(jsonArray[i]);
         }
-        tableTemplate += "</table>";
+        tabvaremplate += "</table>";
         $("#results").html("");
-        $("#results").append(tableTemplate);
+        $("#results").append(tabvaremplate);
 
         //Function 
 
         $('.mark').on('change', function () {
-            let studentId = $(this).attr('id');
-            let newMark = $(this).val();
-            let msg = "<span id='saveMsg'>Data saved successfully</span>"
-            let failMsg = "<span id='failedToSaveMsg'>Failed to save data</span>"
+            var studentId = $(this).attr('id');
+            console.log(studentId)
+            var newMark = $(this).val();
+            var msg = "<span id='saveMsg'>Data saved successfully</span>"
+            var failMsg = "<span id='failedToSaveMsg'>Failed to save data</span>"
             $.ajax({
                 url: "modules/update.php?marks=",
                 method: "post",
                 data: {
                     student_id: studentId,
                     mark: newMark,
+                    test: testID
                 },
                 success: function (data) {
                     if (data == "ok") {
@@ -522,7 +603,7 @@ function appendMarks(json) {
     return false;
 }
 function showNewAssessmentForm() {
-    let form = "<div class='modal'>\
+    var form = "<div class='modal'>\
     <form id='newAssessmentForm'>\
     <h4>Grade</h4>\
     <select name='grade' id='grade'>\
@@ -551,7 +632,7 @@ function showNewAssessmentForm() {
     return false;
 }
 function createMonthOptions(idOfElement) {
-    for (let i = 0; i < months.length; i++) {
+    for (var i = 0; i < months.length; i++) {
         $('#' + idOfElement).select2({
             data: [
                 { id: i, text: months[i] }
@@ -561,14 +642,14 @@ function createMonthOptions(idOfElement) {
     return false;
 }
 function addListeners() {
-    $("#cancel").click(() => {
+    $("#cancel").click(function () {
         event.preventDefault();
 
         $('.modal').remove();
 
         return false;
     })
-    $('#create').click(() => {
+    $('#create').click(function () {
         event.preventDefault();
 
         validateAndsubmit();
@@ -576,13 +657,13 @@ function addListeners() {
         return false;
     })
     //when user selects a grade
-    $("#grade").change(() => {
+    $("#grade").change(function () {
         $("#subject").html('');
-        let streamId = $("#grade").find("option:selected").attr('value');
-        let option = "<option></option>";
+        var streamId = $("#grade").find("option:selected").attr('value');
+        var option = "<option></option>";
 
         //loop through subject array to get subjects taught in the selected grade
-        for (let i = 0; i < subjects.length; i++) {
+        for (var i = 0; i < subjects.length; i++) {
 
             if (subjects[i]['stream'] == streamId) {
                 option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
@@ -592,7 +673,7 @@ function addListeners() {
         $("#subject").select2()
 
     })
-    $("#type").change(() => {
+    $("#type").change(function () {
         if ($('#type').val() == 1) {
             $('#type').after("<div id='monthOptions'>\
             <h4>Month</h4>\
@@ -610,11 +691,11 @@ function addListeners() {
     })
 }
 function validateAndsubmit() {
-    let subject = $('#subject').val();
-    let type = $('#type').val();
-    let month;
+    var subject = $('#subject').val();
+    var type = $('#type').val();
+    var month;
 
-    let validSubject, validType, validMonth
+    var validSubject, validType, validMonth
     if (type == 1) {
         month = $('#month').val();
     }
@@ -639,14 +720,14 @@ function validateAndsubmit() {
         }
     }
     if (validSubject == true && validType == true) {
-        let form = new FormData();
+        var form = new FormData();
         form.append('subject', subject);
         form.append('type', type);
         form.append('period', currentPeriodId);
 
         if (type == 1) {
-            let number = parseInt(month, 10) + 1;
-            let name = "Test " + number;
+            var number = parseInt(month, 10) + 1;
+            var name = "Test " + number;
             console.log(number)
             console.log(name);
             form.append('month', month);
@@ -689,38 +770,18 @@ function isJSON(something) {
     }
 }
 function emailIsValid(email) {
-    let regex = /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
+    var regex = /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
     return regex.test(email);
 }
 
 
 function dashboard() {
     $("#desk").html("<!-- Student start -->\
-    <div id='one'>\
-        <button id='addStudentButton'>Add</button>\
-        <div id='inputContainer'>\
-            <select name='student' id='searchStudent'>\
-                <option></option>\
-            </select>\
-        </div>\
-        <div id='info'>\
-            <center><img src='src/img/user.png' alt='' id='schoolImage'><br><br></center>\
-            <span>Number of students: 200</span><br>\
-            <span>Name: school</span><br>\
-            <span>Number of students :<?php echo countStudents(1, 0); ?></span><br>\
-            <span>Number of male students :100</span><br>\
-            <span>Number of female students :100</span><br>\
-            <span>Country :Burundi</span><br>\
-            <span>Nationalities :5</span><br>\
-            <span>Number of teachers :22</span><br>\
-        </div>\
-    </div>"+ '<!-- Teacher start -->\
-    <div id="two" style="display:none">\
-    </div>\
-    <!-- Marks start -->\
-    <div id="three" style="display:none">\
-        <button id="createAssessment">New assessment</button>\
-        <form id="marksForm">\
+    <div id='container'></div>");
+}
+
+function marksForm() {
+    $("#marksDesk").html(' <form id="marksForm">\
             <div class="form-group row">\
                 <label for="inputEmail3" class="col-sm-2 col-form-label">Grade</label>\
                 <div class="col-sm-10">\
@@ -745,7 +806,335 @@ function dashboard() {
             <button id="viewResults">View results</button>\
         </form>\
         <div id="results"></div>\
-    </div>\
-</div>');
+    </div>');
 
+    $("#marksGrade").html('<option></option>').append(streamsOptions());
+    $("#marksGrade").change(function () {
+        //console.log(1)
+        //If change grade clear all fields
+        $("#marksSubject").html('');
+        $("#marksTest").html('');
+        var streamId = $("#marksGrade").find("option:selected").attr('value');
+        //console.log(streamId)
+        var option = "<option></option>";
+        for (var i = 0; i < subjects.length; i++) {
+
+            if (subjects[i]['stream'] == streamId) {
+                option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
+            }
+        }
+        $("#marksSubject").html('').append(option);
+        $("#marksTest").html('');
+        $("#marksTest").html('');
+        $("#marksSubject").change(function () {
+            $("#marksTest").html('');
+            //If change subject clear the tests field
+            $("#marksTest").html('');
+            var subjectId = $("#marksSubject").find('option:selected').attr('value');
+            var option = "<option></option>";
+            for (var i = 0; i < testsDone.length; i++) {
+
+                if (testsDone[i]['subject'] == subjectId) {
+                    option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
+                }
+            }
+            $("#marksTest").html('').append(option);
+
+            $("#viewResults").click(function () {
+                event.preventDefault();
+                var subject = $("#marksSubject").find('option:selected').attr('value');
+                var grade = $("#marksGrade").find('option:selected').attr('value');
+                var test = $("#marksTest").find('option:selected').attr('value');
+
+                if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
+                    //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
+                    var formData = {
+                        subject: subject,
+                        grade: grade,
+                        test: test
+                    }
+                    console.log(test);
+                    $.ajax({
+                        url: "modules/fetch.php",
+                        method: "post",
+                        data: formData,
+                        success: function (data) {
+                            appendMarks(data, test);
+                        }
+                    })
+                }
+                return false;
+            })
+            return false;
+        })
+        return false;
+    })
 }
+
+function reportsForm() {
+    $("#marksDesk").html("<form>\
+    <h4>Grade</h4>\
+    <select name='grade' id='grade'></select><br>\
+    <h4>Type</h4>\
+    <select name='type' id='type'>\
+    <option></option>\
+    <option value='1'>Monthly</option>\
+    <option value='2'>Annual</option>\
+    </select><br>\
+    <button id='generate'>Generate</button>\
+</form>");
+
+    $("#grade").html("<option></option>" + streamsOptions())
+
+    $("#type").change(function () {
+
+        var type = $("#type").val();
+        console.log(type)
+        //Monthly reports
+        if (type == 1) {
+            $("#type").after("<select name='month' id='month'></select>")
+            createMonthOptions("month")
+        }
+        //Annual reports
+        if (type == 2) {
+            $("#months").remove()
+            $(".select2-container").remove()
+        }
+
+        return false;
+    })
+
+    $("#generate").click(function () {
+        event.preventDefault();
+
+        var grade = $("#grade").val()
+        var type = $("#type").val()
+        var month;
+
+        //monthly
+        if (type == 1) {
+            month = $("#month").val()
+        }
+
+        if (grade != '' && type != '') {
+            var url = "modules/report.php";
+
+            url += "?grade=" + grade
+            url += "&type=" + type;
+            url += "&period=" + currentPeriodId;
+
+            if (type == 1) {
+                //add 1 coz months are stored in an array
+                url += "&month=" + (parseInt(month, 10) + 1);
+            }
+
+            window.open(url)
+        }
+    })
+}
+
+
+function misc(container) {
+    $('#' + container).html('');
+
+    $('#' + container).append("<button id='schoolInfo'>Info</button>");
+    $('#' + container).append("<button id='lists'>Lists</button>");
+    $('#' + container).append("<button id='newGrade'>New grade</button>");
+    $('#' + container).append("<button id='newSubject'>New subject</button>");
+    $('#' + container).append("<div id='board'><div>");
+
+    $("#schoolInfo").click(function () {
+        info('board');
+    })
+
+    $("#lists").click(function () {
+        list('board');
+    })
+
+    $("#newGrade").click(function () {
+        newGradeForm();
+    })
+
+    $("#newSubject").click(function () {
+        newsubjectForm();
+    })
+    function newsubjectForm() {
+        $('body').append("<div class='modal'>\
+                            <form>\
+                                <h4>Subject Name</h4>\
+                                <input type='text' id='subjectName'>\
+                                <h4>Grade</h4>\
+                                <select id='grade'></select>\
+                                <h4>Type</h4>\
+                                <select id='type'>\
+                                    <option value='1'>Compulsary</option>\
+                                    <option value='2'>Elective</option>\
+                                </select>\
+                                <h4>Hours per week</h4>\
+                                <input type='number' name='hours' id='hours'>\
+                                <br>\
+                                <button id='cancel'>Cancel</button>\
+                                <button id='create' type='submit'>Create</button>\
+                            </form>\
+                          </div>");
+
+        $("#grade").html(streamsOptions());
+
+        $("#cancel").click(function () {
+            event.preventDefault();
+
+            $('.modal').remove();
+
+            return false;
+        })
+
+        $("#create").click(function () {
+            event.preventDefault();
+
+            var subjectName = $("#subjectName").val();
+            var grade = $("#grade").val();
+            var type = $("#type").val();
+            var hoursPerWeek = $("#hours").val();
+            var validName, validGrade, validType, validHours = false;
+            if (subjectName == '') {
+                alert("Enter a subject name");
+            }
+            else {
+                validName = true;
+            }
+
+            if (grade == '') {
+                alert("Enter a grade");
+            }
+            else {
+                validGrade = true;
+            }
+
+            if (type == '') {
+                alert("Enter a subject type");
+            }
+            else {
+                validType = true;
+            }
+            if (hoursPerWeek == '' && !isNaN(hoursPerWeek)) {
+                alert("Enter the number of hours per week");
+            }
+            else {
+                validHours = true;
+            }
+            if (validName == true && validGrade == true && validType == true && validHours == true) {
+                //console.log("ok")
+                var form = new FormData();
+
+                form.append('name', subjectName);
+                form.append('grade', grade)
+                form.append('type', type)
+                form.append('hours', hoursPerWeek);
+
+                add(3, form);
+            }
+        })
+    }
+
+    function newGradeForm() {
+        $('body').append("<div class='modal'>\
+                            <form>\
+                                <h4>Grade</h4>\
+                                <input type='number' name='grade' id='grade' placeholder='A number'>\
+                                <h4>Stream</h4>\
+                                <input type='text' name='stream' id='stream' maxlength='1' placeholder='A - Z'>\
+                                <br>\
+                                <button id='cancel'>Cancel</button>\
+                                <button id='create' type='submit'>Create</button>\
+                            </form>\
+                            </div>");
+
+        $("#cancel").click(function () {
+            event.preventDefault();
+
+            $('.modal').remove();
+
+            return false;
+        })
+
+        $("#create").click(function () {
+            event.preventDefault();
+
+            var grade = $("#grade").val();
+            var stream = $("#stream").val();
+
+            var validGrade, validStream = false;
+
+            if (grade !== '' && !isNaN(grade)) {
+                validGrade = true;
+            }
+            else {
+                alert("Enter a grade");
+            }
+            if (stream !== '' && stream.length == 1 && isNaN(stream)) {
+                validStream = true;
+            }
+            else {
+                alert("Enter a valid stream");
+            }
+
+            if (validGrade, validStream == true) {
+                //console.log("ok")
+
+                var form = new FormData();
+                form.append('grade', grade);
+                form.append('stream', stream.toUpperCase());
+
+                add(4, form);
+            }
+        })
+    }
+    function info(id) {
+        $("#" + id).html('')
+
+        $("#" + id).append("<span>Name : </span>" + '<input id="schoolName" value="' + schoolName + '"><br>');
+        //$("#four").append("<span>Type : </span>"+"<input value="+schoolTypes[schoolType]+">");
+        //$("#four").append("<h5></h5>");
+        var typeOptions;
+
+        for (var i = 0; i < schoolTypes.length; i++) {
+            typeOptions += "<option value=" + i + ">" + schoolTypes[i] + "</option>";
+        }
+
+        $("#" + id).append("<span>Type : </span>")
+        $("#" + id).append("<select id='schoolType'>" + typeOptions + "</select>");
+        $("#" + id).append("<div id='msgBoard'></div>")
+        $("#schoolType").val(schoolType).trigger('change');
+
+        $("#schoolName").change(function () {
+            var name = $("#schoolName").val();
+            save(0, schoolId, 'schoolName', name)
+        })
+
+        $("#schoolType").change(function () {
+            var type = $("#schoolType").val();
+            save(0, schoolId, 'schoolType', type)
+        })
+    }
+
+    function list(id) {
+        $("#" + id).html("<h4>Grade</h4>\
+                          <select name='grade' id='grade'></select>\
+                          <br>\
+                          <button id='generate'>Generate</button>");
+
+        $("#grade").html("<option></option>" + streamsOptions());
+
+        $("#generate").click(function () {
+            event.preventDefault();
+
+            var grade = $("#grade").val();
+
+            if (grade !== '') {
+                var url = "modules/list.php?grade=" + grade;
+                window.open(url)
+            }
+        })
+    }
+}
+

@@ -16,12 +16,30 @@ function addToForm() {
 //Function to fire when students have been fetched
 function fetchedStudents(data) {
     studentsArray = JSON.parse(data);
-    addToForm();
+    //addToForm();
     return false;
 }
 
 function showStudentForm() {
-    var form = "<div id='addStudentModal' class='modal'><form enctype='multipart/form-data'><h4>Name :</h4><input type='text' name='name' id='studentName' required><h4>Student's email :</h4><input type='email' name='email' id='studentEmail'><h4>student's telephone number :</h4><input type='number' name='tel' id='studentTel'><h4>Grade :</h4><select name='grade' id='studentGrade' required><option value=''></option></select><h4>Date of birth:</h4><input type='date' name='DOB' id='studentDOB' required><br><button type='button' id='cancelStudentForm'>Cancel</button><button type='submit' id='addStudent'>Add</button></form></div>";
+    var form = "<div id='addStudentModal' class='modal'>\
+                    <form enctype='multipart/form-data'>\
+                        <h4>Name :</h4><input type='text' name='name' id='studentName' required>\
+                        <h4>Student's email :</h4><input type='email' name='email' id='studentEmail'>\
+                        <h4>student's telephone number :</h4><input type='number' name='tel' id='studentTel'>\
+                        <h4>Grade :</h4><select name='grade' id='studentGrade' required>\
+                            <option value=''></option>\
+                        </select>\
+                        <h4>Date of birth:</h4><input type='date' name='DOB' id='studentDOB' required>\
+                        <br>\
+                        <h4>Gender :</h4><select name='gender' id='gender' required>\
+                            <option value='0'>Male</option>\
+                            <option value='1'>Female</option>\
+                        </select>\
+                        <br>\
+                        <button type='button' id='cancelStudentForm'>Cancel</button>\
+                        <button type='submit' id='addStudent'>Add</button>\
+                    </form>\
+                </div>";
     $('body').append(form);
     //These are here becuse they work only when the form is in the DOM but wheb when the oage loads it is not here, that is why it does not work any where else
     //Make the student form disappear when clicked on cancel button
@@ -42,6 +60,7 @@ function showStudentForm() {
         var tel = $("#studentTel").val();
         var grade = $("#studentGrade").val();
         var DOB = $("#studentDOB").val();
+        var gender= $("#gender").val();
         var validName, validGrade, validDOB;
         var period = currentPeriodId;
 
@@ -71,6 +90,7 @@ function showStudentForm() {
             info.append('name', name);
             info.append('email', email);
             info.append('tel', tel);
+            info.append('gender', gender);
             info.append('grade', grade);
             info.append('DOB', DOB);
             info.append('period', period);
@@ -91,7 +111,7 @@ function deleteItem(level, id) {
     }
     //students
     if (level == 2) {
-
+        url += "?student=" + id;
     }
     //assessment
     if (level == 3) {
@@ -111,18 +131,21 @@ function deleted(response, level) {
         if (level == 1) {
             fetchThis(1)
             alert("Staff successfully deleted");
-
+            $("#container").html('')
 
             //makeTeachersTable();
         }
         //students
         if (level == 2) {
+            fetchThis(2)
+            dashboard()
             alert("student successfully deleted");
         }
         //assessment
         if (level == 3) {
-            alert("Assessment successfully deleted");
             dashboard();
+            alert("Assessment successfully deleted");
+
         }
     }
     else {

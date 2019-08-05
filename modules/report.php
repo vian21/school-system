@@ -1,26 +1,27 @@
 <?php
-require('fpdf.php');
+if (isset($_GET['period']) and isset($_GET['grade']) and isset($_GET['type'])) {
+    require('fpdf.php');
 
-class PDF extends FPDF
-{
-    // Simple table
-    function Reports()
+    class PDF extends FPDF
     {
-        //foreach($months as $x){
-        //  $this->cell(30,6,$x,1);
-        //$this->ln();
-        //}
-        include 'config.php';
-        include 'functions.php';
+        // Simple table
+        function Reports()
+        {
+            //foreach($months as $x){
+            //  $this->cell(30,6,$x,1);
+            //$this->ln();
+            //}
+            include 'config.php';
+            include 'functions.php';
 
-        $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+            $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 
 
-        if (isset($_GET['period']) and isset($_GET['grade']) and isset($_GET['type'])) {
+
             $period = $_GET['period'];
             $type = $_GET['type'];
             $grade = $_GET['grade'];
-
+            $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
             // 1 for monthly tests
             if ($type == 1) {
                 $month = $_GET['month'];
@@ -41,33 +42,75 @@ class PDF extends FPDF
                         $this->SetFontSize(10);
 
                         $this->Write(1, "Name: " . $name);
-                        $this->ln(6);
-                        $this->Write(0, "Grade: ");
                         $this->ln(8);
-                        $this->Write(0, "Class: ");
+                        $this->Write(0, "Grade: " . $stream);
                         $this->ln(8);
+                        //$this->Write(0, "Class: ");
+                        //$this->ln(8);
                         $this->Write(0, "Academic year: ");
                         $this->ln(8);
                         $this->Write(0, "Month: " . $months[$month - 1]);
                         $this->ln(8);
 
-                        $this->SetFontSize(15);
+                        $this->SetFontSize(12);
 
-                        $this->cell(30, 7, 'Course', 1);
-                        $this->cell(30, 7, 'Mark', 1);
+                        $this->cell(60, 7, 'COURSE', 1, 0, 'C');
+                        $this->cell(30, 7, 'Periods', 1, 0, 'C');
+                        $this->cell(33, 7, 'Percentage', 1, 0, 'C');
+                        $this->cell(30, 7, 'Grade', 1, 0, 'C');
                         $this->ln(10);
+                        $total = 0;
+                        $total_hours=0;
+                        $number_of_subjects = 0;
                         foreach ($subjects_taken as $subject) {
                             $assessment_id = getAssessmentIdOf($subject, $period, $month);
+
                             //check that subject has a test done
                             if (!empty($assessment_id)) {
-                                //Subject
-                                $this->cell(30, 6, getSubjectName($subject), 1);
-                                //Mark
+                                /** 
+                                 * Marks gotten 
+                                 * It will be empty if student did not take test(enrolled after test was done)
+                                 */
+
                                 $mark = getMark($id, $assessment_id);
-                                $this->cell(30, 6, $mark, 1);
-                                $this->ln();
+                                $hours=getHours($subject);
+
+                                if (!empty($mark)) {
+
+                                    //Subject
+                                    $this->cell(60, 7, getSubjectName($subject), 1);
+                                    //hours
+                                    $this->cell(30, 7, $hours, 1,0,'C');
+                                    //Mark
+                                    $this->cell(33, 7, $mark, 1,0,'R');
+
+                                    $this->cell(30, 7, grade($mark), 1,0,'C');
+
+                                    $this->ln();
+
+                                    $number_of_subjects++;
+                                    $total += $mark;
+                                    $total_hours+=$hours;
+                                }
                             }
                         }
+
+                        //Total row
+                        $this->SetFont('','B',14);
+
+                        $this->cell(60, 7, 'TOTAL', 1);
+
+                        if ($number_of_subjects != 0) {
+                            $percentage = round($total / $number_of_subjects);
+                        } else {
+                            $percentage = "";
+                        }
+                        $this->SetFont('Arial', '', 12);
+                        $this->cell(30, 7, $total_hours, 1,0,'C');
+                        $this->Cell(33, 7, $percentage, 1,0,'R');
+
+                        $this->SetFillColor(230, 228, 225);
+                        $this->cell(30, 7, '', 1,0,'C',true);
                     }
                 }
             }
@@ -76,13 +119,13 @@ class PDF extends FPDF
             if ($type == 2) { }
         }
     }
+    $pdf = new PDF('P', 'mm', 'A4');
+    $pdf->SetFont('Arial', '', 14);
+
+    $pdf->Reports();
+    $pdf->Output('', 'Report.pdf');
 }
 
-$pdf = new PDF('P', 'mm', 'Letter');
-$pdf->SetFont('Arial', '', 14);
-
-$pdf->Reports();
-$pdf->Output('', 'test.pdf');
 
 
 function subjectsTakenBy($student, $period)

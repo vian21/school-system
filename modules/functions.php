@@ -137,6 +137,7 @@ function fetchAllStudents($where)
             $students_array = array();
             $students_array['id'] = $row['id'];
             $students_array['name'] = $row['name'];
+            $students_array['gender'] = $row['gender'];
             $students_array['image'] = $row['image'];
             $students_array['email'] = $row['email'];
             $students_array['tel'] = $row['tel'];
@@ -200,14 +201,14 @@ function countStudents($in, $stream_id)
 function countTeachers()
 {
     include 'config.php';
-    $count = mysqli_num_rows($connect->query("SELECT*FROM users WHERE type=2"));
+    $count = mysqli_num_rows($connect->query("SELECT*FROM users WHERE type=1"));
     return returnValue($count);
 }
-function fetchAllTeachers()
+function fetchAllTeachers($school_id)
 {
     include 'config.php';
     // $get_teachers = $connect->query("SELECT*FROM users WHERE type=2");
-    $get_teachers = $connect->query("SELECT*FROM users");
+    $get_teachers = $connect->query("SELECT*FROM users where school=$school_id");
     $teachers = array();
     while ($row = mysqli_fetch_assoc($get_teachers)) {
         $teacher_array = array();
@@ -215,6 +216,7 @@ function fetchAllTeachers()
         $teacher_array['name'] = $row['name'];
         $teacher_array['image'] = $row['image'];
         $teacher_array['email'] = $row['email'];
+        $teacher_array['gender'] = $row['gender'];
         $teacher_array['tel'] = $row['tel'];
         $teacher_array['type'] = $row['type'];
         $teachers[] = $teacher_array;
@@ -319,4 +321,90 @@ function fetchCompulsarySubjects($grade)
     }
 
     return $subjects;
+}
+
+function fetchSchoolInfo($id){
+    include 'config.php';
+    $get_info=mysqli_fetch_assoc($connect->query("SELECT*FROM info WHERE id=$id"));
+    return returnValue($get_info);
+}
+
+function getSchoolId($userId){
+    include 'config.php';
+
+    $get_info=mysqli_fetch_assoc($connect->query("SELECT*FROM users WHERE id=$userId"));
+
+    return returnValue($get_info['school']);
+}
+
+
+function fetchStudentsIn($grade){
+    include 'config.php';
+    $get_students=$connect->query("SELECT*FROM students WHERE grade=$grade");
+    $students=array();
+    while($column=mysqli_fetch_assoc($get_students)){
+        $student_sub_array=array();
+        $student_sub_array['id']=$column['id'];
+        $student_sub_array['name']=$column['name'];
+        $students[]=$student_sub_array;
+    }
+    return returnValue($students);
+}
+function getHours($subject){
+    include 'config.php';
+    $get_hours=mysqli_fetch_assoc($connect->query("SELECT*FROM subjects WHERE id=$subject"));
+    return $get_hours['hours'];
+}
+
+function grade($mark){
+    if($mark>93){
+        return 'A ';
+    }
+    if($mark<=92 and $mark>=90){
+        return 'A-';
+    }
+    if($mark<=89 and $mark>=87){
+        return 'B+';
+    }
+    if($mark<=86 and $mark>=83){
+        return 'B ';
+    }
+    if($mark<=82 and $mark>=80){
+        return 'B-';
+    }
+    if($mark<=79 and $mark>=77){
+        return 'C+';
+    }
+    if($mark<=76 and $mark>=73){
+        return 'C ';
+    }
+    if($mark<=72 and $mark>=70){
+        return 'C-';
+    }
+    if($mark<=69 and $mark>=67){
+        return 'D+';
+    }
+    if($mark<=66 and $mark>=63){
+        return 'D ';
+    }
+    if($mark<=62 and $mark>=60){
+        return 'D-';
+    }
+    if($mark<60){
+        return 'F ';
+    }
+}
+
+function countMaleStudents(){
+    include 'config.php';
+    $number=mysqli_num_rows($connect->query("SELECT*FROM students WHERE gender=0"));
+
+    return $number;
+}
+
+function countFemaleStudents(){
+    include 'config.php';
+    $number=mysqli_num_rows($connect->query("SELECT*FROM students WHERE gender=1"));
+
+    return $number;
 }

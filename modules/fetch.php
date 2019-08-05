@@ -71,6 +71,7 @@ if (isset($_GET['allStudents'])) {
         $students_sub_array = array();
         $students_sub_array['id'] = $column['id'];
         $students_sub_array['name'] = $column['name'];
+        $students_sub_array['gender'] = $column['gender'];
         $students_sub_array['image'] = $column['image'];
         $students_sub_array['email'] = $column['email'];
         $students_sub_array['tel'] = $column['tel'];
@@ -87,14 +88,16 @@ if (isset($_GET['allStudents'])) {
 if (isset($_GET['allteachers'])) {
     include 'functions.php';
 
+    $school_id=$_GET['school_id'];
     $teachers = array();
-    $teachers_array = fetchAllTeachers();
+    $teachers_array = fetchAllTeachers($school_id);
 
     foreach ($teachers_array as $column) {
         $teachers_sub_array = array();
         $teachers_sub_array['id'] = $column['id'];
         $teachers_sub_array['name'] = $column['name'];
         $teachers_sub_array['email'] = $column['email'];
+        $teachers_sub_array['gender'] = $column['gender'];
         $teachers_sub_array['tel'] = $column['tel'];
         $teachers_sub_array['image'] = $column['image'];
         $teachers_sub_array['subjects'] = array(fetchSubjectsTaughtId($column['id']));
@@ -140,4 +143,12 @@ if (isset($_GET['periods'])) {
         $periods[] = $sub_array;
     }
     echoJson($periods);
+}
+
+
+if(isset($_GET['school_info']) and isset($_GET['user']) and is_numeric($_GET['user'])){
+    include 'functions.php';
+    $user_id=$_GET['user'];
+    $school_id=getSchoolId($user_id);
+    echoJson(fetchSchoolInfo($school_id));
 }

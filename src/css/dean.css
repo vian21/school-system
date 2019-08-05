@@ -180,3 +180,16 @@ button {
 .select2-container--default .select2-results__option {
     white-space: pre;
 }
+
+#marksTable th,
+tr,
+td {
+    border: 2px solid black;
+}
+#container{
+    width:100%;
+}
+#info{
+    width: 100%;
+    justify-content: left;
+}

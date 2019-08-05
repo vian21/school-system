@@ -44,6 +44,7 @@ $id = $_SESSION['id'];
                 <button id="tab1">Students</button>
                 <button id="tab2">Teachers</button>
                 <button id="tab3">Marks</button>
+                <button id="tab4">Misc</button>
             </div>
             <div id="desk">
 
@@ -54,5 +55,13 @@ $id = $_SESSION['id'];
 <script src="src/js/dean.js"></script>
 <script src="src/js/staff.js"></script>
 <script src="src/js/student.js"></script>
+<script>
+    var numberOfStudents = <?php echo countStudents(1, 0).";\n"; ?>
+    var numberOfMaleStudents=<?php echo countMaleStudents().";\n"; ?>
+    var numberOfFemaleStudents=<?php echo countFemaleStudents().";\n"; ?>
+
+    var numberOfTeachers=<?php echo countTeachers().";\n"; ?>
+    var userId=<?php echo $id.";\n"; ?>
+</script>
 
 </html>
