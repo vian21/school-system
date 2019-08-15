@@ -62,37 +62,50 @@ function echoJson($data)
         echo " ";
     }
 }
+
 function fetchSubjectsTaughtId($id)
 {
     include 'config.php';
+
     $subjects_taught_id = $connect->query("SELECT subject FROM teaches WHERE teacher=$id");
     $subjects_taught_array = array();
+
     while ($row = mysqli_fetch_assoc($subjects_taught_id)) {
         $subjects_taught_array[] = $row['subject'];
     }
     return returnValue($subjects_taught_array);
 }
+
 function fetchTestsDone($subject_id, $period)
 {
     include 'config.php';
+
     if ($subject_id == 'all') {
         $select_test = $connect->query("SELECT * FROM assessments Where period=$period");
+
         $tests_done = array();
+
         while ($row = mysqli_fetch_assoc($select_test)) {
             $tests_done_sub_array = array();
+
             $tests_done_sub_array['id'] = $row['id'];
             $tests_done_sub_array['period'] = $row['period'];
             $tests_done_sub_array['name'] = $row['name'];
             $tests_done_sub_array['month'] = $row['month'];
             $tests_done_sub_array['subject'] = $row['subject'];
-            //$tests_done_sub_array['']=$row[''];
+
             $tests_done[] = $tests_done_sub_array;
         }
         return returnValue($tests_done);
     } else {
+        $select_test = $connect->query("SELECT * FROM assessments WHERE subject=$subject_id and period=$period");
 
-        $select_test = mysqli_fetch_assoc($connect->query("SELECT id FROM assessments WHERE subject=$subject_id"));
-        return returnValue($select_test['id']);
+        $tests = array();
+
+        while ($row = mysqli_fetch_assoc($select_test)) {
+            $tests[] = $row['id'];
+        }
+        return returnValue($tests);
     }
 }
 function returnValue($data)
@@ -100,33 +113,40 @@ function returnValue($data)
     if (!empty($data)) {
         return $data;
     } else {
-        return " ";
+        return "";
     }
 }
-function fetchTestNames($subject_id)
+
+function fetchTestNames($assessment_id)
 {
     include 'config.php';
-    $select_test_names = mysqli_fetch_assoc($connect->query("SELECT name FROM assessments WHERE subject=$subject_id"));
-    return returnValue($select_test_names['name']);
+
+    $select_test_name = mysqli_fetch_assoc($connect->query("SELECT * FROM assessments WHERE id=$assessment_id"));
+
+    return returnValue($select_test_name['name']);
 }
+
 function fetchStreamsId($subject_id)
 {
     include 'config.php';
     $select_streams_id = mysqli_fetch_assoc($connect->query("SELECT stream FROM subjects where id=$subject_id"));
     return returnValue($select_streams_id['stream']);
 }
+
 function fetchStreamName($stream_id)
 {
     include 'config.php';
     $select_stream_name = mysqli_fetch_assoc($connect->query("SELECT*FROM streams WHERE id=$stream_id"));
     return returnValue($select_stream_name);    //array(grade + stream)
 }
+
 function fetchStudentsMarks($id)
 {
     include 'config.php';
     $getMarks = $connect->query("SELECT*FROM marks WHERE test_id=$id");
     return returnValue($getMarks);
 }
+
 function fetchAllStudents($where)
 {
     include 'config.php';
@@ -186,11 +206,13 @@ function fetchStudentsTaking($subject_id, $period)
 // 2 : students in a certain grade
 function countStudents($in, $stream_id)
 {
+    include 'config.php';
+
     if ($in == 1) {
-        include 'config.php';
         $count = mysqli_num_rows($connect->query("SELECT*FROM students"));
         return returnValue($count);
     }
+
     if ($in == 2) {
         $count = mysqli_num_rows($connect->query("SELECT*FROM students WHERE grade=$stream_id"));
         return returnValue($count);
@@ -209,7 +231,9 @@ function fetchAllTeachers($school_id)
     include 'config.php';
     // $get_teachers = $connect->query("SELECT*FROM users WHERE type=2");
     $get_teachers = $connect->query("SELECT*FROM users where school=$school_id");
+
     $teachers = array();
+
     while ($row = mysqli_fetch_assoc($get_teachers)) {
         $teacher_array = array();
         $teacher_array['id'] = $row['id'];
@@ -226,15 +250,19 @@ function fetchAllTeachers($school_id)
 function fetchAllStreams()
 {
     include 'config.php';
-    $get_streams = $connect->query("SELECT*FROM streams");
+    $get_streams = $connect->query("SELECT*FROM streams ORDER BY `streams`.`grade` DESC");
+
     $streams = array();
+
     while ($column = mysqli_fetch_assoc($get_streams)) {
         $stream_array = array();
         $stream_array['id'] = $column['id'];
         $stream_array['grade'] = $column['grade'];
         $stream_array['stream'] = $column['stream'];
+        $stream_array['students'] = countStudents(2, $column['id']);
         $streams[] = $stream_array;
     }
+
     return returnValue($streams);
 }
 function fetchAllSubjects($where)
@@ -323,88 +351,120 @@ function fetchCompulsarySubjects($grade)
     return $subjects;
 }
 
-function fetchSchoolInfo($id){
+function fetchSchoolInfo($id)
+{
     include 'config.php';
-    $get_info=mysqli_fetch_assoc($connect->query("SELECT*FROM info WHERE id=$id"));
+    $get_info = mysqli_fetch_assoc($connect->query("SELECT*FROM info WHERE id=$id"));
     return returnValue($get_info);
 }
 
-function getSchoolId($userId){
+function getSchoolId($userId)
+{
     include 'config.php';
 
-    $get_info=mysqli_fetch_assoc($connect->query("SELECT*FROM users WHERE id=$userId"));
+    $get_info = mysqli_fetch_assoc($connect->query("SELECT*FROM users WHERE id=$userId"));
 
     return returnValue($get_info['school']);
 }
 
 
-function fetchStudentsIn($grade){
+function fetchStudentsIn($grade)
+{
     include 'config.php';
-    $get_students=$connect->query("SELECT*FROM students WHERE grade=$grade");
-    $students=array();
-    while($column=mysqli_fetch_assoc($get_students)){
-        $student_sub_array=array();
-        $student_sub_array['id']=$column['id'];
-        $student_sub_array['name']=$column['name'];
-        $students[]=$student_sub_array;
+    $get_students = $connect->query("SELECT*FROM students WHERE grade=$grade");
+    $students = array();
+    while ($column = mysqli_fetch_assoc($get_students)) {
+        $student_sub_array = array();
+        $student_sub_array['id'] = $column['id'];
+        $student_sub_array['name'] = $column['name'];
+        $students[] = $student_sub_array;
     }
     return returnValue($students);
 }
-function getHours($subject){
+function getHours($subject)
+{
     include 'config.php';
-    $get_hours=mysqli_fetch_assoc($connect->query("SELECT*FROM subjects WHERE id=$subject"));
+    $get_hours = mysqli_fetch_assoc($connect->query("SELECT*FROM subjects WHERE id=$subject"));
     return $get_hours['hours'];
 }
 
-function grade($mark){
-    if($mark>93){
+function grade($mark)
+{
+    if ($mark > 93) {
         return 'A ';
     }
-    if($mark<=92 and $mark>=90){
+
+    if ($mark <= 92 and $mark >= 90) {
         return 'A-';
     }
-    if($mark<=89 and $mark>=87){
+
+    if ($mark <= 89 and $mark >= 87) {
         return 'B+';
     }
-    if($mark<=86 and $mark>=83){
+
+    if ($mark <= 86 and $mark >= 83) {
         return 'B ';
     }
-    if($mark<=82 and $mark>=80){
+
+    if ($mark <= 82 and $mark >= 80) {
         return 'B-';
     }
-    if($mark<=79 and $mark>=77){
+
+    if ($mark <= 79 and $mark >= 77) {
         return 'C+';
     }
-    if($mark<=76 and $mark>=73){
+    if ($mark <= 76 and $mark >= 73) {
         return 'C ';
     }
-    if($mark<=72 and $mark>=70){
+
+    if ($mark <= 72 and $mark >= 70) {
         return 'C-';
     }
-    if($mark<=69 and $mark>=67){
+
+    if ($mark <= 69 and $mark >= 67) {
         return 'D+';
     }
-    if($mark<=66 and $mark>=63){
+
+    if ($mark <= 66 and $mark >= 63) {
         return 'D ';
     }
-    if($mark<=62 and $mark>=60){
+
+    if ($mark <= 62 and $mark >= 60) {
         return 'D-';
     }
-    if($mark<60){
+
+    if ($mark < 60) {
         return 'F ';
     }
 }
 
-function countMaleStudents(){
+function countMaleStudents()
+{
     include 'config.php';
-    $number=mysqli_num_rows($connect->query("SELECT*FROM students WHERE gender=0"));
+
+    $number = mysqli_num_rows($connect->query("SELECT*FROM students WHERE gender=0"));
 
     return $number;
 }
 
-function countFemaleStudents(){
+function countFemaleStudents()
+{
     include 'config.php';
-    $number=mysqli_num_rows($connect->query("SELECT*FROM students WHERE gender=1"));
+
+    $number = mysqli_num_rows($connect->query("SELECT*FROM students WHERE gender=1"));
 
     return $number;
+}
+
+function compressCodeIn($folder)
+{
+    $files = array_diff(scandir($folder), array('..', '.', 'index.php'));
+
+    $code = "";
+
+    foreach ($files as $file) {
+        $sub_code = file_get_contents($folder . $file);
+        $code .= "\n" . $sub_code;
+    }
+    return $code;
 }

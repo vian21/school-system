@@ -3,11 +3,14 @@ session_start();
 if (isset($_GET['form_options'])) {
     include 'config.php';
     include 'functions.php';
+
     $id = $_SESSION['id'];
+
     $subjects_ids = fetchSubjectsTaughtId($id);
 
     //print_r($subjects_ids,true);
     $form_Data = array();
+
     foreach ($subjects_ids as $row) {
         $sub_form_data = array();
         $sub_form_Data['id'] = $row;  //The id of the subject taught
@@ -18,10 +21,19 @@ if (isset($_GET['form_options'])) {
         $stream_names = fetchStreamName($stream_ids);
 
         $sub_form_Data['stream_name'] = $stream_names;
-        $sub_form_Data['test_id'] = fetchTestsDone($row, $period);
+
         $tests_done = fetchTestsDone($row, $period);  //The ids of the tests done
-        if ($tests_done != 0) {
-            $test_names = fetchTestNames($tests_done);
+
+        $sub_form_Data['test_id'] = $tests_done;
+        //echoJson($tests_done);
+        $test_names = array();
+
+        if (!empty($tests_done)) {
+            foreach ($tests_done as $test) {
+                $test_names[] = fetchTestNames($test);
+                //echo $test;
+                //echo fetchTestNames($test);
+            }
         } else {
             $test_names = "";
         }
@@ -37,6 +49,7 @@ if (isset($_GET['form_options'])) {
     echoJson($form_Data);
     //echo print_r($stream_ids);
 }
+
 if (isset($_POST['test'])) {
     if ($_POST['test'] !== "" and is_numeric($_POST['test'])) {
         include 'functions.php';
@@ -88,7 +101,7 @@ if (isset($_GET['allStudents'])) {
 if (isset($_GET['allteachers'])) {
     include 'functions.php';
 
-    $school_id=$_GET['school_id'];
+    $school_id = $_GET['school_id'];
     $teachers = array();
     $teachers_array = fetchAllTeachers($school_id);
 
@@ -146,9 +159,9 @@ if (isset($_GET['periods'])) {
 }
 
 
-if(isset($_GET['school_info']) and isset($_GET['user']) and is_numeric($_GET['user'])){
+if (isset($_GET['school_info']) and isset($_GET['user']) and is_numeric($_GET['user'])) {
     include 'functions.php';
-    $user_id=$_GET['user'];
-    $school_id=getSchoolId($user_id);
+    $user_id = $_GET['user'];
+    $school_id = getSchoolId($user_id);
     echoJson(fetchSchoolInfo($school_id));
 }

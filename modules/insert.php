@@ -1,79 +1,102 @@
 <?php
 
 //Creating a student
-if (isset($_GET['student'])) {
-    if (isset($_POST['name']) and isset($_POST['grade']) and $_POST['name'] != "" and $_POST['grade'] != "" and is_numeric($_POST['grade'])) {
-        //echo "ok";
-        include 'config.php';
-        include 'functions.php';
+//if (isset($_GET['student'])) {
+if (
+    isset($_GET['student']) and
+    isset($_POST['name']) and
+    isset($_POST['grade']) and $_POST['name'] != "" and
+    $_POST['grade'] != "" and
+    is_numeric($_POST['grade'])
+) {
+    //echo "ok";
+    include 'config.php';
+    include 'functions.php';
 
-        $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
-        $gender = mysqli_real_escape_string($connect, $_POST['gender']);
-        $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
-        $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
-        $grade = mysqli_real_escape_string($connect, $_POST['grade']);
-        $DOB = $_POST['DOB'];
-        $period = mysqli_real_escape_string($connect, $_POST['period']);
+    $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
+    $gender = mysqli_real_escape_string($connect, $_POST['gender']);
+    $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
+    $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
+    $grade = mysqli_real_escape_string($connect, $_POST['grade']);
+    $DOB = $_POST['DOB'];
+    $period = mysqli_real_escape_string($connect, $_POST['period']);
 
-        $insert = $connect->query("INSERT INTO students(name,gender,email,tel,grade,DOB) VALUES('$name',$gender,'$email','$tel','$grade','$DOB')");
+    $insert = $connect->query("INSERT INTO students(name,gender,email,tel,grade,DOB) VALUES('$name',$gender,'$email','$tel','$grade','$DOB')");
 
-        if (!$insert) {
-            echo "ko";
-        }
-        if ($insert) {
-            echo "ok";
-        }
+    if (!$insert) {
+        echo "ko";
+    }
+    if ($insert) {
+        echo "ok";
+    }
 
-        //id of newly created student
-        $id = $connect->insert_id;
+    //id of newly created student
+    $id = $connect->insert_id;
 
-        $compulsary_courses = fetchCompulsarySubjects($grade);
+    $compulsary_courses = fetchCompulsarySubjects($grade);
 
-        foreach ($compulsary_courses as $subject) {
-            $connect->query("INSERT INTO enrollment(student_id,subject,period) VALUES($id,$subject,$period)");
-        }
+    foreach ($compulsary_courses as $subject) {
+        $connect->query("INSERT INTO enrollment(student_id,subject,period) VALUES($id,$subject,$period)");
     }
 }
+//}
 
 //Creating a new staff
 if (isset($_GET['staff'])) {
     //echo"test";
     if (isset($_POST['type']) and is_numeric($_POST['type'])) {
         include 'config.php';
+
         $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
         $gender = strip_tags(mysqli_real_escape_string($connect, $_POST['gender']));
         $school_id = strip_tags(mysqli_real_escape_string($connect, $_POST['school']));
         $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
         $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
         $type = $_POST['type'];
+
         //If new staff is a dean
-        if ($type == 1) {
-            $insertDean = $connect->query("INSERT INTO users(name,gender,email,tel,type,school) VALUES('$name',$gender,'$email','tel',$type,$school_id)");
-            if (!$insertDean) {
-                echo "ko";
-            } else {
+        if ($type == 0) {
+            $insertDean = $connect->query("INSERT INTO users(name,gender,email,tel,type,school) VALUES('$name',$gender,'$email','$tel',$type,$school_id)");
+            if ($insertDean) {
                 echo "ok";
+            } else {
+                echo "ko";
             }
         }
+
         //If new staff is a teacher
-        if ($type == 2) {
+        if ($type == 1) {
             $grade = explode(',', $_POST['grade']);
-            $insertTeacher = $connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','tel',$type)");
+            $insertTeacher = $connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','$tel',$type)");
+
             if ($insertTeacher) {
                 echo 'o';
             } else {
                 echo 'K';
             }
+
+            //query to get the assigned id of the new user in database
             $fetch_teacher_id = mysqli_fetch_assoc($connect->query("SELECT id FROM users where name='$name' and type='$type' LIMIT 1"));
+
+            //assign that user id to a variable
             $teacher_id = $fetch_teacher_id['id'];
+
+            //loop through and insert the grades taught in database
             foreach ($grade as $stream) {
                 $insertGrade = $connect->query("INSERT INTO teaches(subject,teacher,year) VALUES($stream,$teacher_id,1)");
+
+                /* Used an a variable outside loop so that it will not echo multiple times the response
+                 * The variable is used afterwards outsde the loop to echo a message.
+                 */
+
                 if ($insertGrade) {
                     $inserted = true;
                 } else {
                     $inserted = false;
                 }
             }
+
+            //if the grades were all successfully inserted echo a message 
             if ($inserted == true) {
                 echo 'k';
             } else {
@@ -104,12 +127,12 @@ if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subje
     //get id of newly created test
     $test_id = $connect->insert_id;
 
-
     if ($create_assessment) {
         echo "ok";
     } else {
         echo "ko";
     }
+
 
     foreach ($students_taking_that_subject as $student) {
         //$stream = getStudentInfo($student['id'])['stream'];

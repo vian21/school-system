@@ -12,7 +12,7 @@ if (isset($_GET['staff']) and is_numeric($_GET['staff'])) {
         echo "ko";
     }
 }
-//delete studenr
+//delete student
 if (isset($_GET['student']) and is_numeric($_GET['student'])) {
     include 'config.php';
 
@@ -24,5 +24,60 @@ if (isset($_GET['student']) and is_numeric($_GET['student'])) {
         echo "ok";
     } else {
         echo "ko";
+    }
+}
+
+//delete assessment
+if (isset($_POST['assessment']) and isset($_POST['id'])) {
+    include 'config.php';
+
+    $id = $_POST['id'];
+
+    $delete_assement = $connect->query("DELETE FROM assessments WHERE id=$id");
+
+    $delete_marks = $connect->query("DELETE FROM marks WHERE test_id=$id");
+
+    if ($delete_assement and $delete_marks) {
+        echo 'ok';
+    } else {
+        echo "ko";
+    }
+}
+
+//delete grade
+if (
+    isset($_POST['grade']) and
+    isset($_POST['id']) and
+    is_numeric($_POST['id'])
+) {
+    include 'config.php';
+
+    $id = $_POST['id'];
+
+    $delete = $connect->query("DELETE FROM streams WHERE id=$id");
+
+    if ($delete) {
+        echo 'ok';
+    } else {
+        echo 'ko';
+    }
+}
+
+//delete subject
+if (
+    isset($_POST['subject']) and
+    isset($_POST['id']) and
+    is_numeric($_POST['id'])
+) {
+    include 'config.php';
+
+    $id = $_POST['id'];
+
+    $delete = $connect->query("DELETE FROM subjects WHERE id=$id");
+
+    if ($delete) {
+        echo 'ok';
+    } else {
+        echo 'ko';
     }
 }

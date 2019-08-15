@@ -6,10 +6,10 @@ if (isset($_SESSION['id'])) {
      * 2 : teacher
      */
     if ($_SESSION['type'] == 0) {
-        include 'pages/dean.php';
+        include 'views/dean.php';
     }
     if ($_SESSION['type'] == 1) {
-        include 'pages/teacher.php';
+        include 'views/teacher.php';
     }
 } else {
     header("location:login.php");

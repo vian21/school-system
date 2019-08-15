@@ -22,6 +22,10 @@ $id = $_SESSION['id'];
         <div id="dropdown">
             <span>==</span>
         </div>
+        <div id=term>
+            <select id=termOptions>
+            </select>
+        </div>
         <div id="logout">
             <span><a href="./modules/logout.php">Logout</a></span>
         </div>
@@ -40,12 +44,12 @@ $id = $_SESSION['id'];
                 <button id="tab">Marks</button>
             </div>
             <div id="desk">
+                <button id="createAssessment">New assessment</button>
                 <form id="form">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">Subject</label>
                         <div class="col-sm-10">
                             <select name="subject" id="subject">
-                            <option value="null"></option>
                             </select>
                         </div>
                     </div>
@@ -71,6 +75,7 @@ $id = $_SESSION['id'];
     </div>
 </body>
 <script src="src/js/select2.js"></script>
-<script src="src/js/teacher.js"></script>
+<script src="src/js/teacher/teacher.js"></script>
+<script src="src/js/common.js"></script>
 
 </html>

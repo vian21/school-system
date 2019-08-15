@@ -13,7 +13,7 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
 
             $this->AddPage();
 
-           
+
             $this->SetFontSize(30);
             $this->cell(190, 20, "Class List", 1, 100, 'C');
             $this->ln(10);
@@ -24,19 +24,19 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
             $this->ln(10);
 
             if (!empty($students) and $students !== ' ') {
-            $this->cell(5, 6, '#', 1);
-            $this->cell(50, 6, 'Name', 1);
-            $this->cell(25, 6, 'ID', 1, 0, 'C');
+                $this->cell(5, 6, '#', 1);
+                $this->cell(50, 6, 'Name', 1);
+                $this->cell(25, 6, 'ID', 1, 0, 'C');
 
-            $i = 0;
-            while ($i <= 20) {
-                $i++;
-                $this->cell(5, 6, '', 1);
-            }
+                $i = 0;
+                while ($i <= 20) {
+                    $i++;
+                    $this->cell(5, 6, '', 1);
+                }
 
-            $this->ln();
+                $this->ln();
 
-           
+
                 $number = 1;
                 foreach ($students as $student) {
                     $this->cell(5, 6, $number, 1);
@@ -62,7 +62,9 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
 
     $pdf->list();
     $pdf->Output('', 'class_list.pdf');
-} elseif (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff'])) {
+}
+
+elseif (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff'])) {
     require('fpdf.php');
     class PDF extends FPDF
     {
@@ -71,10 +73,8 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
             include 'functions.php';
             $school = $_GET['staff'];
             $teachers = fetchAllTeachers($school);
-            $genders = array('Male', 'Female');
+            $this->AddPage();
             if (!empty($teachers) and $teachers !== ' ') {
-
-                $this->AddPage();
                 $this->SetFontSize(30);
                 $this->cell(190, 20, "Staff List", 1, 100, 'C');
                 $this->ln(10);
@@ -101,12 +101,7 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
                     $this->cell(20, 6, $teacher['tel'], 1, 0);
                     $this->cell(20, 6, $genders[$teacher['gender']], 1, 0);
 
-                    if ($teacher['type'] == 1) {
-                        $title = 'Dean';
-                    }
-                    if ($teacher['type'] == 2) {
-                        $title = 'Teacher';
-                    }
+                    $title=$staffTypes[$teacher['type']];
 
                     $this->cell(25, 6, $title, 1, 0);
 
@@ -117,6 +112,8 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
                     // }
                 }
             } else {
+                $this->SetFontSize(10);
+                
                 $this->cell(50, 6, "No staff found in the school");
             }
         }

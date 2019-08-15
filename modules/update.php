@@ -1,40 +1,41 @@
 <?php
 //school info
-if(isset($_GET['school_name']) and isset($_GET['id'])){
+
+//update school name
+if (isset($_GET['school_name']) and isset($_GET['id'])) {
     include 'config.php';
 
-    $name=$_GET['school_name'];
-    $id=$_GET['id'];
+    $name = $_GET['school_name'];
+    $id = $_GET['id'];
 
-    $change=$connect->query("UPDATE info SET name='$name' WHERE id=$id");
+    $change = $connect->query("UPDATE info SET name='$name' WHERE id=$id");
 
-    if($change){
+    if ($change) {
         echo "ok";
-    }
-    else{
+    } else {
         echo "ko";
     }
-
 }
 
-if(isset($_GET['school_type']) and isset($_GET['id'])){
+//update school type
+if (isset($_GET['school_type']) and isset($_GET['id'])) {
     include 'config.php';
 
-    $type=$_GET['school_type'];
-    $id=$_GET['id'];
+    $type = $_GET['school_type'];
+    $id = $_GET['id'];
 
-    $change=$connect->query("UPDATE info SET type='$type' WHERE id=$id");
+    $change = $connect->query("UPDATE info SET type='$type' WHERE id=$id");
 
-    if($change){
+    if ($change) {
         echo "ok";
-    }
-    else{
+    } else {
         echo "ko";
     }
-
 }
 
-//stduents info
+//student info
+
+//student name
 if (isset($_GET['student_name']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['name'] != "") {
         include 'config.php';
@@ -48,6 +49,8 @@ if (isset($_GET['student_name']) and isset($_GET['id']) and is_numeric($_GET['id
         }
     }
 }
+
+//student DOB
 if (isset($_GET['student_dob'])) {
     if ($_GET['dob'] != "" and isset($_GET['id']) and is_numeric($_GET['id'])) {
         include 'config.php';
@@ -62,6 +65,7 @@ if (isset($_GET['student_dob'])) {
     }
 }
 
+//student gender
 if (isset($_GET['student_gender'])) {
     if ($_GET['gender'] != "" and is_numeric($_GET['gender']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
         include 'config.php';
@@ -76,6 +80,7 @@ if (isset($_GET['student_gender'])) {
     }
 }
 
+//student grade
 if (isset($_GET['student_grade'])) {
     if ($_GET['grade'] != "" and is_numeric($_GET['grade']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
         include 'config.php';
@@ -90,13 +95,14 @@ if (isset($_GET['student_grade'])) {
     }
 }
 
+//update marks
 if (isset($_GET['marks']) and isset($_POST['student_id']) and isset($_POST['mark']) and is_numeric($_POST['mark']) and is_numeric($_POST['student_id'])) {
     //echo "ok";
     include 'config.php';
     $student_id = mysqli_real_escape_string($connect, $_POST['student_id']);
     $mark = mysqli_real_escape_string($connect, $_POST['mark']);
     $test = mysqli_real_escape_string($connect, $_POST['test']);
-    $update_marks = $connect->query("UPDATE marks SET marks=$mark where student_id=$student_id and test_id=$test");
+    $update_marks = $connect->query("UPDATE marks SET marks=$mark where student_id=$student_id AND test_id=$test");
     if ($update_marks) {
         echo "ok";
     } else {
@@ -104,10 +110,9 @@ if (isset($_GET['marks']) and isset($_POST['student_id']) and isset($_POST['mark
     }
 }
 
-
-
 //Staff edits
 
+//staff name
 if (isset($_GET['staff_name']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['name'] != "") {
         include 'config.php';
@@ -122,6 +127,7 @@ if (isset($_GET['staff_name']) and isset($_GET['id']) and is_numeric($_GET['id']
     }
 }
 
+//staff gender
 if (isset($_GET['staff_gender']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['gender'] != "") {
         include 'config.php';
@@ -136,6 +142,7 @@ if (isset($_GET['staff_gender']) and isset($_GET['id']) and is_numeric($_GET['id
     }
 }
 
+//staff email
 if (isset($_GET['staff_email']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['email'] != "") {
         include 'config.php';
@@ -150,6 +157,7 @@ if (isset($_GET['staff_email']) and isset($_GET['id']) and is_numeric($_GET['id'
     }
 }
 
+//staff tel
 if (isset($_GET['staff_tel']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['tel'] != "") {
         include 'config.php';
@@ -164,7 +172,7 @@ if (isset($_GET['staff_tel']) and isset($_GET['id']) and is_numeric($_GET['id'])
     }
 }
 
-
+//staff type/title
 if (isset($_GET['staff_title']) and isset($_GET['id']) and is_numeric($_GET['id'])) {
     if ($_GET['title'] != "") {
         include 'config.php';
@@ -176,5 +184,28 @@ if (isset($_GET['staff_title']) and isset($_GET['id']) and is_numeric($_GET['id'
         } else {
             echo "ok";
         }
+    }
+}
+
+//update grade
+if (
+    isset($_POST['id']) and
+    isset($_POST['grade']) and
+    isset($_POST['stream']) and
+    is_numeric($_POST['id']) and
+    is_numeric($_POST['grade'])
+) {
+    include 'config.php';
+
+    $id = $_POST['id'];
+    $grade = $_POST['grade'];
+    $stream = $_POST['stream'];
+
+    $update = $connect->query("UPDATE streams SET grade=$grade, stream='$stream' WHERE id=$id");
+
+    if ($update) {
+        echo 'ok';
+    } else {
+        echo 'ko';
     }
 }

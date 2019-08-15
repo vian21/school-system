@@ -1,4 +1,4 @@
 <?php
 include 'config.php';
 include 'functions.php';
-echoJson(fetchStudentsTaking(1,2));
+echoJson(fetchTestNames(1));

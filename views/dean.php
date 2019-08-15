@@ -11,8 +11,10 @@ $id = $_SESSION['id'];
     <?php include './modules/config.php' ?>
     <?php include './modules/staticFiles.php' ?>
     <?php include './modules/functions.php' ?>
+
     <link rel="stylesheet" href="src/css/dean.css">
     <link rel="stylesheet" href="src/css/select2.css">
+    <script src="./src/js/select2.js"></script>
     <title>Dean</title>
 </head>
 
@@ -51,17 +53,26 @@ $id = $_SESSION['id'];
             </div>
         </div>
 </body>
-<script src="src/js/select2.js"></script>
-<script src="src/js/dean.js"></script>
-<script src="src/js/staff.js"></script>
-<script src="src/js/student.js"></script>
+<!--<script src="src/js/select2.js"></script>
+<script src="src/js/dean/dean.js"></script>
+<script src="src/js/common.js"></script>-->
 <script>
-    var numberOfStudents = <?php echo countStudents(1, 0).";\n"; ?>
-    var numberOfMaleStudents=<?php echo countMaleStudents().";\n"; ?>
-    var numberOfFemaleStudents=<?php echo countFemaleStudents().";\n"; ?>
+    var numberOfStudents = <?php echo countStudents(1, 0) . ";\n"; ?>
+    var numberOfMaleStudents = <?php echo countMaleStudents() . ";\n"; ?>
+    var numberOfFemaleStudents = <?php echo countFemaleStudents() . ";\n"; ?>
 
-    var numberOfTeachers=<?php echo countTeachers().";\n"; ?>
-    var userId=<?php echo $id.";\n"; ?>
+    var numberOfTeachers = <?php echo countTeachers() . ";\n"; ?>
+    var userId = <?php echo $id . ";\n"; ?>
+
+    //fetch and compress all js files
+    <?php echo file_get_contents('./src/js/dean/variables.js'); ?>
+    <?php echo file_get_contents('./src/js/dean/functions.js'); ?>
+
+    <?php echo compressCodeIn('./src/js/dean/runner/') ?>
+    <?php echo compressCodeIn('./src/js/dean/create/') ?>
+    <?php echo compressCodeIn('./src/js/dean/retrieve/') ?>
+    <?php echo compressCodeIn('./src/js/dean/update/') ?>
+    <?php echo compressCodeIn('./src/js/dean/delete/') ?>
 </script>
 
 </html>
