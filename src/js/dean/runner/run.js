@@ -8,23 +8,25 @@ $(document).ready(function () {
     fetchSubjects();
 
     dashboard()
+
+    //students tab
     $("#tab1").click(function () {
         studentsTab();
     })
 
+    //teachers tab
     $("#tab2").click(function () {
 
         makeTeachersTable(teachersArray, 'container')
     })
 
+    //marks tab
     $("#tab3").click(function () {
-        $("#three").css('display', 'block');
-        //Append the grades in the select grade input when user clicks on the marks tab
         marks();
-        //$(this).off('click')
         return false;
     })
 
+    //misc tab
     $("#tab4").click(function () {
         misc('container');
 
