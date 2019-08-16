@@ -69,6 +69,7 @@ $id = $_SESSION['id'];
     <?php echo file_get_contents('./src/js/dean/functions.js'); ?>
 
     <?php echo compressCodeIn('./src/js/dean/runner/') ?>
+    <?php echo compressCodeIn('./src/js/dean/tabs/') ?>
     <?php echo compressCodeIn('./src/js/dean/create/') ?>
     <?php echo compressCodeIn('./src/js/dean/retrieve/') ?>
     <?php echo compressCodeIn('./src/js/dean/update/') ?>

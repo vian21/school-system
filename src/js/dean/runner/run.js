@@ -17,13 +17,7 @@ $(document).ready(function () {
         makeTeachersTable(teachersArray, 'container')
     })
 
-    $("#tab3").unbind('click').click(function () {
-        $("#container").html('<button id="createAssessment">New assessment</button>\
-                              <button id="showMarksForm">Results</button>\
-                              <button id="showReportsForm">Reports</button>\
-                              <div id="marksDesk"></div>\
-                            ');
-
+    $("#tab3").click(function () {
         $("#three").css('display', 'block');
         //Append the grades in the select grade input when user clicks on the marks tab
         marks();
