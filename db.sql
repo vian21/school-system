@@ -3,11 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 05, 2019 at 08:33 PM
+-- Generation Time: Aug 20, 2019 at 10:15 AM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -23,12 +25,14 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `academic_year`
+-- Table structure for table `academic_periods`
 --
 
-CREATE TABLE `academic_year` (
+CREATE TABLE `academic_periods` (
   `id` int(11) NOT NULL,
-  `time` text NOT NULL
+  `academic_year` text NOT NULL,
+  `school` int(11) NOT NULL,
+  `name` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -39,6 +43,7 @@ CREATE TABLE `academic_year` (
 
 CREATE TABLE `assessments` (
   `id` int(11) NOT NULL,
+  `school` int(11) NOT NULL,
   `period` int(11) NOT NULL,
   `name` text NOT NULL,
   `month` int(11) NOT NULL,
@@ -55,8 +60,8 @@ CREATE TABLE `assessments` (
 CREATE TABLE `enrollment` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `subject` text NOT NULL,
-  `period` text NOT NULL
+  `subject` int(11) NOT NULL,
+  `period` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -88,13 +93,15 @@ CREATE TABLE `marks` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `periods`
+-- Table structure for table `schools`
 --
 
-CREATE TABLE `periods` (
+CREATE TABLE `schools` (
   `id` int(11) NOT NULL,
-  `academic_year` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` text NOT NULL,
+  `type` int(11) NOT NULL,
+  `email` text NOT NULL,
+  `website` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -105,7 +112,7 @@ CREATE TABLE `periods` (
 
 CREATE TABLE `streams` (
   `id` int(11) NOT NULL,
-  `grade` text NOT NULL,
+  `grade` int(11) NOT NULL,
   `stream` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -138,6 +145,7 @@ CREATE TABLE `students` (
 CREATE TABLE `subjects` (
   `id` int(11) NOT NULL,
   `subject_name` text NOT NULL,
+  `school` int(11) NOT NULL,
   `stream` int(11) NOT NULL,
   `hours` int(11) NOT NULL,
   `type` int(11) NOT NULL
@@ -180,9 +188,9 @@ CREATE TABLE `users` (
 --
 
 --
--- Indexes for table `academic_year`
+-- Indexes for table `academic_periods`
 --
-ALTER TABLE `academic_year`
+ALTER TABLE `academic_periods`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -210,9 +218,9 @@ ALTER TABLE `marks`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `periods`
+-- Indexes for table `schools`
 --
-ALTER TABLE `periods`
+ALTER TABLE `schools`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -250,9 +258,9 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `academic_year`
+-- AUTO_INCREMENT for table `academic_periods`
 --
-ALTER TABLE `academic_year`
+ALTER TABLE `academic_periods`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -280,9 +288,9 @@ ALTER TABLE `marks`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `periods`
+-- AUTO_INCREMENT for table `schools`
 --
-ALTER TABLE `periods`
+ALTER TABLE `schools`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -314,6 +322,7 @@ ALTER TABLE `teaches`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

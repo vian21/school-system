@@ -8,11 +8,12 @@ function deleteGrade(id) {
         },
         success: function (data) {
             if (data == 'ok') {
-                fetchStreams();
+                fetchStreams().then(function () {
 
-                alert("Grade successfully deleted");
+                    alert("Grade successfully deleted");
 
-                misc('container');
+                    gradesTable();
+                });
             }
             else {
                 alert("Failed to delete grade");

@@ -140,18 +140,21 @@ if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subje
     }
 }
 
+//insert subject
 if (
     isset($_GET['subject'])
     && isset($_POST['name'])
     && isset($_POST['grade'])
     && isset($_POST['type'])
     && isset($_POST['hours'])
+    && isset($_POST['id'])
 
     && !empty($_POST['name'])
     && !empty($_POST['grade'])
     && !empty($_POST['type'])
     && !empty($_POST['hours'])
 ) {
+    $school_id=$_POST['id'];
     $subject_name = $_POST['name'];
     $grade = $_POST['grade'];
     $hours = $_POST['hours'];
@@ -159,7 +162,7 @@ if (
 
     include 'config.php';
 
-    $insert = $connect->query("INSERT INTO subjects(subject_name,stream,hours,type) VALUES('$subject_name',$grade,$hours,$type)");
+    $insert = $connect->query("INSERT INTO subjects(subject_name,school,stream,hours,type) VALUES('$subject_name',$school_id,$grade,$hours,$type)");
 
     if ($insert) {
         echo "ok";
@@ -168,6 +171,7 @@ if (
     }
 }
 
+//insert stream | grade
 if (
     isset($_GET['stream'])
     && isset($_POST['grade'])

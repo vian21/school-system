@@ -76,12 +76,12 @@ function fetchSubjectsTaughtId($id)
     return returnValue($subjects_taught_array);
 }
 
-function fetchTestsDone($subject_id, $period)
+function fetchTestsDone($subject_id, $school_id, $period)
 {
     include 'config.php';
 
     if ($subject_id == 'all') {
-        $select_test = $connect->query("SELECT * FROM assessments Where period=$period");
+        $select_test = $connect->query("SELECT * FROM assessments Where school=$school_id AND period=$period");
 
         $tests_done = array();
 
@@ -98,7 +98,7 @@ function fetchTestsDone($subject_id, $period)
         }
         return returnValue($tests_done);
     } else {
-        $select_test = $connect->query("SELECT * FROM assessments WHERE subject=$subject_id and period=$period");
+        $select_test = $connect->query("SELECT * FROM assessments WHERE school=$school_id and subject=$subject_id and period=$period");
 
         $tests = array();
 
@@ -265,12 +265,12 @@ function fetchAllStreams()
 
     return returnValue($streams);
 }
-function fetchAllSubjects($where)
+function fetchAllSubjects($where,$school_id)
 {
     include 'config.php';
 
     if ($where == 'all') {
-        $get_subjects = $connect->query("SELECT*FROM subjects");
+        $get_subjects = $connect->query("SELECT*FROM subjects WHERE school=$school_id");
         $subjects = array();
         while ($row = mysqli_fetch_assoc($get_subjects)) {
             $subjects_array = array();
@@ -278,6 +278,7 @@ function fetchAllSubjects($where)
             $subjects_array['name'] = $row['subject_name'];
             $subjects_array['stream'] = $row['stream'];
             $subjects_array['type'] = $row['type'];
+            $subjects_array['hours'] = $row['hours'];
             $subjects[] = $subjects_array;
         }
         return returnValue($subjects);
@@ -295,18 +296,28 @@ function fetchAllSubjects($where)
         return returnValue($subjects);
     }
 }
-function fetchAcademicYears()
+function fetchAcademicPeriods($school_id)
 {
     include 'config.php';
-    $get_years = $connect->query("SELECT*FROM academic_year");
-    return returnValue($get_years);
+
+    $get_periods = $connect->query("SELECT*FROM academic_periods WHERE school=$school_id");
+    $periods = array();
+    while ($row = mysqli_fetch_assoc($get_periods)) {
+        //fetch periods in that year
+        $sub_array = array();
+        $sub_array['id'] = $row['id'];
+        $sub_array['year'] = $row['academic_year'];
+        $sub_array['period_name'] = $row['name'];
+        $periods[] = $sub_array;
+    }
+    return returnValue($periods);
 }
-function fetchPeriods($in)
+/*function fetchPeriods($in)
 {
     /*if($in=='all'){
 
     }
-    else{*/
+    else{
     include 'config.php';
     $get_periods = $connect->query("SELECT*FROM periods WHERE academic_year=$in");
     $periods = array();
@@ -319,7 +330,7 @@ function fetchPeriods($in)
     return returnValue($periods);
     //}
 
-}
+}*/
 
 function getStudentInfo($id)
 {
@@ -354,7 +365,7 @@ function fetchCompulsarySubjects($grade)
 function fetchSchoolInfo($id)
 {
     include 'config.php';
-    $get_info = mysqli_fetch_assoc($connect->query("SELECT*FROM info WHERE id=$id"));
+    $get_info = mysqli_fetch_assoc($connect->query("SELECT*FROM schools WHERE id=$id"));
     return returnValue($get_info);
 }
 
@@ -465,6 +476,8 @@ function compressCodeIn($folder)
     foreach ($files as $file) {
         $sub_code = file_get_contents($folder . $file);
         $code .= "\n" . $sub_code;
+        //$code.=$sub_code;
     }
     return $code;
+    //return preg_replace(array("/\s+\n/","/\n\s+/","/ +/"),array("\n","\n "," "),$code);
 }

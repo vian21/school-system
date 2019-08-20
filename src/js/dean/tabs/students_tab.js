@@ -55,34 +55,22 @@ function studentsTab() {
 
         //Add listeners for change in student info
         $("#studentInfoName").change(function () {
-            // console.log(1)
-            //$("document").click(function(){
-            save(2, studentSelected['id'], 'name', $("#studentInfoName").val());
-            //console.log(1)
-            //})
+            updateStudentName(studentSelected['id'], $("#studentInfoName").val())
         })
 
         //change gender
         $("#studentInfoGender").change(function () {
-            //$("body").click(function(){
-            console.log(1)
-            save(2, studentSelected['id'], 'gender', $("#studentInfoGender").val());
-            //})
+            updateStudentGender(studentSelected['id'], $("#studentInfoGender").val())
         })
 
         $("#studentInfoGrade").change(function () {
-            //$("body").click(function(){
-            console.log(1)
-            save(2, studentSelected['id'], 'grade', $("#studentInfoGrade").val());
-            //})
+            updateStudentGrade(studentSelected['id'], $("#studentInfoGrade").val())
         })
 
-        $("#studentInfoDOB").change(function () {
-            //$("document").click(function(){
-            console.log(1)
-            save(2, studentSelected['id'], 'dob', $("#studentInfoDOB").val());
-            //})
-        })
+        $("#studentInfoDOB").on('blur', function () {
+            updateStudentDOB(studentSelected['id'], $("#studentInfoDOB").val())
+        }
+        )
     })
 
     $("#addStudentButton").click(function () { showStudentForm() });

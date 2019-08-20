@@ -1,23 +1,27 @@
-function fetchAcademicYears() {
-    var url = "modules/fetch.php?periods=";
+async function fetchAcademicPeriods() {
+    var url = "modules/fetch.php?periods";
 
-    $.ajax({
+    await $.ajax({
         url: url,
-        method: "get",
+        method: "post",
+        data: {
+            id: schoolId
+        },
         success: function (response) {
             periods = JSON.parse(response);
 
             setCurrentPeriod();
 
-            generateTermOptions('termOptions');
+            generateTermOptions();
 
             fetchTests();
-            return false;
         }
     })
+
+    return false;
 }
 
-function setCurrentPeriod() {
+/*function setCurrentPeriod() {
     var positionInArray;
 
     for (var h = 0; h < periods.length; h++) {
@@ -34,4 +38,10 @@ function setCurrentPeriod() {
 
     }
     return false;
+}*/
+
+function setCurrentPeriod() {
+    var lastPeriod = periods.length - 1;
+    currentPeriodId = periods[lastPeriod]['id'];
+    currentPeriod = periods[lastPeriod]['period_name'];
 }

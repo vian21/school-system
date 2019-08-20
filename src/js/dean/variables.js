@@ -1,13 +1,18 @@
 var schoolId;
 var schoolName;
 var schoolType;
+var schoolEmail;
+var schoolWebsite;
+
 var genders = ['Male', 'Female'];
 var schoolTypes = ['Day School', 'Boarding School'];
 var staffTypes = ['Dean', 'Teacher'];
 var subjectTypes = ['Compulsary', 'Elective'];
-//var currentYearPosition, currentYearId, currentYear, currentPeriodPosition, currentPeriodId, currentPeriod;
+
 var periods, currentPeriodId, currentPeriod;
+
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 //Variable to contain all students
 var studentsArray = [];
 //Variable to conatiner all teachers

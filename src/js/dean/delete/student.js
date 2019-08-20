@@ -4,13 +4,9 @@ function deleteStudent(id) {
         url: "modules/delete.php?student=" + id,
         success: function (data) {
             if (data == 'ok') {
-                fetchStudents();
-
-                dashboard();
-
                 alert("Student successfully deleted");
-                
-                $("#container").html('')
+
+                studentstab();
             }
             else {
                 alert("Failed to delete student");

@@ -16,41 +16,26 @@ function appendMarks(json, testID) {
         }
         tabletemplate += "</table>";
         tabletemplate += "<button onclick='deleteAssessment(" + testID + ")'>Delete</button>"
+        tabletemplate += "<div id='msgBoard'></div>"
         $("#results").html("");
         $("#results").append(tabletemplate);
 
         //Function 
 
         $('.mark').on('change', function () {
-            var msg = "<span id='saveMsg'>Data saved successfully</span>";
-            var failMsg = "<span id='failedToSaveMsg'>Failed to save data</span>";
-
             var studentId = $(this).attr('id');
             console.log(studentId)
             var newMark = $(this).val();
-            $.ajax({
-                url: "modules/update.php?marks=",
-                method: "post",
-                data: {
-                    student_id: studentId,
-                    mark: newMark,
-                    test: testID
-                },
-                success: function (data) {
-                    if (data == "ok") {
-                        console.log(msg)
-                        $("#saveMsg").remove()
-                        $("#results").append(msg);
-                        $("#saveMsg").fadeIn().delay(2000).fadeOut();
-                    }
-                    if (data == "ko" || data == "") {
-                        $("#failedToSaveMsg").remove()
-                        $("#results").append(failMsg);
-                        $("#failedToSaveMsg").fadeIn().delay(2000).fadeOut();
-                    }
-                }
 
-            })
+            var newMarkInfo = {
+                student_id: studentId,
+                mark: newMark,
+                test: testID
+            }
+
+            //Location : ../update/marks.js
+            updateMark(newMarkInfo)
+
             return false;
         })
     }

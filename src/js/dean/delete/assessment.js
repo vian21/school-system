@@ -1,7 +1,5 @@
 
 function deleteAssessment(testId) {
-    var msg = "<span id='saveMsg'>Data saved successfully</span>";
-    var deleteFailMsg = "<span id='failedToDeleteMsg'>Failed to delete data</span>";
     $.ajax({
         url: "modules/delete.php",
         data: {
@@ -11,15 +9,19 @@ function deleteAssessment(testId) {
         method: 'post',
         success: function (data) {
             if (data == "ok") {
-                console.log(msg)
-                $("#results").html("");
-                $("#results").append(deletedMsg);
-                $("#deletedMsg").fadeIn().delay(2000).fadeOut();
+                fetchtests().then(function () {
+                    alert("Test deleted");
+
+                    marks();
+                })
+
             }
-            if (data == "ko" || data == "") {
-                $("#results").html("");
-                $("#results").append(deleteFailMsg);
-                $("#failedToDeleteMsg").fadeIn().delay(2000).fadeOut();
+            else {
+                $("#results").append("<span id='failedToDeleteMsg'>Failed to delete data</span>");
+                
+                $("#failedToDeleteMsg").fadeIn()
+                    .delay(2000).fadeOut()
+                    .delay(1000).remove();
             }
         }
     })

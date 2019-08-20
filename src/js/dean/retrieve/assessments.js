@@ -1,13 +1,20 @@
-function fetchTests() {
-    var url = "modules/fetch.php?tests=" + currentPeriodId;
-    $.ajax({
+async function fetchTests() {
+    var url = "modules/fetch.php?tests"
+
+    await $.ajax({
         url: url,
+        method: 'post',
+        data: {
+            school: schoolId,
+            period: currentPeriodId
+        },
         success: function (response) {
-            testsDone = JSON.parse(response);
+            if (response !== ' ') {
+                testsDone = JSON.parse(response);
 
-            dashboard();
+                return true;
+            }
 
-            return false;
         }
     })
 }

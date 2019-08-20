@@ -10,7 +10,8 @@ function createStudent(data) {
         data: data,
         success: (response) => {
             if (response == 'ok') {
-                $(".modal").remove();
+               deleteModal();
+               
                 alert("Student successfully inserted")
                 $("#tab1").trigger('click')
             }

@@ -1,13 +1,20 @@
 $(document).ready(function () {
-    fetchSchoolInfo()
-    //fetcth periods;
-    fetchAcademicYears();
-    //Fetch all streams id
-    fetchStreams();
-    //Fetch all subjects
-    fetchSubjects();
+    fetchSchoolInfo().then(function () {
+        //Fecth all teachers and add them to and array and make a table using the array
+        fetchTeachers();
 
-    dashboard()
+        //fetch all student and add them to an array and add them to select option list using the student's array
+        fetchStudents().then(function(){
+            dashboard()
+        });
+
+        fetchAcademicPeriods();
+
+        fetchStreams();
+
+        fetchSubjects();
+    })
+
 
     //students tab
     $("#tab1").click(function () {

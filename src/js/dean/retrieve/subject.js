@@ -1,10 +1,15 @@
-function fetchSubjects() {
+async function fetchSubjects() {
     var url = "modules/fetch.php?subjects=";
-    $.ajax({
+    await $.ajax({
         url: url,
+        method: "post",
+        data: {
+            id: schoolId
+        },
         success: function (response) {
             subjects = JSON.parse(response);
-            return false;
+            
+            return true;
         }
     })
 }

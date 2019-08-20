@@ -7,6 +7,7 @@ if (isset($_GET['form_options'])) {
     $id = $_SESSION['id'];
 
     $subjects_ids = fetchSubjectsTaughtId($id);
+    $school_id=$_POST['id'];
 
     //print_r($subjects_ids,true);
     $form_Data = array();
@@ -22,7 +23,7 @@ if (isset($_GET['form_options'])) {
 
         $sub_form_Data['stream_name'] = $stream_names;
 
-        $tests_done = fetchTestsDone($row, $period);  //The ids of the tests done
+        $tests_done = fetchTestsDone($row,$school_id, $period);  //The ids of the tests done
 
         $sub_form_Data['test_id'] = $tests_done;
         //echoJson($tests_done);
@@ -130,22 +131,35 @@ if (isset($_GET['streams'])) {
 if (isset($_GET['subjects'])) {
     include 'functions.php';
 
-    echoJson(fetchAllSubjects('all'));
+    $school_id = $_POST['id'];
+    echoJson(fetchAllSubjects('all', $school_id));
 }
 
-if (isset($_GET['tests']) and $_GET['tests'] !== "" and is_numeric($_GET['tests'])) {
+//fetch tests done in a specific period
+if (
+    isset($_GET['tests']) and
+    $_POST['period'] !== "" and
+    is_numeric($_POST['period'])
+) {
     include 'config.php';
     include 'functions.php';
 
-    $period = mysqli_real_escape_string($connect, $_GET['tests']);
+    $school_id = $_POST['school'];
+    $period = mysqli_real_escape_string($connect, $_POST['period']);
 
-    echoJson(fetchTestsDone('all', $period));
+    echoJson(fetchTestsDone('all', $school_id, $period));
 }
 
-if (isset($_GET['periods'])) {
+//fetching terms for specific school
+if (
+    isset($_GET['periods']) and
+    isset($_POST['id'])
+) {
     include 'functions.php';
 
-    $academic_years = fetchAcademicYears();
+    $school_id = $_POST['id'];
+
+    /*$academic_years = fetchAcademicYears($school_id);
 
     while ($row = mysqli_fetch_assoc($academic_years)) {
         //fetch periods in that year
@@ -154,14 +168,19 @@ if (isset($_GET['periods'])) {
         $sub_array['year'] = $row['time'];
         $sub_array['periods'] = fetchPeriods($row['id']);
         $periods[] = $sub_array;
-    }
-    echoJson($periods);
+    }*/
+
+    echoJson(fetchAcademicPeriods($school_id));
 }
 
-
-if (isset($_GET['school_info']) and isset($_GET['user']) and is_numeric($_GET['user'])) {
+//fetching all school information i.e: name,email,website
+if (
+    isset($_GET['school_info']) and
+    isset($_POST['user']) and
+    is_numeric($_POST['user'])
+) {
     include 'functions.php';
-    $user_id = $_GET['user'];
+    $user_id = $_POST['user'];
     $school_id = getSchoolId($user_id);
     echoJson(fetchSchoolInfo($school_id));
 }

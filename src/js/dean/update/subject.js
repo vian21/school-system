@@ -1,19 +1,40 @@
 function editSubject(position) {
     var form = "<div class='modal'><form>"
+    form += "<h4>Name</h4>";
+    form += "<input type='text' name='name' id='name' class='" + subjects[position]['id'] + "' value=" + subjects[position]['name'] + ">"
+
     form += "<h4>Grade</h4>";
-    form += "<input type='number' name='grade' id='grade' class='" + streams[position]['id'] + "' value=" + streams[position]['grade'] + ">"
-    form += "<h4>Stream</h4>";
-    form += "<input type='text' name='stream' id='stream' maxlength='1' value=" + streams[position]['stream'] + "><br>"
+    form += "<select id='grade'></select>"
+
+    form += "<h4>Type</h4>";
+    form += "<select id='type'>"
+    form += "<option value=0>Compulsary</option>"
+    form += "<option value=1>Elective</option>"
+    form += "</select><br>"
+    form += "<input type='number' name='hours' id='hours' value=" + subjects[position]['hours'] + "><br>"
     form += "<button id='cancel'>Cancel</button>"
     form += "<button id='save' type='submit'>Save</button>"
     form += "</form></div>";
 
     $('body').append(form);
 
+    //append options for grades
+    $("#grade").append(streamsOptions())
+
+    for (var j = 0; j < streams.length; j++) {
+        if (streams[j]['id'] == subjects[position]['stream']) {
+            //make current grade default
+            $("#grade").val(streams[j]['id']).trigger('change')
+
+        }
+    }
+
+    $("#type").val(subjects[position]['type']).trigger('change')
+
     $("#cancel").click(function () {
         event.preventDefault();
 
-        $('.modal').remove();
+        deleteModal();
 
         return false;
     })
@@ -21,60 +42,68 @@ function editSubject(position) {
     $("#save").click(function () {
         event.preventDefault();
 
-        var streamId = $("#grade").attr('class');
+        var id = $("#name").attr('class');
+        var name = $("#name").val();
         var grade = $("#grade").val();
-        var stream = $("#stream").val();
+        var type = $("#type").val();
+        var hours = $("#hours").val();
 
-        var validGrade, validStream = false;
+        var validName, validHours;
 
-        if (grade !== '' && !isNaN(grade)) {
-            validGrade = true;
+        if (name !== '') {
+            validName = true;
         }
         else {
-            alert("Enter a grade");
+            alert("Enter a subject name");
         }
-
-        if (stream !== '' && stream.length == 1 && isNaN(stream)) {
-            validStream = true;
+        if (hours !== '') {
+            validHours = true;
         }
         else {
-            alert("Enter a valid stream");
+            alert("Enter hours");
         }
 
-        if (validGrade == true && validStream == true) {
+        if (validName == true && validHours == true) {
             //console.log("ok")
 
             var form = new FormData();
 
-            form.append('id', streamId);
+            form.append('id', id);
+            form.append('name', name);
             form.append('grade', grade);
-            form.append('stream', stream.toUpperCase());
-
+            form.append('type', type);
+            form.append('hours', hours);
             //add(4, form);
+            updateSubject(form);
 
-            $.ajax({
-                url: "modules/update.php",
-                enctype: 'multipart/form-data',
-                processData: false,
-                contentType: false,
-                method: "post",
-                data: form,
-                success: (data) => {
-                    $('.modal').remove();
-
-                    if (data == 'ok') {
-                        fetchStreams();
-
-                        alert("Grade successfully created");
-
-                        misc('container');
-                    }
-                    else {
-                        alert("Failed to create grade");
-                    }
-                }
-
-            });
         }
     })
+}
+
+function updateSubject(info) {
+    $.ajax({
+        url: "modules/update.php?subject",
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        method: "post",
+        data: info,
+        success: (data) => {
+            if (data == 'ok') {
+                fetchSubjects().then(function () {
+                    alert("Subject edited.");
+
+                    deleteModal();
+
+                    subjectsTable();
+
+                })
+
+            }
+            else {
+                alert("Failed to edit subject");
+            }
+        }
+
+    });
 }

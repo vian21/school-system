@@ -58,7 +58,6 @@ function marksForm() {
 
     $("#marksGrade").html('<option></option>').append(streamsOptions());
     $("#marksGrade").change(function () {
-        //console.log(1)
         //If change grade clear all fields
         $("#marksSubject").html('');
         $("#marksTest").html('');
@@ -66,7 +65,6 @@ function marksForm() {
         //console.log(streamId)
         var option = "<option></option>";
         for (var i = 0; i < subjects.length; i++) {
-
             if (subjects[i]['stream'] == streamId) {
                 option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
             }
@@ -74,6 +72,7 @@ function marksForm() {
         $("#marksSubject").html('').append(option);
         $("#marksTest").html('');
         $("#marksTest").html('');
+
         $("#marksSubject").change(function () {
             $("#marksTest").html('');
             //If change subject clear the tests field
@@ -107,6 +106,7 @@ function marksForm() {
                         method: "post",
                         data: formData,
                         success: function (data) {
+                            // Location : /retrieve/marks.js
                             appendMarks(data, test);
                         }
                     })
@@ -143,6 +143,8 @@ function showNewAssessmentForm() {
     $('body').append(form);
     $("#grade").html(streamsOptions())
     $("#grade").select2()
+
+    $("#subject").html(subjectsGradeOptions());
 
     addListeners();
     return false;
@@ -240,7 +242,8 @@ function addListeners() {
             </select>\
             </div>")
 
-            createMonthOptions('month');
+            //createMonthOptions('month');
+            $("#month").html(createMonthOptions());
         }
         else {
             $('#monthOptions').remove();
@@ -273,7 +276,8 @@ function reportsForm() {
         //Monthly reports
         if (type == 1) {
             $("#type").after("<select name='month' id='month'></select>")
-            createMonthOptions("month")
+            //createMonthOptions("month")
+            $("#month").html(createMonthOptions());
         }
         //Annual reports
         if (type == 2) {

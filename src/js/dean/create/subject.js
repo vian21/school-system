@@ -23,7 +23,7 @@ function newsubjectForm() {
     $("#cancel").click(function () {
         event.preventDefault();
 
-        $('.modal').remove();
+        deleteModal();
 
         return false;
     })
@@ -70,6 +70,7 @@ function newsubjectForm() {
             form.append('grade', grade)
             form.append('type', type)
             form.append('hours', hoursPerWeek);
+            form.append('id',schoolId)
 
             //add(3, form);
             createSubject(form);
@@ -78,7 +79,7 @@ function newsubjectForm() {
 }
 
 function createSubject(data) {
-    var url = "modules/insert.php?subject=";
+    var url = "modules/insert.php?subject";
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',
@@ -88,9 +89,12 @@ function createSubject(data) {
         data: data,
         success: (response) => {
             if (response == 'ok') {
-                $(".modal").remove();
-                alert("Subject successfully inserted")
-                misc('container');
+                fetchSubjects().then(function(){
+                    deleteModal();
+                    alert("Subject successfully inserted")
+                    subjectsTable();
+                })
+               
             }
             else {
                 alert("Failed to insert subject")

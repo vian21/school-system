@@ -1,12 +1,13 @@
-function fetchStudents() {
+async function fetchStudents() {
     var url = "modules/fetch.php?allStudents=&school_id=" + schoolId;
-    $.ajax({
+
+    await $.ajax({
         url: url,
         success: function (response) {
             studentsArray = JSON.parse(response);
-            return false;
         }
     })
+    return false;
 }
 
 function showStudentForm() {
