@@ -30,8 +30,13 @@ function fetchImage($level, $id)
     include 'config.php';
     if ($level == 1) {
         $getImage = mysqli_fetch_assoc($connect->query("SELECT*FROM users WHERE id=$id"));
-        return returnValue($getImage['image']);
+        if ($getImage['image'] !== '') {
+            return returnValue($getImage['image']);
+        } else {
+            return 'user.png';
+        }
     }
+
     if ($level == 2) {
         $getName = mysqli_fetch_assoc($connect->query("SELECT*FROM students WHERE id=$id"));
         return returnValue($getImage['image']);
@@ -210,12 +215,12 @@ function countStudents($in, $stream_id)
 
     if ($in == 1) {
         $count = mysqli_num_rows($connect->query("SELECT*FROM students"));
-        return returnValue($count);
+        return $count;
     }
 
     if ($in == 2) {
         $count = mysqli_num_rows($connect->query("SELECT*FROM students WHERE grade=$stream_id"));
-        return returnValue($count);
+        return $count;
     }
 }
 
@@ -224,7 +229,7 @@ function countTeachers()
 {
     include 'config.php';
     $count = mysqli_num_rows($connect->query("SELECT*FROM users WHERE type=1"));
-    return returnValue($count);
+    return $count;
 }
 function fetchAllTeachers($school_id)
 {
@@ -265,7 +270,7 @@ function fetchAllStreams()
 
     return returnValue($streams);
 }
-function fetchAllSubjects($where,$school_id)
+function fetchAllSubjects($where, $school_id)
 {
     include 'config.php';
 
@@ -351,7 +356,7 @@ function fetchCompulsarySubjects($grade)
 {
     include 'config.php';
 
-    $get_subjects = $connect->query("SELECT*FROM subjects WHERE stream=$grade AND type=1");
+    $get_subjects = $connect->query("SELECT*FROM subjects WHERE stream=$grade AND type=0");
 
     $subjects = array();
 

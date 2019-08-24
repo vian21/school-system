@@ -193,6 +193,8 @@ function addListeners() {
         }
         if (validSubject == true && validType == true) {
             var form = new FormData();
+
+            form.append('school', schoolId);
             form.append('subject', subject);
             form.append('type', type);
             form.append('period', currentPeriodId);
@@ -208,7 +210,7 @@ function addListeners() {
             else {
                 form.append('name', 'Exam');
             }
-            createAssessment();
+            createAssessment(form);
 
         }
         return false;

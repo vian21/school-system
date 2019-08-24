@@ -3,11 +3,17 @@ async function fetchTeachers() {
     await $.ajax({
         url: url,
         success: function (response) {
-            teachersArray = JSON.parse(response);
-            addTeachersTosearchBox();
+            if (isJSON(response)) {
+                teachersArray = JSON.parse(response);
+                addTeachersTosearchBox();
+
+                return true;
+            }
+            else {
+                teachersArray = '';
+            }
         }
     })
-    return false;
 }
 
 

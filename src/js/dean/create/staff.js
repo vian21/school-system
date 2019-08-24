@@ -44,8 +44,9 @@ function showStaffForm() {
             //$("#grade").select2({
             //data: [
             //{ id: '', text: ' ' },
-            subjects_gradeOptions('grade')//]
+            //subjects_gradeOptions('grade')//]
             // });
+            $("#grade").html(subjectsGradeOptions()).select2()
         }
 
         if ($("#staffType").val() == 0) {
@@ -121,7 +122,7 @@ function showStaffForm() {
 }
 
 function createStaff(data) {
-    var url = "modules/insert.php?staff=";
+    var url = "modules/insert.php?staff";
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',
@@ -131,12 +132,14 @@ function createStaff(data) {
         data: data,
         success: (response) => {
             if (response == 'ok') {
-                $(".modal").remove();
-                alert("Student successfully inserted")
-                makeTeachersTable(teachersArray, 'container');
+                fetchTeachers().then(function(){
+                    $(".modal").remove();
+                    alert("Staff successfully inserted")
+                    makeTeachersTable();
+                })
             }
             else {
-                alert("Failed to insert student")
+                alert("Failed to create staff")
             }
         }
 

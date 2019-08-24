@@ -1,5 +1,11 @@
 <?php
 
+function createSchool($name, $type)
+{
+    include 'config.php';
+
+    $connect->query("INSERT INTO schools(name,type) VALUES('$name',$type)");
+}
 function createAdmin($name, $email, $password)
 {
     include 'config.php';
@@ -10,8 +16,10 @@ function createAdmin($name, $email, $password)
 
     if ($create) {
         echo "<h1>Admin created.</h1>";
+        createSchool('School 101', 0);
     } else {
         echo "Failed to create admin";
     }
 }
 
+createAdmin('admin', 'admin@gmail.com', '123');

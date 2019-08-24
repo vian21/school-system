@@ -3,11 +3,12 @@ function deleteStaff(id) {
         url: "modules/delete.php?staff=" + id,
         success: function (data) {
             if (data == 'ok') {
-                fetchTeachers();
+                fetchTeachers().then(function(){
+                    alert("Staff successfully deleted");
 
-                alert("Staff successfully deleted");
-                
-                $("#container").html('')
+                    makeTeachersTable();
+                })
+
             }
             else {
                 alert("Failed to delete staff");

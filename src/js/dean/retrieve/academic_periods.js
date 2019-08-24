@@ -8,13 +8,19 @@ async function fetchAcademicPeriods() {
             id: schoolId
         },
         success: function (response) {
-            periods = JSON.parse(response);
+            if (isJSON(response)) {
+                periods = JSON.parse(response);
 
-            setCurrentPeriod();
+                setCurrentPeriod();
 
-            generateTermOptions();
+                generateTermOptions();
 
-            fetchTests();
+                fetchTests();
+            }
+            else{
+                periods = '';
+            }
+
         }
     })
 

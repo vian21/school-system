@@ -7,7 +7,7 @@ if (isset($_GET['form_options'])) {
     $id = $_SESSION['id'];
 
     $subjects_ids = fetchSubjectsTaughtId($id);
-    $school_id=$_POST['id'];
+    $school_id = $_POST['id'];
 
     //print_r($subjects_ids,true);
     $form_Data = array();
@@ -23,7 +23,7 @@ if (isset($_GET['form_options'])) {
 
         $sub_form_Data['stream_name'] = $stream_names;
 
-        $tests_done = fetchTestsDone($row,$school_id, $period);  //The ids of the tests done
+        $tests_done = fetchTestsDone($row, $school_id, $period);  //The ids of the tests done
 
         $sub_form_Data['test_id'] = $tests_done;
         //echoJson($tests_done);
@@ -81,22 +81,24 @@ if (isset($_GET['allStudents'])) {
     $students = array();
     $students_array = fetchAllStudents('all');
 
-    foreach ($students_array as $column) {
-        $students_sub_array = array();
-        $students_sub_array['id'] = $column['id'];
-        $students_sub_array['name'] = $column['name'];
-        $students_sub_array['gender'] = $column['gender'];
-        $students_sub_array['image'] = $column['image'];
-        $students_sub_array['email'] = $column['email'];
-        $students_sub_array['tel'] = $column['tel'];
-        $students_sub_array['stream'] = fetchStreamName($column['grade']);
-        $students_sub_array['DOB'] = $column['DOB'];
-        $students_sub_array['status'] = $column['status'];
-        $students_sub_array['account_status'] = $column['account_status'];
-        $students[] = $students_sub_array;
-    }
+    if (!empty($students_array)) {
+        foreach ($students_array as $column) {
+            $students_sub_array = array();
+            $students_sub_array['id'] = $column['id'];
+            $students_sub_array['name'] = $column['name'];
+            $students_sub_array['gender'] = $column['gender'];
+            $students_sub_array['image'] = $column['image'];
+            $students_sub_array['email'] = $column['email'];
+            $students_sub_array['tel'] = $column['tel'];
+            $students_sub_array['stream'] = fetchStreamName($column['grade']);
+            $students_sub_array['DOB'] = $column['DOB'];
+            $students_sub_array['status'] = $column['status'];
+            $students_sub_array['account_status'] = $column['account_status'];
+            $students[] = $students_sub_array;
+        }
 
-    echoJson($students);
+        echoJson($students);
+    }
 }
 
 if (isset($_GET['allteachers'])) {

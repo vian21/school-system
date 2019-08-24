@@ -2,8 +2,8 @@
 session_start();
 if (isset($_SESSION['id'])) {
     /*
-     * 1 : Academic dean
-     * 2 : teacher
+     * 0 : Academic dean
+     * 1 : teacher
      */
     if ($_SESSION['type'] == 0) {
         include 'views/dean.php';

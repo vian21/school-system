@@ -1,7 +1,9 @@
 function appendMarks(json, testID) {
+    var tabletemplate = "";
+
     if (isJSON(json) && json !== "") {
         var jsonArray = JSON.parse(json);
-        var tabletemplate = "<table id='marksTable'><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
+        tabletemplate += "<table id='marksTable'><tr><th>#</th><th>Name</th><th>Marks</th></tr>";
         var i = 0;
         var number = 0;
         for (i; i < jsonArray.length; i++) {
@@ -15,11 +17,12 @@ function appendMarks(json, testID) {
             //console.log(jsonArray[i]);
         }
         tabletemplate += "</table>";
+
         tabletemplate += "<button onclick='deleteAssessment(" + testID + ")'>Delete</button>"
         tabletemplate += "<div id='msgBoard'></div>"
+
         $("#results").html("");
         $("#results").append(tabletemplate);
-
         //Function 
 
         $('.mark').on('change', function () {
@@ -39,8 +42,14 @@ function appendMarks(json, testID) {
             return false;
         })
     }
-    else {
-        return false;
+    if (json == '') {
+
+        tabletemplate += "<button onclick='deleteAssessment(" + testID + ")'>Delete</button>"
+        tabletemplate += "<div id='msgBoard'></div>"
+
+        $("#results").html("<span>No marks recorded. May be because no students were enrolled when the assessment was created.</span><br>");
+
+        $("#results").append(tabletemplate);
     }
     return false;
 }

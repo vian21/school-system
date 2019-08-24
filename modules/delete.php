@@ -1,4 +1,5 @@
 <?php
+//delete staff
 if (isset($_GET['staff']) and is_numeric($_GET['staff'])) {
     include 'config.php';
 
@@ -6,7 +7,9 @@ if (isset($_GET['staff']) and is_numeric($_GET['staff'])) {
 
     $delete = $connect->query("DELETE FROM users WHERE id =$id");
 
-    if ($delete) {
+    $deleteSubjectsTaught = $connect->query("DELETE FROM teaches  where teacher = $id");
+    
+    if ($delete and $deleteSubjectsTaught) {
         echo "ok";
     } else {
         echo "ko";
@@ -20,7 +23,9 @@ if (isset($_GET['student']) and is_numeric($_GET['student'])) {
 
     $delete = $connect->query("DELETE FROM students WHERE id =$id");
 
-    if ($delete) {
+    $deleteEnrollemnts = $connect->query("DELETE FROM enrollment  where student_id=$id");
+
+    if ($delete and $deleteEnrollemnts) {
         echo "ok";
     } else {
         echo "ko";

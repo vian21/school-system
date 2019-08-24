@@ -8,6 +8,7 @@ var genders = ['Male', 'Female'];
 var schoolTypes = ['Day School', 'Boarding School'];
 var staffTypes = ['Dean', 'Teacher'];
 var subjectTypes = ['Compulsary', 'Elective'];
+var periodTypes=['Term','Semester'];
 
 var periods, currentPeriodId, currentPeriod;
 

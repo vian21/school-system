@@ -9,10 +9,13 @@ async function fetchTests() {
             period: currentPeriodId
         },
         success: function (response) {
-            if (response !== ' ') {
+            if (isJSON(response)) {
                 testsDone = JSON.parse(response);
 
                 return true;
+            }
+            if (response == '') {
+                testsDone = '';
             }
 
         }

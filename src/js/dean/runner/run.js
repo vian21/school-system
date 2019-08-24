@@ -15,6 +15,10 @@ $(document).ready(function () {
         fetchSubjects();
     })
 
+    $("#addTerm").click(function(){
+        // located : ../create/period.js
+        newPeriodForm();
+    })
 
     //students tab
     $("#tab1").click(function () {
@@ -24,7 +28,7 @@ $(document).ready(function () {
     //teachers tab
     $("#tab2").click(function () {
 
-        makeTeachersTable(teachersArray, 'container')
+        makeTeachersTable()
     })
 
     //marks tab

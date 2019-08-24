@@ -67,7 +67,7 @@ if (isset($_GET['staff'])) {
         //If new staff is a teacher
         if ($type == 1) {
             $grade = explode(',', $_POST['grade']);
-            $insertTeacher = $connect->query("INSERT INTO users(name,email,tel,type) VALUES('$name','$email','$tel',$type)");
+            $insertTeacher = $connect->query("INSERT INTO users(name,gender,email,tel,type,school) VALUES('$name',$gender,'$email','$tel',$type,$school_id)");
 
             if ($insertTeacher) {
                 echo 'o';
@@ -107,10 +107,21 @@ if (isset($_GET['staff'])) {
 }
 
 //Creating a new assessement and records in the marks table
-if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subject']) and is_numeric($_POST['subject']) and is_numeric($_POST['type']) and isset($_POST['period']) and is_numeric($_POST['period']) and isset($_POST['name']) and is_numeric($_POST['subject'])) {
+if (
+    isset($_GET['assessment']) and
+    isset($_POST['type']) and
+    isset($_POST['subject']) and
+    is_numeric($_POST['subject']) and
+    is_numeric($_POST['type']) and
+    isset($_POST['period']) and
+    is_numeric($_POST['period']) and
+    isset($_POST['name']) and
+    is_numeric($_POST['subject'])
+) {
     include 'config.php';
     include 'functions.php';
 
+    $school_id = $_POST['school'];
     $subject = mysqli_real_escape_string($connect, $_POST['subject']);
     $type = mysqli_real_escape_string($connect, $_POST['type']);
     $period_id = mysqli_real_escape_string($connect, $_POST['period']);
@@ -122,10 +133,11 @@ if (isset($_GET['assessment']) and isset($_POST['type']) and isset($_POST['subje
         $month = mysqli_real_escape_string($connect, $_POST['month']) + 1;
     }
 
-    $create_assessment = $connect->query("INSERT INTO assessments(period,name,month,type,subject) VALUES($period_id,'$period_name',$month,$type,$subject)");
+    $create_assessment = $connect->query("INSERT INTO assessments(school,period,name,month,type,subject) VALUES($school_id,$period_id,'$period_name',$month,$type,$subject)");
 
     //get id of newly created test
-    $test_id = $connect->insert_id;
+    $test_id_query = mysqli_fetch_assoc($connect->query("SELECT id FROM assessments WHERE school = $school_id AND period = $period_id AND name = '$period_name' AND month = $month AND type = $type AND subject = $subject"));
+    $test_id = $test_id_query['id'];
 
     if ($create_assessment) {
         echo "ok";
@@ -151,10 +163,11 @@ if (
 
     && !empty($_POST['name'])
     && !empty($_POST['grade'])
-    && !empty($_POST['type'])
+    && $_POST['type']!==''
     && !empty($_POST['hours'])
 ) {
-    $school_id=$_POST['id'];
+
+    $school_id = $_POST['id'];
     $subject_name = $_POST['name'];
     $grade = $_POST['grade'];
     $hours = $_POST['hours'];
@@ -192,5 +205,27 @@ if (
         echo "ok";
     } else {
         echo "ko";
+    }
+}
+
+//insert period
+if (
+    isset($_GET['period']) and
+    isset($_POST['id']) and
+    isset($_POST['year']) and
+    isset($_POST['name'])
+) {
+    include 'config.php';
+
+    $school_id = $_POST['id'];
+    $year = $_POST['year'];
+    $name = $_POST['name'];
+
+    $insert = $connect->query("INSERT INTO academic_periods(academic_year,school,name) VALUES('$year',$school_id,'$name')");
+
+    if ($insert) {
+        echo 'ok';
+    } else {
+        echo 'ko';
     }
 }

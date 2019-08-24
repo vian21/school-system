@@ -75,7 +75,7 @@ function subjectsGradeOptions() {
             }
         }
 
-        options += "<option>" + subjects[i]['name'] + " " + stream + "</option>"
+        options += "<option value=" + subjects[i]['id'] + ">" + subjects[i]['name'] + " " + stream + "</option>"
     }
 
     return options;
@@ -115,7 +115,7 @@ function subjectsGradeOptions() {
 function createMonthOptions() {
     var options;
     for (var i = 0; i < months.length; i++) {
-        options += "<option>" + months[i] + "</option>"
+        options += "<option value=" + i + ">" + months[i] + "</option>"
     }
     return options;
 }

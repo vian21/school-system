@@ -1,7 +1,7 @@
 
-function createAssessment() {
+function createAssessment(form) {
     $.ajax({
-        url: 'modules/insert.php?assessment=',
+        url: 'modules/insert.php?assessment',
         method: "post",
         enctype: 'multipart/form-data',
         processData: false,

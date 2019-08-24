@@ -7,8 +7,8 @@ function newsubjectForm() {
                             <select id='grade'></select>\
                             <h4>Type</h4>\
                             <select id='type'>\
-                                <option value='1'>Compulsary</option>\
-                                <option value='2'>Elective</option>\
+                                <option value='0'>Compulsary</option>\
+                                <option value='1'>Elective</option>\
                             </select>\
                             <h4>Hours per week</h4>\
                             <input type='number' name='hours' id='hours'>\
@@ -70,7 +70,7 @@ function newsubjectForm() {
             form.append('grade', grade)
             form.append('type', type)
             form.append('hours', hoursPerWeek);
-            form.append('id',schoolId)
+            form.append('id', schoolId)
 
             //add(3, form);
             createSubject(form);
@@ -89,12 +89,12 @@ function createSubject(data) {
         data: data,
         success: (response) => {
             if (response == 'ok') {
-                fetchSubjects().then(function(){
+                fetchSubjects().then(function () {
                     deleteModal();
                     alert("Subject successfully inserted")
                     subjectsTable();
                 })
-               
+
             }
             else {
                 alert("Failed to insert subject")

@@ -56,12 +56,12 @@ function newGradeForm() {
 
 function createGrade(data) {
     $.ajax({
-        url: "modules/update.php",
+        url: "modules/insert.php?stream",
         enctype: 'multipart/form-data',
         processData: false,
         contentType: false,
         method: "post",
-        data: form,
+        data: data,
         success: (data) => {
             $('.modal').remove();
 

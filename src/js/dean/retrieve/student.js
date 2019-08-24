@@ -4,10 +4,16 @@ async function fetchStudents() {
     await $.ajax({
         url: url,
         success: function (response) {
-            studentsArray = JSON.parse(response);
+            if (isJSON(response)) {
+                studentsArray = JSON.parse(response);
+
+                return true;
+            }
+            else {
+                studentsArray = '';
+            }
         }
     })
-    return false;
 }
 
 function showStudentForm() {

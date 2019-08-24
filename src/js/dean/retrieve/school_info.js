@@ -3,17 +3,19 @@ async function fetchSchoolInfo() {
 
     await $.ajax({
         url: url,
-        method:'post',
+        method: 'post',
         data: {
             user: userId
         },
         success: function (response) {
-            var info = JSON.parse(response);
-            schoolId = info['id'];
-            schoolName = info['name'];
-            schoolType = info['type'];
-            schoolEmail = info['email'];
-            schoolWebsite = info['website'];
+            if (isJSON(response)) {
+                var info = JSON.parse(response);
+                schoolId = info['id'];
+                schoolName = info['name'];
+                schoolType = info['type'];
+                schoolEmail = info['email'];
+                schoolWebsite = info['website'];
+            }
 
             return true;
         }

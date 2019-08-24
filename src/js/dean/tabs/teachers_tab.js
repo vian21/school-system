@@ -1,4 +1,4 @@
-function makeTeachersTable(array, container) {
+function makeTeachersTable() {
     var teacherTableTemplate = "<button id='addTeacherButton'>Add</button>";
     teacherTableTemplate += "<select id='searchTeacherBox'></select>"
     teacherTableTemplate += "<button id='downloadStaffList'>Download</button>";
@@ -14,33 +14,33 @@ function makeTeachersTable(array, container) {
                                 </tr>";
     var number = 0;
     var jobTitle;
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < teachersArray.length; i++) {
         teacherTableTemplate += "<tr>";
         number = i + 1;
         teacherTableTemplate += "<td>" + number + "</td>";
-        teacherTableTemplate += "<td>" + array[i]['name'] + "</td>";
-        teacherTableTemplate += "<td>" + array[i]['email'] + "</td>";
-        teacherTableTemplate += "<td>" + genders[array[i]['gender']] + "</td>";
-        teacherTableTemplate += "<td>" + array[i]['tel'] + "</td>";
-        if (array[i]['type'] == 1) {
+        teacherTableTemplate += "<td>" + teachersArray[i]['name'] + "</td>";
+        teacherTableTemplate += "<td>" + teachersArray[i]['email'] + "</td>";
+        teacherTableTemplate += "<td>" + genders[teachersArray[i]['gender']] + "</td>";
+        teacherTableTemplate += "<td>" + teachersArray[i]['tel'] + "</td>";
+        if (teachersArray[i]['type'] == 1) {
             jobTitle = "Dean";
         }
-        if (array[i]['type'] == 2) {
+        if (teachersArray[i]['type'] == 2) {
             jobTitle = "Teacher";
         }
-        teacherTableTemplate += "<td>" + staffTypes[array[i]['type']] + "</td>";
+        teacherTableTemplate += "<td>" + staffTypes[teachersArray[i]['type']] + "</td>";
 
         //Staff edit button
         teacherTableTemplate += "<td><button onclick=getTeacherInfo(" + i + ")>Edit</button></td>"
 
         //staff delete button
-        teacherTableTemplate += "<td><button onclick=deleteStaff(" + array[i]['id'] + ")>Delete</button></td>"
+        teacherTableTemplate += "<td><button onclick=deleteStaff(" + teachersArray[i]['id'] + ")>Delete</button></td>"
 
         teacherTableTemplate += "</tr>";
     }
     teacherTableTemplate += "</table></div>"
-    $('#' + container).html("");
-    $('#' + container).append(teacherTableTemplate);
+    $('#container').html("");
+    $('#container').append(teacherTableTemplate);
     addTeachersTosearchBox();
 
     //add a listener for click on add button

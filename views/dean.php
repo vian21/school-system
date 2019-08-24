@@ -27,6 +27,7 @@ $id = $_SESSION['id'];
         <div id=term>
             <select id=termOptions>
             </select>
+            <button id='addTerm'>+</button>
         </div>
         <div id="logout">
             <span><a href="./modules/logout.php">Logout</a></span>

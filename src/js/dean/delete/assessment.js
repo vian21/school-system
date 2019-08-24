@@ -9,7 +9,7 @@ function deleteAssessment(testId) {
         method: 'post',
         success: function (data) {
             if (data == "ok") {
-                fetchtests().then(function () {
+                fetchTests().then(function () {
                     alert("Test deleted");
 
                     marks();

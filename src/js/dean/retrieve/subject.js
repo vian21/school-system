@@ -7,9 +7,14 @@ async function fetchSubjects() {
             id: schoolId
         },
         success: function (response) {
-            subjects = JSON.parse(response);
-            
-            return true;
+            if (isJSON(response)) {
+                subjects = JSON.parse(response);
+
+                return true;
+            }
+            else {
+                subjects = '';
+            }
         }
     })
 }
