@@ -79,7 +79,7 @@ function newsubjectForm() {
 }
 
 function createSubject(data) {
-    var url = "modules/insert.php?subject";
+    var url = "modules/dean/create/subject.php";
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',

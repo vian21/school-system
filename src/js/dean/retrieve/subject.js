@@ -1,5 +1,5 @@
 async function fetchSubjects() {
-    var url = "modules/fetch.php?subjects=";
+    var url = "modules/dean/fetch/subjects.php";
     await $.ajax({
         url: url,
         method: "post",

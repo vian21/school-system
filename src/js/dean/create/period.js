@@ -58,7 +58,7 @@ function newPeriodForm() {
     })
 }
 function newPeriod(year, name) {
-    var url = "modules/insert.php?period"
+    var url = "modules/dean/create/period.php"
 
     $.ajax({
         url: url,

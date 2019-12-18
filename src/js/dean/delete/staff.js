@@ -1,9 +1,9 @@
 function deleteStaff(id) {
     $.ajax({
-        url: "modules/delete.php?staff=" + id,
+        url: "modules/dean/delete/staff.php?staff=" + id,
         success: function (data) {
             if (data == 'ok') {
-                fetchTeachers().then(function(){
+                fetchTeachers().then(function () {
                     alert("Staff successfully deleted");
 
                     makeTeachersTable();

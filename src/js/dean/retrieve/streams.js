@@ -1,5 +1,5 @@
 async function fetchStreams() {
-    var url = "modules/fetch.php?streams";
+    var url = "modules/dean/fetch/streams.php";
 
     await $.ajax({
         url: url,

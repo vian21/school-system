@@ -122,7 +122,7 @@ function showStaffForm() {
 }
 
 function createStaff(data) {
-    var url = "modules/insert.php?staff";
+    var url = "modules/create/staff.php";
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',

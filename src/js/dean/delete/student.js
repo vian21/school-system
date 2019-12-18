@@ -1,7 +1,7 @@
 
 function deleteStudent(id) {
     $.ajax({
-        url: "modules/delete.php?student=" + id,
+        url: "modules/dean/delete/student.php?student=" + id,
         success: function (data) {
             if (data == 'ok') {
                 fetchStudents().then(function () {

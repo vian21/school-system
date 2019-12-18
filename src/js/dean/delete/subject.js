@@ -1,6 +1,6 @@
 function deleteSubject(id) {
     $.ajax({
-        url: "modules/delete.php",
+        url: "modules/dean/delete/subject.php",
         method: "post",
         data: {
             subject: '',

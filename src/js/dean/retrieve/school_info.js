@@ -1,5 +1,5 @@
 async function fetchSchoolInfo() {
-    var url = "modules/fetch.php?school_info";
+    var url = "modules/dean/fetch/info.php";
 
     await $.ajax({
         url: url,

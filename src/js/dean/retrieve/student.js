@@ -1,5 +1,5 @@
 async function fetchStudents() {
-    var url = "modules/fetch.php?allStudents=&school_id=" + schoolId;
+    var url = "modules/dean/fetch/students.php?school_id=" + schoolId;
 
     await $.ajax({
         url: url,
@@ -15,6 +15,9 @@ async function fetchStudents() {
         }
     })
 }
+
+
+
 
 function showStudentForm() {
     var form = "<div id='addStudentModal' class='modal'>\
@@ -90,6 +93,8 @@ function showStudentForm() {
             info.append('grade', grade);
             info.append('DOB', DOB);
             info.append('period', period);
+            info.append('school',schoolId)
+            info.append('year',)
 
             //add(2, info);
             createStudent(info);

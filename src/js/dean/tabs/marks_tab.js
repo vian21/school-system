@@ -102,7 +102,7 @@ function marksForm() {
                     }
                     console.log(test);
                     $.ajax({
-                        url: "modules/fetch.php",
+                        url: "modules/dean/fetch/test.php",
                         method: "post",
                         data: formData,
                         success: function (data) {

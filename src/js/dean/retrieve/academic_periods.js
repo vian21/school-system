@@ -1,5 +1,5 @@
 async function fetchAcademicPeriods() {
-    var url = "modules/fetch.php?periods";
+    var url = "modules/dean/fetch/academic_periods.php";
 
     await $.ajax({
         url: url,

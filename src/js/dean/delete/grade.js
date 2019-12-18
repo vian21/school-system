@@ -1,9 +1,8 @@
 function deleteGrade(id) {
     $.ajax({
-        url: "modules/delete.php",
+        url: "modules/dean/delete/stream.php",
         method: "post",
         data: {
-            grade: '',
             id: id
         },
         success: function (data) {

@@ -1,7 +1,7 @@
 
 function deleteAssessment(testId) {
     $.ajax({
-        url: "modules/delete.php",
+        url: "modules/dean/delete/assessment.php",
         data: {
             assessment: '',
             id: testId
