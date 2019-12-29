@@ -82,7 +82,7 @@ function editSubject(position) {
 
 function updateSubject(info) {
     $.ajax({
-        url: "modules/update.php?subject",
+        url: "modules/dean/update/subject.php",
         enctype: 'multipart/form-data',
         processData: false,
         contentType: false,
@@ -90,7 +90,7 @@ function updateSubject(info) {
         data: info,
         success: (data) => {
             if (data == 'ok') {
-                fetchSubjects().then(function () {
+                fetchSubjects().then(fetchStudents()).then(function () {
                     alert("Subject edited.");
 
                     deleteModal();

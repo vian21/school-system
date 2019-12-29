@@ -14,6 +14,8 @@ function createAssessment(form) {
                 fetchTests();
 
                 alert("Assessment successfully created.")
+
+                marks();
             }
             else {
                 alert("Failed to create assessement");

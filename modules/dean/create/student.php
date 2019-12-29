@@ -19,6 +19,9 @@ if (
     $DOB = $_POST['DOB'];
     $period = mysqli_real_escape_string($connect, $_POST['period']);
 
+    $start=$_POST['start'];
+    $end=$_POST['end'];
+
     $insert = $connect->query("INSERT INTO students(name,gender,email,tel,grade,DOB) VALUES('$name',$gender,'$email','$tel','$grade','$DOB')");
 
     if (!$insert) {
@@ -34,7 +37,7 @@ if (
     $compulsary_courses = fetchCompulsarySubjects($grade);
 
     foreach ($compulsary_courses as $subject) {
-        $connect->query("INSERT INTO enrollment(student_id,subject,period) VALUES($id,$subject,$period)");
+        $connect->query("INSERT INTO enrollment(student_id,subject,period,start,end) VALUES($id,$subject,$period,$start,$end)");
     }
 }
 //}

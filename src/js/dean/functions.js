@@ -21,14 +21,22 @@ function generateTermOptions() {
 //Listen for change in term select box
 function changeTermListener() {
     $('#termOptions').change(function () {
+
         var selectedTermIndex = $('#termOptions').val()
 
         var selectedTermId = periods[selectedTermIndex]['id'];
-        var selectedTermName = periods[selectedTermIndex]['name'];
+        var selectedTermName = periods[selectedTermIndex]['period_name'];
+
+        var selectedTermStart = periods[selectedTermIndex]['year'][0];
+        var selectedTermEnd = periods[selectedTermIndex]['year'][1];
 
         if (selectedTermId !== currentPeriodId) {
+
             currentPeriodId = selectedTermId;
             currentPeriod = selectedTermName;
+
+            start = selectedTermStart;
+            end = selectedTermEnd;
 
             fetchTests().then(function () {
                 studentsTab();
@@ -80,37 +88,6 @@ function subjectsGradeOptions() {
 
     return options;
 }
-/*function subjects_gradeOptions(idOfElement) {
-    //var array = "";
-    for (var i = 0; i < subjects.length; i++) {
-        //var position=subjects[i]['stream'];
-        var stream = "";//streams[i][position];
-        for (var h = 0; h < streams.length; h++) {
-            if (streams[h]['id'] == subjects[i]['stream']) {
-                stream = streams[h]['grade'] + " " + streams[h]['stream']
-                break;
-            }
-        }
-
-        $('#' + idOfElement).select2({
-            data: [
-                { id: subjects[i]['id'], text: subjects[i]['name'] + " " + stream }
-            ]
-        });
-    }
-    return false;
-}
-
-/*function createMonthOptions(idOfElement) {
-    for (var i = 0; i < months.length; i++) {
-        $('#' + idOfElement).select2({
-            data: [
-                { id: i, text: months[i] }
-            ]
-        });
-    }
-    return false;
-}*/
 
 function createMonthOptions() {
     var options;

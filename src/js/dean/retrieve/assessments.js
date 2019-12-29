@@ -14,7 +14,7 @@ async function fetchTests() {
 
                 return true;
             }
-            if (response == '') {
+            if (response == ' ' || response == '') {
                 testsDone = '';
             }
 

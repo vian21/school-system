@@ -1,5 +1,5 @@
 function updateStaffName(staffId, newname) {
-    var url = "modules/update.php?staff_name";
+    var url = "modules/dean/update/staff/staff_name.php";
     $.ajax({
         url: url,
         method: "post",
@@ -26,7 +26,7 @@ function updateStaffName(staffId, newname) {
 }
 
 function updateStaffEmail(staffId, newEmail) {
-    var url = "modules/update.php?staff_email";
+    var url = "modules/dean/update/staff/staff_email.php";
     $.ajax({
         url: url,
         method: "post",
@@ -53,7 +53,7 @@ function updateStaffEmail(staffId, newEmail) {
 }
 
 function updateStaffGender(staffId, newGender) {
-    var url = "modules/update.php?staff_gender";
+    var url = "modules/dean/update/staff/staff_gender.php";
     $.ajax({
         url: url,
         method: "post",
@@ -80,7 +80,7 @@ function updateStaffGender(staffId, newGender) {
 }
 
 function updateStaffJob(staffId, newJob) {
-    var url = "modules/update.php?staff_title";
+    var url = "modules/dean/update/staff/staff_type.php";
     $.ajax({
         url: url,
         method: "post",
@@ -107,7 +107,7 @@ function updateStaffJob(staffId, newJob) {
 }
 
 function updateStaffTel(staffId, newTel) {
-    var url = "modules/update.php?staff_tel";
+    var url = "modules/dean/update/staff/staff_tel.php";
     $.ajax({
         url: url,
         method: "post",

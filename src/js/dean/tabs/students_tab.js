@@ -1,4 +1,54 @@
 
+function subjectsLearntTable(student_index) {
+    var number = 1;
+    var table = "<table><tr><th>#</th><th>name</th><th>hours</th><th>type</th><th>status</th><th>action</th></tr>";
+    var subjectsLearnt = studentsArray[student_index]['subjects'];
+    console.log(subjectsLearnt)
+    for (var i = 0; i < subjectsLearnt.length; i++) {
+        table += "<tr>";
+
+        table += "<td>" + number + "</td>";
+
+        table += "<td>" + subjectsLearnt[i]['name'] + "</td>";
+
+        table += "<td>" + subjectsLearnt[i]['hours'] + "</td>";
+
+        table += "<td>" + subjectTypes[subjectsLearnt[i]['type']] + "</td>";
+
+        table += "<td>" + subjectEnrollmentStatus[subjectsLearnt[i]['status']] + "</td>";
+
+        /*
+         * cell for action
+         * blank when subject is compulsary
+         *
+         */
+
+        //when subject is compulsary
+        if (subjectsLearnt[i]['type'] == 0) {
+            table += "<td></td>";
+        }
+        //when subject is elective and not enrolled in
+        if (subjectsLearnt[i]['type'] == 1 && subjectsLearnt[i]['status'] == 0) {
+            //function found at ../create/enrollment.js
+            table += "<td><button onclick='enroll(" + studentsArray[student_index]['id'] + "," + subjectsLearnt[i]['id'] + "," + student_index + ")'>Enroll</button></td>";
+        }
+        //when subject is elective and enrolled in
+        if (subjectsLearnt[i]['type'] == 1 && subjectsLearnt[i]['status'] == 1) {
+            //function found at ../delete/enrollment.js
+            table += "<td><button onclick='disenroll(" + studentsArray[student_index]['id'] + "," + subjectsLearnt[i]['id'] + "," + student_index + ")'>unenroll</button></td>";
+        }
+
+
+        table += "<tr>";
+
+        number++
+    }
+    table += "</table>";
+
+    $("#subject_enrollment_table").html(table);
+}
+
+
 function studentsTab() {
     $("#container").html("<button id='addStudentButton'>Add</button>\
     <select name='student' id='searchStudent'>\
@@ -18,9 +68,9 @@ function studentsTab() {
     addToForm();
 
     $("#searchStudent").on("change", function () {
-        //console.log($(this)/*.find("selected:option").attr("value")*/)
+
         var position = $("#searchStudent").select2('val');
-        console.log(position)
+
         var studentSelected = studentsArray[position];
         var studentInfoTemplate = "";
         var studentSelectedImage = studentSelected['image'];
@@ -46,10 +96,18 @@ function studentsTab() {
         studentInfoTemplate += "<option></option>"
         studentInfoTemplate += streamsOptions();
         studentInfoTemplate += "</select>";
+
+        //adding table for subjects learnt
+        studentInfoTemplate += "<h4>Subjects</h4>";
+        studentInfoTemplate += "<div id='subject_enrollment_table'></div>";
+
         studentInfoTemplate += "<button onclick='deleteStudent(" + studentSelected['id'] + ")'>Delete</button>";
         studentInfoTemplate += "<div id='msgBoard'></div>"
+
         $("#info").html(studentInfoTemplate);
 
+        //the subject table is added after the div has been created first
+        subjectsLearntTable(position);
         //Make the gender selected
         $("#studentInfoGender").val(studentSelected['gender']).trigger('change');
 
@@ -74,4 +132,131 @@ function studentsTab() {
     })
 
     $("#addStudentButton").click(function () { showStudentForm() });
+
+
+
+
+    function showStudentForm() {
+        var form = "<div id='addStudentModal' class='modal'>\
+                        <form enctype='multipart/form-data'>\
+                            <h4>Name :</h4>\
+                                <input type='text' name='name' id='studentName' required>\
+                            \
+                            \
+                            <h4>Date of birth:</h4>\
+                                <input type='date' name='DOB' id='studentDOB' required>\
+                            \
+                            \
+                            <br>\
+                            \
+                            \
+                            <h4>Student's email :</h4>\
+                                <input type='email' name='email' id='studentEmail'>\
+                            \
+                            \
+                            <h4>student's telephone number :</h4>\
+                                <input type='number' name='tel' id='studentTel'>\
+                            \
+                            \
+                            <h4>Grade :</h4><select name='grade' id='studentGrade' required>\
+                                <option value=''></option>\
+                            </select>\
+                            \
+                            \
+                            <h4>Gender :</h4><select name='gender' id='gender' required>\
+                                <option value='0'>Male</option>\
+                                <option value='1'>Female</option>\
+                            </select>\
+                            <br>\
+                            \
+                            \
+                            <button type='button' id='cancelStudentForm'>Cancel</button>\
+                            <button type='submit' id='addStudent'>Add</button>\
+                        </form>\
+                </div>";
+        $('body').append(form);
+        //These are here becuse they work only when the form is in the DOM but wheb when the oage loads it is not here, that is why it does not work any where else
+        //Make the student form disappear when clicked on cancel button
+        $("#cancelStudentForm").click(() => {
+            event.preventDefault();
+            $("#addStudentModal").remove();
+        })
+
+        //Append streams in select
+        $("#studentGrade").append(streamsOptions());
+
+        //Submit the add student form
+        $("#addStudent").click((event) => {
+            event.preventDefault();
+
+            var name = $("#studentName").val();
+            var DOB = $("#studentDOB").val();
+            var email = $("#studentEmail").val();
+            var tel = $("#studentTel").val();
+            var yearStart = $("#startYear").val();
+            var yearEnd = $("#endYear").val();
+            var grade = $("#studentGrade").val();
+            var gender = $("#gender").val();
+
+
+            var validName, validYearStart, validYearEnd, validGrade, validDOB;
+            var period = currentPeriodId;
+
+            if (name == "") {
+                alert("Please enter a name");
+            }
+            else {
+                validName = true;
+            }
+
+            if (yearStart == "") {
+                alert("Please enter the start of the academic year");
+            }
+            else {
+                validYearStart = true;
+            }
+
+            if (yearEnd == "") {
+                alert("Please enter the end of the academic year!");
+            }
+            else {
+                validYearEnd = true;
+            }
+
+            if (grade == "") {
+                alert("Please enter a grade");
+            }
+            else {
+                validGrade = true;
+            }
+
+            if (DOB == "") {
+                alert("Please enter a date of birth");
+            }
+            else {
+                validDOB = true;
+            }
+
+            if (validName == true && validYearStart == true && validYearEnd == true && validGrade == true && validDOB == true) {
+                var info = new FormData();
+
+                info.append('name', name);
+                info.append('email', email);
+                info.append('tel', tel);
+                info.append('gender', gender);
+                info.append('grade', grade);
+                info.append('DOB', DOB);
+                info.append('period', period);
+                info.append('school', schoolId)
+                info.append('year', period)
+                
+                info.append('start',start)
+                info.append('end',end);
+
+                //add(2, info);
+                createStudent(info);
+            }
+        })
+        return false;
+    }
 }

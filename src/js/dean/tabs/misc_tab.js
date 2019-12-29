@@ -46,13 +46,29 @@ function misc(container) {
         }
 
         $("#" + id).append("<span>Type : </span>")
-        $("#" + id).append("<select id='schoolType'>" + typeOptions + "</select>");
+        $("#" + id).append("<select id='schoolType'>" + typeOptions + "</select><br>");
+        $("#" + id).append("<span>Website : </span><input type='text' id='website' placeholder='School Website' value="+schoolWebsite+"><br>");
+        $("#" + id).append("<span>Email : </span><input type='email' id='email' placeholder='School email' value="+schoolEmail+"><br>");
         $("#" + id).append("<div id='msgBoard'></div>")
         $("#schoolType").val(schoolType).trigger('change');
 
         $("#schoolName").change(function () {
             var name = $("#schoolName").val();
+            //@ src/js/dean/update/school_info.js
+
             updateSchoolName(schoolId, name);
+        })
+
+        $("#website").change(function () {
+            var website = $("#website").val();
+                   //@ src/js/dean/update/school_info.js
+            updateSchoolWebsite(schoolId, website);
+        })
+
+        $("#email").change(function () {
+            var email = $("#email").val();
+                   //@ src/js/dean/update/school_info.js
+            updateSchoolEmail(schoolId, email);
         })
 
         $("#schoolType").change(function () {
@@ -75,7 +91,7 @@ function misc(container) {
             var grade = $("#grade").val();
 
             if (grade !== '') {
-                var url = "modules/list.php?grade=" + grade;
+                var url = "modules/dean/lists/students.php?grade=" + grade;
                 window.open(url)
             }
         })

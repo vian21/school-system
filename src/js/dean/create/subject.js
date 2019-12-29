@@ -33,7 +33,13 @@ function newsubjectForm() {
 
         var subjectName = $("#subjectName").val();
         var grade = $("#grade").val();
+
+        /*
+         * 0 for compulsary
+         * 1 for elective
+         */
         var type = $("#type").val();
+
         var hoursPerWeek = $("#hours").val();
         var validName, validGrade, validType, validHours = false;
         if (subjectName == '') {

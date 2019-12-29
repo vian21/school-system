@@ -1,5 +1,5 @@
 function updateStudentName(studentId, newname) {
-    var url = "modules/update.php?student_name";
+    var url = "modules/dean/update/student/student_name.php";
     $.ajax({
         url: url,
         method: "post",
@@ -28,7 +28,7 @@ function updateStudentName(studentId, newname) {
 }
 
 function updateStudentGrade(studentId, newGrade) {
-    var url = "modules/update.php?student_grade";
+    var url = "modules/dean/update/student/student_grade.php";
     $.ajax({
         url: url,
         method: "post",
@@ -54,7 +54,7 @@ function updateStudentGrade(studentId, newGrade) {
 }
 
 function updateStudentGender(studentId, newGender) {
-    var url = "modules/update.php?student_gender";
+    var url = "modules/dean/update/student/student_gender.php";
     $.ajax({
         url: url,
         method: "post",
@@ -81,7 +81,7 @@ function updateStudentGender(studentId, newGender) {
 }
 
 function updateStudentDOB(studentId, newDOB) {
-    var url = "modules/update.php?student_dob";
+    var url = "modules/dean/update/student/student_dob.php";
     $.ajax({
         url: url,
         method:"post",

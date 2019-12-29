@@ -56,7 +56,7 @@ function makeTeachersTable() {
 
     //Open new tab with a pdf of staff list
     $("#downloadStaffList").click(function () {
-        window.open("modules/list.php?staff=" + schoolId);
+        window.open("modules/dean/lists/staff.php?staff=" + schoolId);
 
         return false;
     })

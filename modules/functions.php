@@ -9,7 +9,6 @@ include 'config.php';
  *      2 : student
  * parameter 2 : id
  */
-//Database connection
 function fetchName($level, $id)
 {
     include 'config.php';
@@ -145,6 +144,47 @@ function fetchStreamName($stream_id)
     return returnValue($select_stream_name);    //array(grade + stream)
 }
 
+function fetchSubjectsLearnt($student_id, $grade)
+{
+    include 'config.php';
+    $subjectsLearnt = $connect->query("SELECT * FROM subjects WHERE stream=$grade");
+
+    $subjects = array();
+    while ($row = mysqli_fetch_assoc($subjectsLearnt)) {
+        $sub_array = array();
+
+        $sub_array['id'] = $row['id'];
+        $sub_array['name'] = $row['subject_name'];
+        $sub_array['hours'] = $row['hours'];
+
+        /*
+         * 0 for compulsary
+         * 1 for elective
+         */
+        $sub_array['type'] = $row['type'];
+
+        /*
+         * 0 for not enrolled
+         * 1 for enrolled
+         */
+        $sub_array['status'] = isEnrolled($student_id, $row['id']);
+        $subjects[] = $sub_array;
+    }
+
+    return $subjects;
+}
+
+function isEnrolled($student_id, $subject_id)
+{
+    include("config.php");
+
+    $status = 0;
+    if (mysqli_fetch_assoc($connect->query("SELECT*FROM enrollment WHERE student_id=$student_id AND subject=$subject_id")) != null) {
+        $status = 1;
+    }
+
+    return $status;
+}
 function fetchStudentsMarks($id)
 {
     include 'config.php';
@@ -311,31 +351,12 @@ function fetchAcademicPeriods($school_id)
         //fetch periods in that year
         $sub_array = array();
         $sub_array['id'] = $row['id'];
-        $sub_array['year'] = $row['academic_year'];
+        $sub_array['year'] = array($row['start'], $row['end']);
         $sub_array['period_name'] = $row['name'];
         $periods[] = $sub_array;
     }
     return returnValue($periods);
 }
-/*function fetchPeriods($in)
-{
-    /*if($in=='all'){
-
-    }
-    else{
-    include 'config.php';
-    $get_periods = $connect->query("SELECT*FROM periods WHERE academic_year=$in");
-    $periods = array();
-    while ($column = mysqli_fetch_assoc($get_periods)) {
-        $sub_array = array();
-        $sub_array['id'] = $column['id'];
-        $sub_array['name'] = $column['name'];
-        $periods[] = $sub_array;
-    }
-    return returnValue($periods);
-    //}
-
-}*/
 
 function getStudentInfo($id)
 {
@@ -404,8 +425,10 @@ function getHours($subject)
     return $get_hours['hours'];
 }
 
-function grade($mark)
+function grade($marks)
 {
+    //rounding off to accomodate marks in between
+    $mark=round($marks);
     if ($mark > 93) {
         return 'A ';
     }
@@ -484,5 +507,4 @@ function compressCodeIn($folder)
         //$code.=$sub_code;
     }
     return $code;
-    //return preg_replace(array("/\s+\n/","/\n\s+/","/ +/"),array("\n","\n "," "),$code);
 }

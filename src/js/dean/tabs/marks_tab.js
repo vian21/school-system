@@ -58,61 +58,90 @@ function marksForm() {
 
     $("#marksGrade").html('<option></option>').append(streamsOptions());
     $("#marksGrade").change(function () {
+
         //If change grade clear all fields
         $("#marksSubject").html('');
         $("#marksTest").html('');
+
+        //Id of the grade
         var streamId = $("#marksGrade").find("option:selected").attr('value');
-        //console.log(streamId)
+
+
         var option = "<option></option>";
         for (var i = 0; i < subjects.length; i++) {
             if (subjects[i]['stream'] == streamId) {
                 option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
             }
         }
+
+        //append the new option the subject field and clear the test field
         $("#marksSubject").html('').append(option);
         $("#marksTest").html('');
-        $("#marksTest").html('');
 
+        //if the user selects a subject 
         $("#marksSubject").change(function () {
+
+            //first clear the test field
             $("#marksTest").html('');
-            //If change subject clear the tests field
-            $("#marksTest").html('');
+
+            //get the id of the subject selected
             var subjectId = $("#marksSubject").find('option:selected').attr('value');
-            var option = "<option></option>";
+
+            //check if there is any tests done in that term
+            //variable to hold the true/false status of test done on term
+            var anyTestDone = false;    //false by default
+
+            //search in testsDone array
             for (var i = 0; i < testsDone.length; i++) {
 
-                if (testsDone[i]['subject'] == subjectId) {
-                    option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
+                if (testsDone[i]['period'] == currentPeriodId && testsDone[i]['subject'] == subjectId) {
+                    anyTestDone = true;
                 }
             }
-            $("#marksTest").html('').append(option);
 
-            $("#viewResults").click(function () {
-                event.preventDefault();
-                var subject = $("#marksSubject").find('option:selected').attr('value');
-                var grade = $("#marksGrade").find('option:selected').attr('value');
-                var test = $("#marksTest").find('option:selected').attr('value');
+            var option = "<option></option>";
 
-                if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
-                    //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
-                    var formData = {
-                        subject: subject,
-                        grade: grade,
-                        test: test
+            //loop through all tests done looking for the one corrsponding to the desired subject
+            if (anyTestDone == true) {
+                for (var i = 0; i < testsDone.length; i++) {
+
+                    if (testsDone[i]['subject'] == subjectId) {
+                        option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
                     }
-                    console.log(test);
-                    $.ajax({
-                        url: "modules/dean/fetch/test.php",
-                        method: "post",
-                        data: formData,
-                        success: function (data) {
-                            // Location : /retrieve/marks.js
-                            appendMarks(data, test);
-                        }
-                    })
                 }
-                return false;
-            })
+
+                //clear the test field and append the test options
+                $("#marksTest").html('').append(option);
+
+                //When the view result button is clicked
+                $("#viewResults").click(function () {
+                    event.preventDefault();
+                    var subject = $("#marksSubject").find('option:selected').attr('value');
+                    var grade = $("#marksGrade").find('option:selected').attr('value');
+                    var test = $("#marksTest").find('option:selected').attr('value');
+
+                    if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
+                        //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
+                        var formData = {
+                            subject: subject,
+                            grade: grade,
+                            test: test
+                        }
+                        console.log(test);
+                        $.ajax({
+                            url: "modules/dean/fetch/test.php",
+                            method: "post",
+                            data: formData,
+                            success: function (data) {
+                                // Location : /retrieve/marks.js
+                                appendMarks(data, test);
+                            }
+                        })
+                    }
+                    return false;
+                })
+            }
+
             return false;
         })
         return false;
@@ -302,17 +331,29 @@ function reportsForm() {
             month = $("#month").val()
         }
 
-        if (grade != '' && type != '') {
-            var url = "modules/report.php";
+        if (grade != '' && type == 1) {
+            var url = "modules/dean/reports/monthly.php";
 
-            url += "?grade=" + grade
-            url += "&type=" + type;
+            url += "?grade=" + grade;
+            url += "&school=" + schoolId;
             url += "&period=" + currentPeriodId;
+            url += "&month=" + (parseInt(month, 10) + 1);
+            url += "&start=" + start;
+            url += "&end=" + end;
+            window.open(url)
+        }
 
-            if (type == 1) {
-                //add 1 coz months are stored in an array
-                url += "&month=" + (parseInt(month, 10) + 1);
-            }
+        if (type == 2) {
+            //add 1 coz months are stored in an array
+            var url = "modules/dean/reports/annual.php";
+
+            url += "?grade=" + grade;
+            url += "&period=" + currentPeriodId;
+            url += "&school=" + schoolId;
+            // url += "&period=" +currentPeriodId ;
+
+            url += "&start=" + start;
+            url += "&end=" + end;
 
             window.open(url)
         }
