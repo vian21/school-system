@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 24, 2019 at 06:34 PM
+-- Generation Time: Jan 04, 2020 at 06:30 PM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -25,12 +25,26 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `academic_enrollments`
+--
+
+CREATE TABLE `academic_enrollments` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `academic_periods`
 --
 
 CREATE TABLE `academic_periods` (
   `id` int(11) NOT NULL,
-  `academic_year` text NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL,
   `school` int(11) NOT NULL,
   `name` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -61,7 +75,9 @@ CREATE TABLE `enrollment` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
   `subject` int(11) NOT NULL,
-  `period` int(11) NOT NULL
+  `period` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -87,7 +103,10 @@ CREATE TABLE `marks` (
   `student_id` int(11) NOT NULL,
   `stream` int(11) NOT NULL,
   `test_id` int(11) NOT NULL,
-  `marks` int(11) NOT NULL
+  `marks` int(11) NOT NULL,
+  `subject` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `period` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -133,7 +152,8 @@ CREATE TABLE `students` (
   `DOB` date NOT NULL,
   `password` text NOT NULL,
   `status` int(11) NOT NULL,
-  `account_status` int(11) NOT NULL
+  `account_status` int(11) NOT NULL,
+  `school` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -186,6 +206,12 @@ CREATE TABLE `users` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `academic_enrollments`
+--
+ALTER TABLE `academic_enrollments`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `academic_periods`
@@ -256,6 +282,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `academic_enrollments`
+--
+ALTER TABLE `academic_enrollments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `academic_periods`

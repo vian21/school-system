@@ -477,6 +477,58 @@ function grade($marks)
     }
 }
 
+function GPA($marks)
+{
+    //rounding off to accomodate marks in between
+    $mark=round($marks);
+    if ($mark > 93) {
+        return 4.00;
+    }
+
+    if ($mark <= 92 and $mark >= 90) {
+        return 3.70;
+    }
+
+    if ($mark <= 89 and $mark >= 87) {
+        return 3.30;
+    }
+
+    if ($mark <= 86 and $mark >= 83) {
+        return 3.00;
+    }
+
+    if ($mark <= 82 and $mark >= 80) {
+        return 2.70;
+    }
+
+    if ($mark <= 79 and $mark >= 77) {
+        return 2.30;
+    }
+    if ($mark <= 76 and $mark >= 73) {
+        return 2.00;
+    }
+
+    if ($mark <= 72 and $mark >= 70) {
+        return 1.70;
+    }
+
+    if ($mark <= 69 and $mark >= 67) {
+        return 1.30;
+    }
+
+    if ($mark <= 66 and $mark >= 63) {
+        return 1.00;
+    }
+
+    if ($mark <= 62 and $mark >= 60) {
+        return 0.70;
+    }
+
+    if ($mark < 60) {
+        return 0.00;
+    }
+}
+
 function countMaleStudents()
 {
     include 'config.php';
