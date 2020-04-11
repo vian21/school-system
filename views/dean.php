@@ -22,7 +22,7 @@ $id = $_SESSION['id'];
     <!-- Navbar -->
     <div id='navBar'>
         <div id="dropdown">
-            <span>==</span>
+            <span></span>
         </div>
         <div id=term>
             <select id=termOptions>
@@ -38,8 +38,8 @@ $id = $_SESSION['id'];
         <div id="sidebar">
             <div id="user">
                 <center><img src="src/img/<?php echo fetchImage(1, $id); ?>" alt="" id="img"></center>
-                <span id="username">Name :<?php echo fetchName(1, $id); ?></span>
-                <span id="jobTitle">Job : <?php echo fetchJobTitle($id); ?></span>
+                <span id="username">Name: <?php echo fetchName(1, $id); ?></span>
+                <span id="jobTitle"><?php echo fetchJobTitle($id); ?></span>
             </div>
         </div>
         <div id="workPlace">
@@ -54,10 +54,8 @@ $id = $_SESSION['id'];
             </div>
         </div>
 </body>
-<!--<script src="src/js/select2.js"></script>
-<script src="src/js/dean/dean.js"></script>
-<script src="src/js/common.js"></script>-->
 <script>
+    var userType=0;
     var numberOfStudents = <?php echo countStudents(1, 0) . ";\n"; ?>
     var numberOfMaleStudents = <?php echo countMaleStudents() . ";\n"; ?>
     var numberOfFemaleStudents = <?php echo countFemaleStudents() . ";\n"; ?>
@@ -66,8 +64,8 @@ $id = $_SESSION['id'];
     var userId = <?php echo $id . ";\n"; ?>
 
     //fetch and compress all js files
-    <?php echo file_get_contents('./src/js/dean/variables.js'); ?>
-    <?php echo file_get_contents('./src/js/dean/functions.js'); ?>
+    <?php echo file_get_contents('./src/js/variables.js'); ?>
+    <?php echo file_get_contents('./src/js/functions.js'); ?>
 
     <?php echo compressCodeIn('./src/js/dean/runner/') ?>
     <?php echo compressCodeIn('./src/js/dean/tabs/') ?>

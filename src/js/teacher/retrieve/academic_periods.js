@@ -17,7 +17,7 @@ async function fetchAcademicPeriods() {
 
                 fetchTests();
             }
-            else {
+            else{
                 periods = '';
             }
 
@@ -32,6 +32,6 @@ function setCurrentPeriod() {
     console.log(lastPeriod)
     currentPeriodId = periods[lastPeriod]['id'];
     currentPeriod = periods[lastPeriod]['period_name'];
-    start = periods[lastPeriod]['year'][0];
-    end = periods[lastPeriod]['year'][1];
+    start=periods[lastPeriod]['year'][0];
+    end=periods[lastPeriod]['year'][1];
 }

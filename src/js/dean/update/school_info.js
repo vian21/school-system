@@ -1,9 +1,43 @@
+function updateSchoolImage(schoolId, newImage, oldImage) {
+    var url = "modules/dean/update/school/school_image.php";
+    var form = new FormData();
+    form.append('id', schoolId);
+
+    form.append('image', newImage);
+
+    form.append('old', oldImage);
+
+
+    $.ajax({
+        url: url,
+        method: "post",
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        data: form,
+        success: function (response) {
+            if (response == 'ok') {
+                fetchSchoolInfo().then(function () {
+                    $("#msgBoard").html('');
+                    $("#msgBoard").append("Data saved successfully")
+                    $("#msgBoard").fadeIn().delay(2000).fadeOut();
+                })
+            }
+            else {
+                $("#msgBoard").html('');
+                $("#msgBoard").append("Failed to save data")
+                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+            }
+        }
+    })
+}
+
 function updateSchoolName(schoolId, newName) {
     var url = "modules/dean/update/school/school_name.php";
 
     $.ajax({
         url: url,
-        method:"post",
+        method: "post",
         data: {
             id: schoolId,
             name: newName
@@ -24,13 +58,38 @@ function updateSchoolName(schoolId, newName) {
         }
     })
 }
+function updateSchoolMotto(schoolId, newMotto) {
+    var url = "modules/dean/update/school/school_motto.php";
 
+    $.ajax({
+        url: url,
+        method: "post",
+        data: {
+            id: schoolId,
+            motto: newMotto
+        },
+        success: function (response) {
+            if (response == 'ok') {
+                fetchSchoolInfo().then(function () {
+                    $("#msgBoard").html('');
+                    $("#msgBoard").append("Data saved successfully")
+                    $("#msgBoard").fadeIn().delay(2000).fadeOut();
+                })
+            }
+            else {
+                $("#msgBoard").html('');
+                $("#msgBoard").append("Failed to save data")
+                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+            }
+        }
+    })
+}
 function updateSchoolType(schoolId, newType) {
     var url = "modules/dean/update/school/school_type.php";
 
     $.ajax({
         url: url,
-        method:"post",
+        method: "post",
         data: {
             id: schoolId,
             type: newType
@@ -57,7 +116,7 @@ function updateSchoolWebsite(schoolId, newWebsite) {
 
     $.ajax({
         url: url,
-        method:"post",
+        method: "post",
         data: {
             id: schoolId,
             website: newWebsite
@@ -83,7 +142,7 @@ function updateSchoolEmail(schoolId, newEmail) {
 
     $.ajax({
         url: url,
-        method:"post",
+        method: "post",
         data: {
             id: schoolId,
             email: newEmail

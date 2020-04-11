@@ -7,8 +7,8 @@ function newGradeForm() {
                                 <h4>Stream</h4>\
                                 <input type='text' name='stream' id='stream' maxlength='1' placeholder='A - Z'>\
                                 <br>\
-                                <button id='cancel'>Cancel</button>\
-                                <button id='create' type='submit'>Create</button>\
+                                <button class='delete' id='cancel'>Cancel</button>\
+                                <button class='new' id='create' type='submit'>Create</button>\
                             </form>\
                             </div>");
 
@@ -42,7 +42,6 @@ function newGradeForm() {
         }
 
         if (validGrade == true && validStream == true) {
-            //console.log("ok")
 
             var form = new FormData();
             form.append('grade', grade);

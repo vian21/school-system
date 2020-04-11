@@ -39,8 +39,19 @@ function changeTermListener() {
             end = selectedTermEnd;
 
             fetchTests().then(function () {
-                studentsTab();
-                alert("Term changed successfully")
+                if (userType == 0) {
+
+                    alert("Term changed successfully")
+                    studentsTab();
+                }
+                if (userType == 1) {
+                    fetchSubjectsTaught().then(function () {
+                        marks();
+                        alert("Term changed successfully")
+
+
+                    })
+                }
             })
         }
 
@@ -67,10 +78,14 @@ function isJSON(something) {
         return false;
     }
 }
+
 function emailIsValid(email) {
     var regex = /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
     return regex.test(email);
 }
+
+
+
 function subjectsGradeOptions() {
     var options;
 
@@ -110,8 +125,6 @@ function staffTitlesOptions() {
     return options;
 }
 
-
-//generate options for grades | streams
 function streamsOptions() {
     var optionsTemplate = "";
     for (var i = 0; i < streams.length; i++) {

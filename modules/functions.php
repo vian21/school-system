@@ -45,10 +45,10 @@ function fetchJobTitle($id)
 {
     include 'config.php';
     $getTitle = mysqli_fetch_assoc($connect->query("SELECT*FROM users WHERE id=$id"));
-    if ($getTitle['type'] == 1) {
-        return "Dean";
+    if ($getTitle['type'] == 0) {
+        return "Academic Dean";
     }
-    if ($getTitle['type'] == 2) {
+    if ($getTitle['type'] == 1) {
         return "Teacher";
     }
 }
@@ -428,7 +428,7 @@ function getHours($subject)
 function grade($marks)
 {
     //rounding off to accomodate marks in between
-    $mark=round($marks);
+    $mark = round($marks);
     if ($mark > 93) {
         return 'A ';
     }
@@ -480,7 +480,7 @@ function grade($marks)
 function GPA($marks)
 {
     //rounding off to accomodate marks in between
-    $mark=round($marks);
+    $mark = round($marks);
     if ($mark > 93) {
         return 4.00;
     }

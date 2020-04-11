@@ -88,13 +88,7 @@ function annualDecision($gpa)
     <title>Report</title>
     <style>
         body {
-            width: 90%;
-            margin-left: 5%;
-            font-size: 10px;
-        }
-
-        img {
-            width: 100px;
+            margin: 0;
         }
     </style>
 </head>
@@ -129,43 +123,80 @@ function annualDecision($gpa)
             $number_of_subjects = sizeof($subjects_taken);
 
     ?>
-            <img src="../../../src/img/logo.png" alt="">
-            <h1><?php echo $school_name; ?></h1>
-            <h1>STUDENT'S ACADEMIC REPORT CARD <?php echo $start . '-' . $end; ?></h1>
 
-            <h4>Name: <?php echo $name; ?></h4>
-            <h4>Grade: <?php echo $stream; ?></h4>
+            <table style="width:100%;border-collapse:collapse;border:none">
+                <tr style="border:none">
+                    <th style="width:20%;border:none;"></th>
+                    <th style="width:80%;border:none;"></th>
+                </tr>
 
-            <table id='main' style="border:1px solid black;">
+                <tr style="border:none">
+                    <td rowspan="3" style="border:none">
+                        <img src="../../../src/img/logo.png" alt='' style="width: 100px;" />
+
+                    </td>
+
+                    <td style="border:none">
+                        <div id="school_name" style="font-size:15px;font-weight: bold;text-align:center;"><?php echo $school_info['name']; ?></div>
+                    </td>
+                </tr>
+
+                <tr style="border:none">
+                    <td style="border:none">
+                        <div id="core_values" style="font-size:10px;text-align:center;"><?php echo $school_info['motto']; ?></div>
+
+                    </td>
+                </tr>
+                <tr style="border:none">
+                    <td style="border:none">
+                        <div id="core_values" style="font-size:15px;font-weight: bold;text-align:center;">STUDENT'S REPORT CARD <?php echo $start . '-' . $end; ?></div>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
                 <tr>
-                    <th colspan="3" rowspan="2" style="border:1px solid black;">course</th>
-                    <th colspan="2" rowspan="2" style="border:1px solid black;">Hours</th>
+                    <td>Name: <?php echo $name; ?></td>
+                </tr>
+                <tr>
+                    <td>ID: <?php echo $id; ?></td>
+                </tr>
+                <tr>
+                    <td>Grade: <?php echo $stream; ?></td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <table id='main' style="font-size:10px;">
+                <tr>
+                    <th colspan="3" rowspan="2" style="font-size:11px;text-align:center;border:1px solid black;font-weight:bold;">course</th>
+                    <th colspan="2" rowspan="2" style="font-size:11px;text-align:center;border:1px solid black;font-weight:bold;">Hours</th>
 
                     <?php
                     foreach ($periods as $row) {
-                        echo '<th colspan="4" style="border:1px solid black;">' . $row['name'] . '</th>';
+                        echo '<th colspan="4" style="font-size:11px;text-align:center;border:1px solid black;font-weight:bold">' . $row['name'] . '</th>';
                     }
                     ?>
 
 
-                    <th colspan="3" style="border:1px solid black;">Annual</th>
+                    <th colspan="3" style="font-size:11px;text-align:center;border:1px solid black;font-weight:bold">Annual</th>
                 </tr>
 
                 <tr>
                     <?php
                     foreach ($periods as $row) {
-                        echo '<td style="border:1px solid black;">test</td>';
-                        echo '<td style="border:1px solid black;">Exam</td>';
-                        echo '<td style="border:1px solid black;">percentage</td>';
-                        echo '<td style="border:1px solid black;">grade</td>';
+                        echo '<td style="font-weight:bold;text-align:center;border:1px solid black;">TEST</td>';
+                        echo '<td style="font-weight:bold;text-align:center;border:1px solid black;">EXAM</td>';
+                        echo '<td style="font-weight:bold;text-align:center;border:1px solid black;">TOTAL</td>';
+                        echo '<td style="font-weight:bold;text-align:center;border:1px solid black;">GRADE</td>';
                     }
 
                     ?>
 
 
-                    <td style="border:1px solid black;">percentage</td>
-                    <td style="border:1px solid black;">grade</td>
-                    <td style="border:1px solid black;">C. GPA</td>
+                    <td style="font-weight:bold;text-align:center;border:1px solid black;">TOTAL</td>
+                    <td style="font-weight:bold;text-align:center;border:1px solid black;">GRADE</td>
+                    <td style="font-weight:bold;text-align:center;border:1px solid black;">C. GPA</td>
                 </tr>
 
 
@@ -223,27 +254,27 @@ function annualDecision($gpa)
                 ?>
                 <!-- totals row -->
                 <tr>
-                    <td colspan="3" style="border:1px solid black;">Total</td>
-                    <td colspan="2" style="border:1px solid black;"><?php echo $total_hours; ?></td>
+                    <td colspan="3" style="font-weight:bold;border:1px solid black;">TOTAL</td>
+                    <td colspan="2" style="font-weight:bold;border:1px solid black;"><?php echo $total_hours; ?></td>
                     <?php
                     //columns for periods
                     foreach ($periods as $period) {
 
-                        echo '<td style="border:1px solid black;"></td>';
+                        echo '<td style="border:1px solid black;background-color:lightgray;"></td>';
 
-                        echo '<td style="border:1px solid black;"></td>';
+                        echo '<td style="border:1px solid black;background-color:lightgray;"></td>';
 
 
-                        echo '<td style="border:1px solid black;">' . round(array_sum($total_term_percentage_array[$period['name']]) / $number_of_subjects) . '</td>';
-                        echo '<td style="border:1px solid black;"></td>';
-                    }
+                        echo '<td style="font-weight:bold;border:1px solid black;">' . round(array_sum($total_term_percentage_array[$period['name']]) / $number_of_subjects) . '</td>';
+                        echo '<td style="border:1px solid black;background-color:lightgray;"></td>';
+                    }                    
                     //Annual
 
                     $annual_percentage = $total_percentage / $number_of_subjects;
                     $annual_CGPA = $total_CGPA / $total_hours;
-                    echo '<td style="border:1px solid black;">' . round($annual_percentage) . '</td>';
-                    echo '<td style="border:1px solid black;">' . grade($annual_percentage) . '</td>';
-                    echo '<td style="border:1px solid black;">' . round($annual_CGPA, 1) . '</td>';
+                    echo '<td style="font-weight:bold;border:1px solid black;">' . round($annual_percentage) . '</td>';
+                    echo '<td style="font-weight:bold;border:1px solid black;">' . grade($annual_percentage) . '</td>';
+                    echo '<td style="font-weight:bold;border:1px solid black;">' . round($annual_CGPA, 1) . '</td>';
 
 
 
@@ -254,54 +285,79 @@ function annualDecision($gpa)
                 <!-- row for remarks-->
 
                 <tr>
-                    <td colspan="3">Remark</td>
-                    <td colspan="20" style="text-align:center"><?php annualDecision(round($annual_CGPA, 1)); ?></td>
+                    <td colspan="3" style="font-weight:bold;border:1px solid black;">ANNUAL DECISION</td>
+                    <td colspan="20" style="font-weight:bold;text-align:center;border:1px solid black;"><?php annualDecision(round($annual_CGPA, 1)); ?></td>
+                </tr>
+                <!-- *the table should contain a maximum of 15 rows
+                    *if the student takes les the system will fill those empty courses with invisible rows
+                    to get a consisten spacing on all reports
+                    -->
+                <?php
+                if ($number_of_subjects < 15) {
+                    $missing = 15 - $number_of_subjects;
+                    $i = 0;
+                    while ($i < $missing) {
+                        echo '<tr><td style="font-size:11px;border:none;"></td></tr>';
+                        $i++;
+                    }
+                }
+                ?>
+            </table>
+            <table id='mid' style="font-size:10px;">
+                <tr>
+                    <th style="width:70%;"></th>
+                    <th style="width:30%;"></th>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+
+                            <tr>
+                                <td style="border:none;text-align:right;font-weight:bold;">G.P.A:</td>
+                                <td style="border:none">Grade Point Average:</td>
+                            </tr>
+                            <tr>
+                                <td style="border:none;text-align:right;font-weight:bold;">C.G.P.A=</td>
+                                <td style="border:none">GPA * HOURS PER WEEK</td>
+                            </tr>
+                            <tr>
+                                <td style="border:none;text-align:right;font-weight:bold;">AVERAGE GPA=</td>
+                                <td style="border:none">TOTAL C.GPA / TOTAL HOURS PER WEEK</td>
+                            </tr>
+                            <tr>
+                                <td style="border:none;text-align:right;font-weight:bold;">ANNUAL PASS MARK:</td>
+                                <td style="border:none">1.0 AVERAGE G.P.A</td>
+                            </tr>
+
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>Academic Dean's signature</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>________________________</td>
+                            </tr>
+                            <tr>
+                                <td>Head Master's signature</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>________________________</td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
             </table>
-            <h4></h4>
+            <br><br>
 
-            <table id='mid'>
-                <tr>
-                    <th style="width: 80%;"></th>
-                    <th style="width: 20%;"></th>
-                </tr>
-                <tr>
-                    <td>
-                        <b>GPA: </b>Grade Point Average
-                    </td>
-                    <td>
-                        Academic Dean's signature
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>C GPA</b>GPA x hours
-                    </td>
-                    <td style="border-bottom:1px solid black;">
-                        <!-- Academic dean's signature -->
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>AVERAGE GPA =</b> TOTAL C.GPA / TOTAL HOURS PER WEEK
-                    </td>
-                    <td>
-                        Headmaster's signature
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Annual passmark:</b> 1.00
-                    </td>
-                    <td style="border-bottom:1px solid black;">
-                        <!-- Academic dean's signature -->
-                    </td>
-                </tr>
-
-            </table>
-            <h4></h4>
-
-            <table id="scale">
+            <table id="scale" style="width: 100%;font-size:8px;">
                 <tr>
                     <td colspan="3" rowspan="3" style="border:1px solid black;">Grading scale</td>
                     <td colspan="2" style="border:1px solid black;">scale</td>
@@ -379,6 +435,8 @@ $tcpdf->setPrintHeader(false);
 $tcpdf->setPrintFooter(false);
 $tcpdf->setListIndentWidth(3);
 
+$tcpdf->SetTopMargin(0);
+$tcpdf->SetAutoPageBreak(true, 0);
 $tcpdf->AddPage();
 
 $tcpdf->writeHTML($html, true, false, false, false, '');

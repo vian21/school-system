@@ -21,5 +21,19 @@ function createAdmin($name, $email, $password)
         echo "Failed to create admin";
     }
 }
+function createTeacher($name, $email, $password)
+{
+    include 'config.php';
 
-createAdmin('admin', 'admin@gmail.com', '123');
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $create = $connect->query("INSERT INTO users(name,gender,email,password,type,status,school) VALUES('$name',0,'$email','$hashedPassword',1,1,1)");
+
+    if ($create) {
+        echo "<h1>teacher created.</h1>";
+        } else {
+        echo "Failed to create teacher";
+    }
+}
+createTeacher('patrick','teacher@gmail.com','123');
+//createAdmin('admin', 'admin@gmail.com', '123');

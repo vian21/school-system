@@ -5,7 +5,7 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
     $grade = $_GET['grade'];
     $students = fetchStudentsIn(($grade));
     $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
-
+    $school = fetchSchoolInfo($_GET['school']);
     //number of check boxes
     $boxes = 20;
 ?>
@@ -25,7 +25,7 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
 
             .heading {
                 width: 100%;
-                border: 1px solid black;
+                border: 2px solid black;
                 align-content: center;
             }
 
@@ -60,9 +60,33 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
 
     <body>
 
+    <table style="width:100%;border-collapse:collapse;border:none">
+                <tr style="border:none">
+                    <th style="width:20%;border:none;"></th>
+                    <th style="width:80%;border:none;"></th>
+                </tr>
+
+                <tr style="border:none">
+                    <td rowspan="2" style="border:none">
+                        <img src="../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
+
+                    </td>
+
+                    <td style="border:none">
+                        <div id="school_name" style="font-size:20px;font-weight: bold;"><?php echo $school['name']; ?></div>
+                    </td>
+                </tr>
+
+                <tr style="border:none">
+                    <td style="border:none">
+                        <div id="core_values" style="font-size:10px;"><?php echo $school['motto']; ?></div>
+
+                    </td>
+                </tr>
+            </table>
         <center>
             <!-- ⚠ Caution ⚠: use double quotes otherwise css rules won't apply -->
-            <h1 class="heading">Class list</h1>
+            <h1 class="heading" style="text-align:center;padding:10px;">Class list</h1>
         </center>
 
         <!-- h1 to break line since br does not work -->

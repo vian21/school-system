@@ -13,8 +13,8 @@ function newsubjectForm() {
                             <h4>Hours per week</h4>\
                             <input type='number' name='hours' id='hours'>\
                             <br>\
-                            <button id='cancel'>Cancel</button>\
-                            <button id='create' type='submit'>Create</button>\
+                            <button class='delete' id='cancel'>Cancel</button>\
+                            <button class='new' id='create' type='submit'>Create</button>\
                         </form>\
                       </div>");
 
@@ -69,7 +69,6 @@ function newsubjectForm() {
             validHours = true;
         }
         if (validName == true && validGrade == true && validType == true && validHours == true) {
-            //console.log("ok")
             var form = new FormData();
 
             form.append('name', subjectName);

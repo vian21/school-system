@@ -132,3 +132,30 @@ function updateStaffTel(staffId, newTel) {
         }
     })
 }
+
+function updateStaffPassword(staffId, newPassword) {
+    var url = "modules/dean/update/staff/staff_password.php";
+    $.ajax({
+        url: url,
+        method: "post",
+        data: {
+            password: newPassword,
+            id: staffId
+        },
+        success: function (response) {
+            if (response == 'ok') {
+                fetchTeachers().then(addTeachersTosearchBox())
+
+                $("#msgBoard").html('');
+                $("#msgBoard").append("Data saved successfully")
+                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+
+            }
+            else {
+                $("#msgBoard").html('');
+                $("#msgBoard").append("Failed to save data")
+                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+            }
+        }
+    })
+}

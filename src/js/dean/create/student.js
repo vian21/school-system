@@ -10,9 +10,9 @@ function createStudent(data) {
         data: data,
         success: (response) => {
             if (response == 'ok') {
-                fetchStudents().then(function(){
+                fetchStudents().then(function () {
                     deleteModal();
-               
+
                     alert("Student successfully inserted")
                     $("#tab1").trigger('click')
                 })

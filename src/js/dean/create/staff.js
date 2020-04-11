@@ -16,8 +16,10 @@ function showStaffForm() {
                         <select id='staffType'>\
                         <option value='0'>Dean</option>\
                         <option value='1'>Teacher</option></select><br>\
-                        <button id='cancelStaffForm'>Cancel</button>\
-                        <button type='submit' id='addStaff'>Add</button>\
+                        <h4>password: </h4>\
+                        <input type='password' autocomplete='off' id='password'><br>\
+                        <button class='delete' id='cancelStaffForm'>Cancel</button>\
+                        <button class='new' type='submit' id='addStaff'>Add</button>\
                     </form>\
                 </div>";
 
@@ -37,15 +39,6 @@ function showStaffForm() {
             data-placeholder='Subject(s)'\
             name='subjects[]' \
             multiple class='select-subjects'><select>");
-            //$(".multipleGrades").select2();
-            /*$(".multipleGrades").change(() => {
-                console.log($(".multipleGrades").select2('data'));
-            })*/
-            //$("#grade").select2({
-            //data: [
-            //{ id: '', text: ' ' },
-            //subjects_gradeOptions('grade')//]
-            // });
             $("#grade").html(subjectsGradeOptions()).select2()
         }
 
@@ -64,9 +57,10 @@ function showStaffForm() {
         var email = $("#staffEmail").val();
         var tel = $("#staffTel").val();
         var grade = $("#grade").select2('val')
+        var password=$("#password").val();
 
         //var DOB = $("#studentDOB").val();
-        var validName, valideEmail, validType, validGrade;
+        var validName, valideEmail, validType, validGrade,validPassword;
 
         if (name == "") {
             alert("Please enter a name");
@@ -89,6 +83,13 @@ function showStaffForm() {
             validType = true;
         }
 
+        if (password == "") {
+            alert("Please enter a password");
+        }
+        else {
+            validPassword = true;
+        }
+
         if ($("#staffType").val() == 1) {
             //Check that a grade(s) was provided for the teacher to teach
             if ($("#grade").select2('val') == null) {
@@ -99,14 +100,19 @@ function showStaffForm() {
             }
         }
 
-        if (validName == true && validType == true && valideEmail == true) {
+        if (validName == true && validType == true && valideEmail == true && validPassword == true) {
             var info = new FormData();
             info.append('name', name);
             info.append('gender', gender);
             info.append('type', type);
             info.append('email', email);
             info.append('tel', tel);
+            info.append('password', password);
+
             info.append('school', schoolId);
+            
+
+            info.append('year', currentPeriodId);
 
             if ($("#staffType").val() == 1) {
                 info.append('grade', grade);
@@ -122,7 +128,7 @@ function showStaffForm() {
 }
 
 function createStaff(data) {
-    var url = "modules/create/staff.php";
+    var url = "modules/dean/create/staff.php";
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',
@@ -132,7 +138,7 @@ function createStaff(data) {
         data: data,
         success: (response) => {
             if (response == 'ok') {
-                fetchTeachers().then(function(){
+                fetchTeachers().then(function () {
                     $(".modal").remove();
                     alert("Staff successfully inserted")
                     makeTeachersTable();

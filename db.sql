@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 04, 2020 at 06:30 PM
+-- Generation Time: Apr 11, 2020 at 02:12 PM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -83,18 +83,6 @@ CREATE TABLE `enrollment` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `info`
---
-
-CREATE TABLE `info` (
-  `id` int(11) NOT NULL,
-  `name` text NOT NULL,
-  `type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `marks`
 --
 
@@ -118,8 +106,10 @@ CREATE TABLE `marks` (
 CREATE TABLE `schools` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
+  `motto` text NOT NULL,
   `type` int(11) NOT NULL,
   `email` text NOT NULL,
+  `image` text NOT NULL,
   `website` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -232,12 +222,6 @@ ALTER TABLE `enrollment`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `info`
---
-ALTER TABLE `info`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `marks`
 --
 ALTER TABLE `marks`
@@ -305,12 +289,6 @@ ALTER TABLE `assessments`
 -- AUTO_INCREMENT for table `enrollment`
 --
 ALTER TABLE `enrollment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `info`
---
-ALTER TABLE `info`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

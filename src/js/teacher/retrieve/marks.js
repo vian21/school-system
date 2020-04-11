@@ -12,11 +12,12 @@ function appendMarks(json, testID) {
             tabletemplate += "<tr>";
             tabletemplate += "<td>" + number + "</td>";
             tabletemplate += "<td>" + jsonArray[i]['name'] + "</td>";
-            tabletemplate += "<td><input type='number' max='100' min='0' class='mark' id='" + jsonArray[i]['id'] + "' value=" + jsonArray[i]['marks'] + "></td>";
+            tabletemplate += "<td><input class='mark' id='" + jsonArray[i]['id'] + "' value=" + jsonArray[i]['marks'] + "></td>";
             tabletemplate += "</tr>";
             //console.log(jsonArray[i]);
         }
         tabletemplate += "</table>";
+        
         tabletemplate += "<br><div id='msgBoard'></div>"
 
         tabletemplate += "<button class='delete' onclick='deleteAssessment(" + testID + ")'>Delete</button>"
@@ -29,7 +30,6 @@ function appendMarks(json, testID) {
             var studentId = $(this).attr('id');
             console.log(studentId)
             var newMark = $(this).val();
-
             if (newMark < 0 || newMark > 100) {
 
                 $("#msgBoard").html('')

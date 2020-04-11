@@ -1,205 +1,134 @@
-//Fetch info about teacher and assign it to the Teacher object
-fetchThis(2);
-//Teacher object to contain all info about teacher, streams taught and tests done
-var Teacher = new Object;
-var currentYearId, currentYear, currentPeriodId, currentPeriod;
-var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var school;
+var subjects;
 
-function fetchThis(what) {
-    var url = "modules/fetch.php";
-    if (what == 1) {
-        url += "?form_options="
-    }
-    if (what == 2) {
-        url += "?periods="
-    }
-    /*if (what == 3) {
-        url += "?tests="
-    }*/
-    $.ajax({
-        url: url,
-        method: 'get',
-        data: {
-            teachers_period: currentPeriodId
-        },
-        success: function (data) {
-            if (data !== "") {
-                if (what == 1) {
-                    assignProp(data);
-
-                }
-                if (what == 2) {
-                    fetchedPeriods(data);
-                }
-                /*if (what == 3) {
-                    tests = JSON.parse(data);
-                }*/
-            }
-
-
-        }
-    })
-}
-$("#createAssessment").click(function () {
-    showNewAssessmentForm();
-})
-function fetchedPeriods(json) {
-    periods = JSON.parse(json);
-
-    setCurrentPeriod();
-
-    generateTermOptions('termOptions')
-    //Fetch tests in current period
-    fetchThis(1);
-
-    changeTermListener();
-
-    return false;
-}
-
-function changeTermListener() {
-    $('#termOptions').change(function () {
-        var selectedTermValue = $('#termOptions').val()
-        //get first value == year's index in periods array
-        var selectedTermYear = selectedTermValue.split(',')[0];
-        //get second value == period's index in the periods array
-        var selectedTermArrayPosition = selectedTermValue.split(',')[1];
-        //get the periods array of a the selected year using the year's index and the index of the period array
-        var selectedPeriodArray = periods[selectedTermYear]['periods'][selectedTermArrayPosition]
-        var selectedTermId = selectedPeriodArray['id'];
-        var selectedTermName = selectedPeriodArray['name'];
-
-        if (selectedTermId !== currentPeriodId) {
-            currentPeriodId = selectedTermId;
-            currentPeriod = selectedTermName;
-
-            fetchThis(1);
-            alert("Term changed successfully")
-        }
-
-        return false;
-    })
-    return false;
-}
-
-function assignProp(json) {
-    if (json != "") {
-        var jsonArray = JSON.parse(json);
-        var i;
-        var subjectIds = [];
-        var subjectNames = [];
-        var streamIds = [];
-        var streamNames = [];
-        var testsIds = [];
-        var testNames = [];
-        for (i = 0; i < jsonArray.length; i++) {
-            subjectIds.push(jsonArray[i]['id']);
-            subjectNames.push(jsonArray[i]['name']);
-            streamIds.push(jsonArray[i]['stream_id']);
-            streamNames.push(jsonArray[i]['stream_name']['grade'] + ' ' + jsonArray[i]['stream_name']['stream']);
-            testsIds.push(jsonArray[i]['test_id']);
-            testNames.push(jsonArray[i]['test_name']);
-        }
-        Teacher.subjectTaughtIds = subjectIds;
-        Teacher.subjectTaughtNames = subjectNames;
-        Teacher.streamsTaughtIds = streamIds;
-        Teacher.streamsTaughtNames = streamNames;
-        Teacher.testsDoneId = testsIds;
-        Teacher.testsDoneName = testNames;
-        //After fetching append info to form
-        //appendSubjectsToForm('subject');
-        $("#subject").html(subjects())
-        //console.log('1');
-
-    }
-}
-
-function subjects() {
-    //console.log('ok')
-    var options = "<option><option>";
-    for (var i = 0; i < Teacher.subjectTaughtNames.length; i++) {
-        var name = Teacher.subjectTaughtNames[i]
-        var id = Teacher.subjectTaughtIds[i];
-        options += "<option value=" + id + " position=" + i + ">" + name + "</option>";
-    }
-    console.log(options)
-    return options;
-    //alert(options);
-}
-
-$("#subject").change(function () {
-    var position = $(this).find('option:selected').attr('position');
-    //console.log(position);
-    if (position !== undefined) {
-        var gradeId = Teacher.streamsTaughtIds[position];
-        var grade = Teacher.streamsTaughtNames[position];
-        $("#grade").html("");
-        $("#grade").append("<option value=" + gradeId + "> Grade " + grade + "</option>");
-        var testId = Teacher.testsDoneId[position]; //array of test ids
-        var test = Teacher.testsDoneName[position]; //array of test names
-        $("#test").html("");
-
-        for(var i=0;i<testId.length;i++){
-            $("#test").append("<option value=" + testId[i] + ">" + test[i] + "</option>");
-        }
+$("document").ready(function(){
+    marks();
+    fetchSchoolInfo().then(function () {
+        //Fecth all teachers and add them to and array and make a table using the array
         
-    }
-    else {
-        $("#grade").html("");
-        $("#test").html("");
-    }
 
-
+        fetchAcademicPeriods().then(function(){
+            fetchSubjectsTaught();
+        });
+    })
 })
-$("#view").click(function () {
-    event.preventDefault();
-    //Prevent form from being submitted if no options for test or its value is null(In case a subject does not have a test)
-    if ($("#test").has('option').length > 0 && $("#test").find('option:selected').attr('value') !== "") {
-        var subject = $("#subject").find('option:selected').attr('value');
-        var grade = $("#grade").find('option:selected').attr('value');
-        var test = $("#test").find('option:selected').attr('value');
-        /*var formData = new FormData();
-        formData.append('subject', subject);
-        formData.append('grade', grade);
-        formData.append('test', test);
-        //formData.append('',);*/
-        var formData = {
-            subject: subject,
-            grade: grade,
-            test: test
-        }
+//Marks
 
-        $.ajax({
-            url: "modules/fetch.php",
-            method: "post",
-            data: formData,
-            success: function (data) {
-                appendMarks(data,test);
+//Append all grades to form
+function marks() {
+    $("#container").html('<button class="new" id="createAssessment">New assessment</button>\
+                            <button id="showMarksForm">Results</button>\
+                            <div id="marksDesk"></div>');
+
+    $('#createAssessment').click(function () {
+        showNewAssessmentForm();
+
+        return false
+    })
+
+    $('#showMarksForm').click(function () {
+        marksForm();
+
+        return false
+    })
+
+    return false
+}
+
+
+function marksForm() {
+    $("#marksDesk").html(' <form id="marksForm">\
+                <h5>subject</h5>\
+                <select name="subject" id="subject">\
+                    </select><br>\
+                <h5>Test</h5>\
+                    <select name="test" id="marksTest" required>\
+                    </select><br>\
+            <button class="new" id="viewResults">View results</button>\
+        </form>\
+        <div id="results"> </div>\
+    </div>');
+    $("#subject").html('').append("<option value=''></option>"+teacherSubjectList());
+
+    $("#subject").change(function () {
+
+       
+
+        //append the new option the subject field and clear the test field
+        $("#marksTest").html('');
+
+        //if the user selects a subject 
+
+            //first clear the test fie
+            //get the id of the subject selected
+            var subjectId = $("#subject").find('option:selected').attr('value');
+
+            //check if there is any tests done in that term
+            //variable to hold the true/false status of test done on term
+            var anyTestDone = false;    //false by default
+
+            //search in testsDone array
+            for (var i = 0; i < testsDone.length; i++) {
+
+                if (testsDone[i]['period'] == currentPeriodId && testsDone[i]['subject'] == subjectId) {
+                    anyTestDone = true;
+                }
             }
-        })
-    }
 
+            var option = "<option></option>";
 
-})
+            //loop through all tests done looking for the one corrsponding to the desired subject
+            if (anyTestDone == true) {
+                for (var i = 0; i < testsDone.length; i++) {
 
+                    if (testsDone[i]['subject'] == subjectId) {
+                        option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
+                    }
+                }
 
-function isJSON(something) {
-    if (typeof something != 'string')
-        something = JSON.stringify(something);
+                //clear the test field and append the test options
+                $("#marksTest").html('').append(option);
 
-    try {
-        JSON.parse(something);
-        return true;
-    } catch (e) {
+                //When the view result button is clicked
+                $("#viewResults").click(function () {
+                    event.preventDefault();
+                    var subject = $("#marksSubject").find('option:selected').attr('value');
+                    var grade = $("#marksGrade").find('option:selected').attr('value');
+                    var test = $("#marksTest").find('option:selected').attr('value');
+
+                    if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
+                        //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
+                        var formData = {
+                            subject: subject,
+                            grade: grade,
+                            test: test
+                        }
+                        console.log(test);
+                        $.ajax({
+                            url: "modules/dean/fetch/test.php",
+                            method: "post",
+                            data: formData,
+                            success: function (data) {
+                                // Location : /retrieve/marks.js
+                                appendMarks(data, test);
+                            }
+                        })
+                    }
+                    return false;
+                })
+            }
+
+            
         return false;
-    }
+    })
 }
 
 function showNewAssessmentForm() {
     var form = "<div class='modal'>\
                     <form id='newAssessmentForm'>\
                         <h4>Subject</h4>\
-                        <select name='grade' id='assessedSubject'>\
+                        <select name='subject' id='testSubject'>\
+                            <option><option>\
                         </select><br>\
                         <h4>Type</h4>\
                         <select name='type' id='type'><br>\
@@ -207,19 +136,20 @@ function showNewAssessmentForm() {
                             <option value='1'>Test</option>\
                             <option value='2'>Exam</option>\
                         </select><br>\
-                        <button id='cancel'>Cancel</button>\
-                        <button id='create'>Create</button>\
-                    </form>\
-                    </div>";
+                        <button class='delete' id='cancel'>Cancel</button>\
+                        <button class='new' id='create'>Create</button>\
+                    </form>";
 
     $('body').append(form);
-    $("#assessedSubject").html(subjects())
-    //$("#assessedSubject").select2()
+    //$("#grade").select2()
 
-    //createMonthOptions('month');
+    $("#testSubject").html("<option value=''></option>"+teacherSubjectList());
+
     addListeners();
     return false;
 }
+
+
 function addListeners() {
     $("#cancel").click(function () {
         event.preventDefault();
@@ -232,10 +162,79 @@ function addListeners() {
     $('#create').click(function () {
         event.preventDefault();
 
-        validateNewAssessmentForm();
+        var subject = $('#testSubject').val();
+        console.log(subject)
+        var type = $('#type').val();
+        var month;
 
+        var validSubject, validType, validMonth
+        if (type == 1) {
+            month = $('#month').val();
+        }
+        if (subject == "") {
+            alert("Enter a subject");
+        }
+        else {
+            validSubject = true;
+        }
+        if (type == "") {
+            alert("Enter an assessment type");
+        }
+        else {
+            validType = true;
+        }
+        if (type == 1) {
+            if (month == "") {
+                alert("Enter a month")
+            }
+            else {
+                validMonth = true;
+            }
+        }
+        if (validSubject == true && validType == true) {
+            var form = new FormData();
+
+            form.append('school', schoolId);
+            form.append('subject', subject);
+            form.append('type', type);
+            form.append('period', currentPeriodId);
+
+            if (type == 1) {
+                var number = parseInt(month, 10) + 1;
+                var name = "Test " + number;
+                console.log(number)
+                console.log(name);
+                form.append('month', month);
+                form.append('name', name);
+            }
+            else {
+                form.append('name', 'Exam');
+            }
+            createAssessment(form);
+
+        }
         return false;
+
     })
+
+    //when user selects a grade
+    $("#grade").change(function () {
+        $("#subject").html('');
+        var streamId = $("#grade").find("option:selected").attr('value');
+        var option = "<option></option>";
+
+        //loop through subject array to get subjects taught in the selected grade
+        for (var i = 0; i < subjects.length; i++) {
+
+            if (subjects[i]['stream'] == streamId) {
+                option += "<option value='" + subjects[i]['id'] + "'>" + subjects[i]['name'] + "</option>"
+            }
+        }
+        $("#subject").html('').append(option);
+        //$("#subject").select2()
+
+    })
+
     $("#type").change(function () {
         if ($('#type').val() == 1) {
             $('#type').after("<div id='monthOptions'>\
@@ -245,7 +244,8 @@ function addListeners() {
             </select>\
             </div>")
 
-            createMonthOptions('month');
+            //createMonthOptions('month');
+            $("#month").html(createMonthOptions());
         }
         else {
             $('#monthOptions').remove();
@@ -254,80 +254,12 @@ function addListeners() {
     })
 }
 
-function validateNewAssessmentForm() {
-    var subject = $('#assessedSubject').val();
-    var type = $('#type').val();
-    var month;
 
-    var validSubject, validType, validMonth
-    if (type == 1) {
-        month = $('#month').val();
-    }
-    if (subject == "") {
-        alert("Enter a subject");
-    }
-    else {
-        validSubject = true;
-    }
-    if (type == "") {
-        alert("Enter an assessment type");
-    }
-    if (type == 1) {
-        if (month == "") {
-            alert("Enter a month")
-        }
-        else {
-            validType = true;
-            validMonth = true;
-        }
-    }
-    if (type == 2) {
-        validType = true;
-    }
-    if (validSubject == true && validType == true) {
-        var form = new FormData();
-        form.append('subject', subject);
-        form.append('type', type);
-        form.append('period', currentPeriodId);
+function teacherSubjectList(){
+    var html="";
 
-        if (type == 1) {
-            var number = parseInt(month, 10) + 1;
-            var name = "Test " + number;
-            console.log(number)
-            console.log(name);
-            form.append('month', month);
-            form.append('name', name);
-        }
-        else {
-            form.append('name', 'Exam');
-        }
-        $.ajax({
-            url: 'modules/insert.php?assessment=',
-            method: "post",
-            enctype: 'multipart/form-data',
-            processData: false,
-            contentType: false,
-            data: form,
-            success: function (data) {
-                if (data == "ok") {
-                    $(".modal").remove();
-                    fetchThis(1);
-                    alert("Assessment successfully created.")
-                }
-                else {
-                    alert("Failed to create assessement");
-                }
-            }
-        })
-
+    for(var i=0;i<subjects.length;i++){
+        html+="<option value="+subjects[i]['id']+">"+subjects[i]['subject']+' '+subjects[i]['name']['grade']+subjects[i]['name']['stream']+"</option>";
     }
-    return false;
-}
-
-function streamsOptions() {
-    var optionsTemplate = "";
-    for (var i = 0; i < Teacher.subjectTaughtNames.length; i++) {
-        optionsTemplate += "<option value='" + Teacher.subjectTaughtNames[i]['id'] + "'>Grade " + Teacher.subjectTaughtNames[i]['grade'] + ' ' + Teacher.subjectTaughtNames[i]['stream'] + "</option>";
-    }
-    return optionsTemplate;
+    return html;
 }

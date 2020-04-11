@@ -1,74 +1,76 @@
+html,
 body {
-    margin: o;
+    margin: 0;
+    margin: 0;
+    background-color: #efefef;
     font-family: arial;
+    height: 100%;
+    width: 100%;
 }
 
 #navBar {
     width: 100%;
-    position: fixed;
-    background-color: blueviolet;
+    background-color: #333;
+    top: 0;
+    width: 100%;
+    display: flex;
 }
 
 #dropdown {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    display: block;
+    width: 5%;
     float: left;
+    align-items: center;
+}
+
+#term {
+    width: 75%;
+    text-align: center;
 }
 
 #logout {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    display: block;
+    padding-top: 5px;
+    width: 20%;
     float: right;
+    text-align: right;
 }
 
 #main {
-    background-color: chocolate;
     width: 100%;
     display: flex;
 }
 
 #sidebar {
-    background-color: aquamarine;
-    margin-top: 40px;
-    width: 15%;
-    height: 688;
+    background-color: #333;
+    width: 20%;
+    min-height: 100%;
+    color: white;
 }
 
 #user {
     justify-content: center;
-    background-color: azure;
     margin-right: 20px;
     margin-left: 20px;
-    height: 500px;
 }
 
-#img {
-    margin-top: 30px;
+img {
+    margin-top: 10px;
     margin-bottom: 20px;
     border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-    display: block;
-    align-self: center;
+    width: 50px;
+    overflow: hidden;
 }
-
 #username {
     display: block;
 }
 
 #jobTitle {
     display: block;
+    background-color: #428bca;
 }
 
 #workPlace {
-    background-color: green;
-    width: 85%;
-    margin-top: 40px;
+    background-color: #ffff;
+    width: 80%;
 }
 
 #menubar {
@@ -76,16 +78,13 @@ body {
     margin-left: 20px;
 }
 
-#tab {
-    background-color: yellow;
-}
+
 
 #desk {
-    width: 95%;
+    width: 100%;
     margin-top: 10px;
     margin-left: 20px;
     display: flex;
-    background-color: blanchedalmond;
 }
 
 #one {
@@ -98,11 +97,14 @@ body {
 }
 
 #info {
-    width: 90%;
+    width: 100%;
+    margin-left: 10px;
 }
 
 #schoolImage {
     border-radius: 50%;
+    width: 200px;
+
 }
 
 #info span {
@@ -116,7 +118,7 @@ body {
 #teachersTable th,
 tr,
 td {
-    border: 2px solid black;
+    border: 1px solid black;
 }
 
 .modal {
@@ -157,20 +159,32 @@ td {
 }
 
 #marksForm {
-    background-color: blue;
-    width: 20%;
-}
-
-#marksForm select,
-button {
+    background-color: #efefef;
+    padding: 5px;
     margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
+    width: 20%;
 }
 
 #results {
     width: 80%;
-    background-color: chartreuse;
+}
+
+#marksDesk {
+    width: 100%;
+    display: flex;
+}
+
+#marksForm select,
+button {
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+#results {
+    width: 80%;
+    background-color: g;
+    padding: 15px;
 }
 
 #searchTeacherBox {
@@ -184,12 +198,85 @@ button {
 #marksTable th,
 tr,
 td {
-    border: 2px solid black;
+    border: 1px solid black;
 }
-#container{
-    width:100%;
+
+#container {
+    width: 100%;
+
 }
-#info{
+
+#info {
     width: 100%;
     justify-content: left;
+}
+
+table {
+
+    border: 1px solid black;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    text-overflow: clip;
+}
+
+table th,
+tr,
+td {
+    border: 1px solid black;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 3px;
+}
+
+table th {
+    text-align: center;
+}
+
+#msgBoard {
+    color: #64ac5a;
+}
+
+button {
+    border-radius: 40px;
+}
+
+.new {
+    background-color: #4BCFFA;
+}
+
+.delete {
+    background-color: #dc3545;
+}
+
+label {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 750px) {
+    #workPlace {
+        width: 100%;
+        text-align: left;
+    }
+
+    #sidebar {
+        display: none;
+    }
+
+    #marksDesk {
+        display: inline;
+    }
+
+    #marksForm {
+        width: 100%;
+    }
+
+    #results {
+        width: 100%;
+    }
+}
+
+select {
+    border: 1px solid black;
 }

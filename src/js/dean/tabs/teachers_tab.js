@@ -1,7 +1,7 @@
 function makeTeachersTable() {
-    var teacherTableTemplate = "<button id='addTeacherButton'>Add</button>";
+    var teacherTableTemplate = "<button class='new' id='addTeacherButton'>Add</button>";
     teacherTableTemplate += "<select id='searchTeacherBox'></select>"
-    teacherTableTemplate += "<button id='downloadStaffList'>Download</button>";
+    teacherTableTemplate += "<button class='new' id='downloadStaffList'>Download</button>";
     teacherTableTemplate += "<div id='teacherView'>"
     teacherTableTemplate += "<table id='teachersTable'>\
                                 <tr><th>#</th><th>Name</th>\
@@ -31,10 +31,10 @@ function makeTeachersTable() {
         teacherTableTemplate += "<td>" + staffTypes[teachersArray[i]['type']] + "</td>";
 
         //Staff edit button
-        teacherTableTemplate += "<td><button onclick=getTeacherInfo(" + i + ")>Edit</button></td>"
+        teacherTableTemplate += "<td><button class='new' onclick=getTeacherInfo(" + i + ")>Edit</button></td>"
 
         //staff delete button
-        teacherTableTemplate += "<td><button onclick=deleteStaff(" + teachersArray[i]['id'] + ")>Delete</button></td>"
+        teacherTableTemplate += "<td><button class='delete' onclick=deleteStaff(" + teachersArray[i]['id'] + ")>Delete</button></td>"
 
         teacherTableTemplate += "</tr>";
     }
@@ -95,10 +95,36 @@ function getTeacherInfo(position) {
     teacherInfoTemplate += "Job : <select id='staffTitle'>";
     teacherInfoTemplate += staffTitlesOptions();
     teacherInfoTemplate += "</select><br>";
+    teacherInfoTemplate+="<b>Change password: </b><input type=password id='newPassword'>"
+    teacherInfoTemplate += "<br><div id='msgBoard'></div>"
+
+    if (teachersArray[position]['type'] == 1) {
+
+        teacherInfoTemplate += `
+        <h4>Subjects taught</h4>\
+        <button class='new' onclick=addClass(`+teachersArray[position]['id']+`)>Add</button>`
+        teacherInfoTemplate+=`<table>\
+        <tr><th>#</th>\
+        <th>subject</th>\
+        <th></th>\
+        </tr>`
+        var template = "";
+        for (var i = 0; i < teachersArray[position]['subjects'].length; i++) {
+            var table = "";
+            var index = teachersArray[position]['subjects'][i];
+            var number = i + 1;
+            table += "<tr>";
+            table += "<td>" + number + "</td>"
+            table += "<td>" + index['subject'] + ' ' + index['stream']['grade'] + index['stream']['stream'] + "</td>";
+            table += "<td><button class='delete' onclick=removeClass("+teachersArray[position]['id']+','+index['id']+")>Delete</button></td>"
+            table += "<tr>";
+            template += table;
+        }
+        teacherInfoTemplate += template + "</table>";
+    }
 
     //staff delete button
-    teacherInfoTemplate += "<td><button onclick=deleteStaff(" + teachersArray[position]['id'] + ")>Delete</button></td>"
-    teacherInfoTemplate += "<div id='msgBoard'></div>"
+    teacherInfoTemplate += "<td><button class='delete' onclick=deleteStaff(" + teachersArray[position]['id'] + ")>Delete</button></td>"
 
     $("#teacherView").html(teacherInfoTemplate)
 
@@ -149,6 +175,14 @@ function addTeacherChangeListeners(id) {
         //console.log(newName)
         //save(1, id, 'title', newTitle);
         updateStaffJob(id, newTitle);
+
+    });
+
+    $('#newPassword').change(() => {
+        var newPassword = $('#newPassword').val();
+        //console.log(newName)
+        //save(1, id, 'title', newTitle);
+        updateStaffPassword(id, newPassword);
 
     });
 }

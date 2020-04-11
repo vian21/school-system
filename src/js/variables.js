@@ -1,7 +1,9 @@
 var schoolId;
 var schoolName;
+var schoolMotto;
 var schoolType;
 var schoolEmail;
+var schoolImage;
 var schoolWebsite;
 
 var genders = ['Male', 'Female'];

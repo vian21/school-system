@@ -38,7 +38,37 @@ function misc(container) {
     function info(id) {
         $("#" + id).html('')
 
+        $("#" + id).append(`
+        <center>
+        <img src="" alt="School Image" id="schoolImage">
+        </center>
+        <br>
+        <input type="file" id="imgChoose">
+        <br>`);
+        $("#schoolImage").attr("src", "src/img/uploaded/" + schoolImage);
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#schoolImage').attr('src', e.target.result);
+
+                }
+                reader.readAsDataURL(input.files[0]);
+
+                var image = $("#imgChoose")[0].files[0];
+                //@ src/js/dean/update/school_info.js
+                console.log(image)
+                updateSchoolImage(schoolId, image, schoolImage);
+            }
+        }
+        $("#imgChoose").change(function () {
+            readURL(this);
+        });
+
         $("#" + id).append("<span>Name : </span>" + '<input id="schoolName" value="' + schoolName + '"><br>');
+        $("#" + id).append("<span>Name : </span>" + '<input id="schoolMotto" value="' + schoolMotto + '"><br>');
+
         var typeOptions;
 
         for (var i = 0; i < schoolTypes.length; i++) {
@@ -47,11 +77,14 @@ function misc(container) {
 
         $("#" + id).append("<span>Type : </span>")
         $("#" + id).append("<select id='schoolType'>" + typeOptions + "</select><br>");
-        $("#" + id).append("<span>Website : </span><input type='text' id='website' placeholder='School Website' value="+schoolWebsite+"><br>");
-        $("#" + id).append("<span>Email : </span><input type='email' id='email' placeholder='School email' value="+schoolEmail+"><br>");
+        $("#" + id).append("<span>Website : </span><input type='text' id='website' placeholder='School Website' value=" + schoolWebsite + "><br>");
+        $("#" + id).append("<span>Email : </span><input type='email' id='email' placeholder='School email' value=" + schoolEmail + "><br>");
         $("#" + id).append("<div id='msgBoard'></div>")
         $("#schoolType").val(schoolType).trigger('change');
 
+
+        //$("#imgChoose").change(function () {
+        //})
         $("#schoolName").change(function () {
             var name = $("#schoolName").val();
             //@ src/js/dean/update/school_info.js
@@ -59,15 +92,21 @@ function misc(container) {
             updateSchoolName(schoolId, name);
         })
 
+        $("#schoolMotto").change(function () {
+            var motto = $("#schoolMotto").val();
+            //@ src/js/dean/update/school_info.js
+
+            updateSchoolMotto(schoolId, motto);
+        })
         $("#website").change(function () {
             var website = $("#website").val();
-                   //@ src/js/dean/update/school_info.js
+            //@ src/js/dean/update/school_info.js
             updateSchoolWebsite(schoolId, website);
         })
 
         $("#email").change(function () {
             var email = $("#email").val();
-                   //@ src/js/dean/update/school_info.js
+            //@ src/js/dean/update/school_info.js
             updateSchoolEmail(schoolId, email);
         })
 
@@ -81,7 +120,7 @@ function misc(container) {
         $("#" + id).html("<h4>Grade</h4>\
                           <select name='grade' id='grade'></select>\
                           <br>\
-                          <button id='generate'>Generate</button>");
+                          <button class='new' id='generate'>Generate</button>");
 
         $("#grade").html("<option></option>" + streamsOptions());
 
@@ -91,7 +130,7 @@ function misc(container) {
             var grade = $("#grade").val();
 
             if (grade !== '') {
-                var url = "modules/dean/lists/students.php?grade=" + grade;
+                var url = "modules/dean/lists/students.php?grade=" + grade+"&school="+schoolId;
                 window.open(url)
             }
         })
@@ -137,8 +176,8 @@ function subjectsTable() {
         table += "<td>" + subjectTypes[subjects[i]['type']] + "</td>";
         table += "<td>" + subjects[i]['hours'] + "</td>";
 
-        table += "<td><button class='editSubject' id=" + i + ">Edit</button></td>";
-        table += "<td><button class='deleteSubject' id=" + subjects[i]['id'] + ">Delete</button></td>";
+        table += "<td><button  class='editSubject new' id=" + i + ">Edit</button></td>";
+        table += "<td><button  class='deleteSubject delete' id=" + subjects[i]['id'] + ">Delete</button></td>";
         table += "</tr>";
     }
 
@@ -184,8 +223,8 @@ function gradesTable() {
 
         table += "<td>" + numberOfStudentsInGrade + "</td>";
 
-        table += "<td><button class='editGrade' id=" + i + ">Edit</button></td>";
-        table += "<td><button class='deleteGrade' id=" + streams[i]['id'] + ">Delete</button></td>";
+        table += "<td><button  class='editGrade new' id=" + i + ">Edit</button></td>";
+        table += "<td><button  class='deleteGrade delete' id=" + streams[i]['id'] + ">Delete</button></td>";
         table += "</tr>";
     }
 

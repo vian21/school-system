@@ -8,8 +8,8 @@ function newPeriodForm() {
                             <option value=1>Semester</option>\
                         </select><br>\
                         <input type='number' id='periodNumber' placeholder='Number'><br>\
-                        <button id='cancel'>Cancel</button>\
-                        <button id='create'>Create</button>\
+                        <button class='delete' id='cancel'>Cancel</button>\
+                        <button class='new' id='create'>Create</button>\
                     </form>\
                 </div>";
     $('body').append(htmlForm);

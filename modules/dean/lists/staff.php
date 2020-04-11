@@ -3,8 +3,8 @@ ob_start();
 if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff'])) {
     include '../../config.php';
     include '../../functions.php';
-    $school = $_GET['staff'];
-    $teachers = fetchAllTeachers($school);
+    $school =fetchSchoolInfo($_GET['staff']);
+    $teachers = fetchAllTeachers($school['id']);
     if (!empty($teachers) and $teachers !== ' ') {
 ?>
         <!DOCTYPE html>
@@ -73,6 +73,31 @@ if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff
         </head>
 
         <body>
+
+    <table style="width:100%;border-collapse:collapse;border:none">
+                <tr style="border:none">
+                    <th style="width:20%;border:none;"></th>
+                    <th style="width:80%;border:none;"></th>
+                </tr>
+
+                <tr style="border:none">
+                    <td rowspan="2" style="border:none">
+                        <img src="../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
+
+                    </td>
+
+                    <td style="border:none">
+                        <div id="school_name" style="font-size:20px;font-weight: bold;"><?php echo $school['name']; ?></div>
+                    </td>
+                </tr>
+
+                <tr style="border:none">
+                    <td style="border:none">
+                        <div id="core_values" style="font-size:10px;"><?php echo $school['motto']; ?></div>
+
+                    </td>
+                </tr>
+            </table>
             <center>
                 <!-- ⚠ Caution ⚠: use double quotes otherwise css rules won't apply -->
                 <h1 class="heading">Staff list</h1>

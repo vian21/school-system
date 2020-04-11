@@ -1,7 +1,7 @@
 //Marks
 //Append all grades to form
 function marks() {
-    $("#container").html('<button id="createAssessment">New assessment</button>\
+    $("#container").html('<button class="new" id="createAssessment">New assessment</button>\
                             <button id="showMarksForm">Results</button>\
                             <button id="showReportsForm">Reports</button>\
                             <div id="marksDesk"></div>');
@@ -30,30 +30,18 @@ function marks() {
 
 function marksForm() {
     $("#marksDesk").html(' <form id="marksForm">\
-            <div class="form-group row">\
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Grade</label>\
-                <div class="col-sm-10">\
+                <h5>Grade</h5>\
                     <select name="subject" id="marksGrade">\
                     </select>\
-                </div>\
-            </div>\
-            <div class="form-group row">\
-                <label for="inputEmail3" class="col-sm-2 col-form-label">subject</label>\
-                <div class="col-sm-10">\
+                <h5>subject</h5>\
                     <select name="grade" id="marksSubject">\
                     </select>\
-                </div>\
-            </div>\
-            <div class="form-group row">\
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Test</label>\
-                <div class="col-sm-10">\
+                <h5>Test</h5>\
                     <select name="test" id="marksTest" required>\
-                    </select>\
-                </div>\
-            </div>\
-            <button id="viewResults">View results</button>\
+                    </select><br>\
+            <button class="new" id="viewResults">View results</button>\
         </form>\
-        <div id="results"></div>\
+        <div id="results"> </div>\
     </div>');
 
     $("#marksGrade").html('<option></option>').append(streamsOptions());
@@ -165,15 +153,15 @@ function showNewAssessmentForm() {
                             <option value='1'>Test</option>\
                             <option value='2'>Exam</option>\
                         </select><br>\
-                        <button id='cancel'>Cancel</button>\
-                        <button id='create'>Create</button>\
+                        <button class='delete' id='cancel'>Cancel</button>\
+                        <button class='new' id='create'>Create</button>\
                     </form>";
 
     $('body').append(form);
-    $("#grade").html(streamsOptions())
-    $("#grade").select2()
+    $("#grade").html("<option value=''></option>"+streamsOptions())
+    //$("#grade").select2()
 
-    $("#subject").html(subjectsGradeOptions());
+    $("#subject").html("<option value=''></option>"+subjectsGradeOptions());
 
     addListeners();
     return false;
@@ -260,7 +248,7 @@ function addListeners() {
             }
         }
         $("#subject").html('').append(option);
-        $("#subject").select2()
+        //$("#subject").select2()
 
     })
 
@@ -295,7 +283,7 @@ function reportsForm() {
     <option value='1'>Monthly</option>\
     <option value='2'>Annual</option>\
     </select><br>\
-    <button id='generate'>Generate</button>\
+    <button class='new' id='generate'>Generate</button>\
 </form>");
 
     $("#grade").html("<option></option>" + streamsOptions())
@@ -312,8 +300,7 @@ function reportsForm() {
         }
         //Annual reports
         if (type == 2) {
-            $("#months").remove()
-            $(".select2-container").remove()
+            $("#month").remove()
         }
 
         return false;

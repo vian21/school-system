@@ -30,12 +30,12 @@ function subjectsLearntTable(student_index) {
         //when subject is elective and not enrolled in
         if (subjectsLearnt[i]['type'] == 1 && subjectsLearnt[i]['status'] == 0) {
             //function found at ../create/enrollment.js
-            table += "<td><button onclick='enroll(" + studentsArray[student_index]['id'] + "," + subjectsLearnt[i]['id'] + "," + student_index + ")'>Enroll</button></td>";
+            table += "<td><button class='new' onclick='enroll(" + studentsArray[student_index]['id'] + "," + subjectsLearnt[i]['id'] + "," + student_index + ")'>Enroll</button></td>";
         }
         //when subject is elective and enrolled in
         if (subjectsLearnt[i]['type'] == 1 && subjectsLearnt[i]['status'] == 1) {
             //function found at ../delete/enrollment.js
-            table += "<td><button onclick='disenroll(" + studentsArray[student_index]['id'] + "," + subjectsLearnt[i]['id'] + "," + student_index + ")'>unenroll</button></td>";
+            table += "<td><button class='delete' onclick='disenroll(" + studentsArray[student_index]['id'] + "," + subjectsLearnt[i]['id'] + "," + student_index + ")'>unenroll</button></td>";
         }
 
 
@@ -50,22 +50,22 @@ function subjectsLearntTable(student_index) {
 
 
 function studentsTab() {
-    $("#container").html("<button id='addStudentButton'>Add</button>\
+    $("#container").html("<button class='new' id='addStudentButton'>Add</button>\
     <select name='student' id='searchStudent'>\
       <option></option>\
     </select>\
  <div id='info'>\
-     <center><img src='src/img/user.png' alt='' id='schoolImage'><br><br></center>\
-    <span>Name: "+ schoolName + "</span><br>\
-    <span>Number of students :"+ numberOfStudents + "</span><br>\
-    <span>Number of male students :"+ numberOfMaleStudents + "</span><br>\
-    <span>Number of female students :"+ numberOfFemaleStudents + "</span><br>\
-    <span>Country :Burundi</span><br>\
-    <span>Nationalities :5</span><br>\
-    <span>Number of teachers :"+ numberOfTeachers + "</span><br>\
+     <center><img src='' alt='' id='schoolImage'></center><br>\
+    <span><b>Name: </b>"+ schoolName + "</span><br>\
+    <span><b>Number of students :</b>"+ numberOfStudents + "</span><br>\
+    <span><b>Number of male students :</b>"+ numberOfMaleStudents + "</span><br>\
+    <span><b>Number of female students :</b>"+ numberOfFemaleStudents + "</span><br>\
+    <span><b>Number of teachers :</b>"+ numberOfTeachers + "</span><br>\
 </div>\
 ")
     addToForm();
+
+        $("#schoolImage").attr("src", "src/img/uploaded/" + schoolImage);
 
     $("#searchStudent").on("change", function () {
 
@@ -82,27 +82,27 @@ function studentsTab() {
         var studentSelectedEmail = studentSelected['email'];
         var studentSelectedGrade = studentSelected['stream']['grade'] + ' ' + studentSelected['stream']['stream'];
         studentInfoTemplate += "<center><img id='studentImage' src='" + studentSelectedImage + "'></center>";
-        studentInfoTemplate += "Name : <input type='text' id='studentInfoName'  value='" + studentSelectedName + "'></br>";
+        studentInfoTemplate += "<b>Name : </b><input type='text' id='studentInfoName'  value='" + studentSelectedName + "'></br>";
 
-        studentInfoTemplate += "Gender: <select id='studentInfoGender'>";
+        studentInfoTemplate += "<b>Gender:</b> <select id='studentInfoGender'>";
         studentInfoTemplate += "<option value='0'>Male</option>";
         studentInfoTemplate += "<option value='1'>Female</option>";
         studentInfoTemplate += "</select><br>";
 
-        studentInfoTemplate += "DOB : <input type='date' id='studentInfoDOB'  value='" + studentSelectedDOB + "'></br>";
-        studentInfoTemplate += "Grade : ";
+        studentInfoTemplate += "<b>DOB : </b><input type='date' id='studentInfoDOB'  value='" + studentSelectedDOB + "'></br>";
+        studentInfoTemplate += "<b>Grade : </b>";
         studentInfoTemplate += "<select id='studentInfoGrade'>";
         studentInfoTemplate += "<option value='" + studentSelected['id'] + "'>" + studentSelectedGrade + "</option>"
         studentInfoTemplate += "<option></option>"
         studentInfoTemplate += streamsOptions();
         studentInfoTemplate += "</select>";
+        studentInfoTemplate += "<br><div id='msgBoard'></div>"
 
         //adding table for subjects learnt
-        studentInfoTemplate += "<h4>Subjects</h4>";
+        studentInfoTemplate += "<br><br><h5 style='text-decoration:underline;'>Subjects</h5>";
         studentInfoTemplate += "<div id='subject_enrollment_table'></div>";
 
-        studentInfoTemplate += "<button onclick='deleteStudent(" + studentSelected['id'] + ")'>Delete</button>";
-        studentInfoTemplate += "<div id='msgBoard'></div>"
+        studentInfoTemplate += "<button class='delete' onclick='deleteStudent(" + studentSelected['id'] + ")'>Delete</button>";
 
         $("#info").html(studentInfoTemplate);
 
@@ -170,8 +170,8 @@ function studentsTab() {
                             <br>\
                             \
                             \
-                            <button type='button' id='cancelStudentForm'>Cancel</button>\
-                            <button type='submit' id='addStudent'>Add</button>\
+                            <button class='delete' type='button' id='cancelStudentForm'>Cancel</button>\
+                            <button class='new' type='submit' id='addStudent'>Add</button>\
                         </form>\
                 </div>";
         $('body').append(form);

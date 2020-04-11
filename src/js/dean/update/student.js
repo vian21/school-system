@@ -17,6 +17,8 @@ function updateStudentName(studentId, newname) {
                 $("#msgBoard").append("Data saved successfully")
                 $("#msgBoard").fadeIn().delay(2000).fadeOut();
 
+                
+
             }
             else {
                 $("#msgBoard").html('');
@@ -34,7 +36,10 @@ function updateStudentGrade(studentId, newGrade) {
         method: "post",
         data: {
             id: studentId,
-            grade: newGrade
+            grade: newGrade,
+            period:currentPeriodId,
+            start:start,
+            end:end
         },
         success: function (response) {
             if (response == 'ok') {
@@ -43,6 +48,7 @@ function updateStudentGrade(studentId, newGrade) {
                 $("#msgBoard").html('');
                 $("#msgBoard").append("Data saved successfully")
                 $("#msgBoard").fadeIn().delay(2000).fadeOut();
+                studentsTab();
             }
             else {
                 $("#msgBoard").html('');
