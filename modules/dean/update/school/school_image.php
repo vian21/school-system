@@ -1,7 +1,7 @@
 <?php
 include "../../../config.php";
 if (isset($_FILES['image'])) {
-    $oldImage=$_POST['old'];
+    $oldImage = $_POST['old'];
     $oldImgLocation = "../../../../src/img/uploaded/" . $oldImage;
     $imgName = $_FILES['image']['name'];
     $location = "../../../../src/img/uploaded/" . $imgName;
@@ -16,17 +16,15 @@ if (isset($_FILES['image'])) {
             if ($location != $oldImgLocation) {
                 unlink($oldImgLocation);
             }
-        
         } else {
             echo "k";
         }
     }
     //Change image location in database
-    $change=$connect->query("UPDATE schools SET image='$imgName'");
-    if($change){
+    $change = $connect->query("UPDATE schools SET image='$imgName'");
+    if ($change) {
         echo "ok";
-    }
-    else{
+    } else {
         echo "ko";
     }
 }

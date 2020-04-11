@@ -1,11 +1,11 @@
 <?php
 
 if (
-  
+
     isset($_POST['id']) and
     is_numeric($_POST['id'])
 ) {
-    include ("../../../config.php");
+    include("../../../config.php");
 
     $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
     if ($tel == '') {

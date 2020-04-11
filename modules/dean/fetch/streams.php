@@ -1,4 +1,4 @@
 <?php
-  include("../../functions.php");
+include("../../functions.php");
 
-    echoJson(fetchAllStreams());
+echoJson(fetchAllStreams());

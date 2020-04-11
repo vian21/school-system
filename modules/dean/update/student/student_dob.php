@@ -6,7 +6,7 @@ if (
     isset($_POST['id']) and
     is_numeric($_POST['id'])
 ) {
-    include ("../../../config.php");
+    include("../../../config.php");
     $id = $_POST['id'];
     $dob = $_POST['dob'];
     $change_dob = $connect->query("UPDATE students SET DOB='$dob' WHERE id=$id");

@@ -19,8 +19,8 @@ if (
     $DOB = $_POST['DOB'];
     $period = mysqli_real_escape_string($connect, $_POST['period']);
 
-    $start=$_POST['start'];
-    $end=$_POST['end'];
+    $start = $_POST['start'];
+    $end = $_POST['end'];
 
     $insert = $connect->query("INSERT INTO students(name,gender,email,tel,grade,DOB) VALUES('$name',$gender,'$email','$tel','$grade','$DOB')");
 

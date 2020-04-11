@@ -10,10 +10,10 @@ var genders = ['Male', 'Female'];
 var schoolTypes = ['Day School', 'Boarding School'];
 var staffTypes = ['Dean', 'Teacher'];
 var subjectTypes = ['Compulsary', 'Elective'];
-var subjectEnrollmentStatus=['not enrolled','enrolled'];
-var periodTypes=['Term','Semester'];
+var subjectEnrollmentStatus = ['not enrolled', 'enrolled'];
+var periodTypes = ['Term', 'Semester'];
 
-var periods, currentPeriodId, currentPeriod,start,end;
+var periods, currentPeriodId, currentPeriod, start, end;
 
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 

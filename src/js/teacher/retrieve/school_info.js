@@ -12,7 +12,7 @@ async function fetchSchoolInfo() {
                 var info = JSON.parse(response);
                 schoolId = info['id'];
                 schoolName = info['name'];
-                schoolMotto=info['motto'];
+                schoolMotto = info['motto'];
                 schoolType = info['type'];
                 schoolEmail = info['email'];
                 schoolImage = info['image'];

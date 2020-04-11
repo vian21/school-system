@@ -9,18 +9,18 @@ function addClass(teacher) {
                 </form></div>`
 
     $('body').append(form);
-    $("#subject").html("<option></option>"+subjectsGradeOptions())
+    $("#subject").html("<option></option>" + subjectsGradeOptions())
 
-    $("#add").click(function(){
+    $("#add").click(function () {
         event.preventDefault();
-        var subject=$("#subject").val();
+        var subject = $("#subject").val();
         $.ajax({
-            method:'post',
+            method: 'post',
             url: "modules/dean/create/teaching.php",
             data: {
-                teacher:teacher,
-                subject:subject,
-                year:currentPeriodId
+                teacher: teacher,
+                subject: subject,
+                year: currentPeriodId
 
             },
             success: function (response) {
@@ -30,7 +30,7 @@ function addClass(teacher) {
                         alert("Class added to teacher")
                         makeTeachersTable();
                     })
-    
+
                 }
                 else {
                     alert("Failed to add class to teacher")

@@ -57,10 +57,10 @@ function showStaffForm() {
         var email = $("#staffEmail").val();
         var tel = $("#staffTel").val();
         var grade = $("#grade").select2('val')
-        var password=$("#password").val();
+        var password = $("#password").val();
 
         //var DOB = $("#studentDOB").val();
-        var validName, valideEmail, validType, validGrade,validPassword;
+        var validName, valideEmail, validType, validGrade, validPassword;
 
         if (name == "") {
             alert("Please enter a name");
@@ -110,7 +110,7 @@ function showStaffForm() {
             info.append('password', password);
 
             info.append('school', schoolId);
-            
+
 
             info.append('year', currentPeriodId);
 

@@ -1,13 +1,13 @@
 var school;
 var subjects;
 
-$("document").ready(function(){
+$("document").ready(function () {
     marks();
     fetchSchoolInfo().then(function () {
         //Fecth all teachers and add them to and array and make a table using the array
-        
 
-        fetchAcademicPeriods().then(function(){
+
+        fetchAcademicPeriods().then(function () {
             fetchSubjectsTaught();
         });
     })
@@ -48,77 +48,77 @@ function marksForm() {
         </form>\
         <div id="results"> </div>\
     </div>');
-    $("#subject").html('').append("<option value=''></option>"+teacherSubjectList());
+    $("#subject").html('').append("<option value=''></option>" + teacherSubjectList());
 
     $("#subject").change(function () {
 
-       
+
 
         //append the new option the subject field and clear the test field
         $("#marksTest").html('');
 
         //if the user selects a subject 
 
-            //first clear the test fie
-            //get the id of the subject selected
-            var subjectId = $("#subject").find('option:selected').attr('value');
+        //first clear the test fie
+        //get the id of the subject selected
+        var subjectId = $("#subject").find('option:selected').attr('value');
 
-            //check if there is any tests done in that term
-            //variable to hold the true/false status of test done on term
-            var anyTestDone = false;    //false by default
+        //check if there is any tests done in that term
+        //variable to hold the true/false status of test done on term
+        var anyTestDone = false;    //false by default
 
-            //search in testsDone array
+        //search in testsDone array
+        for (var i = 0; i < testsDone.length; i++) {
+
+            if (testsDone[i]['period'] == currentPeriodId && testsDone[i]['subject'] == subjectId) {
+                anyTestDone = true;
+            }
+        }
+
+        var option = "<option></option>";
+
+        //loop through all tests done looking for the one corrsponding to the desired subject
+        if (anyTestDone == true) {
             for (var i = 0; i < testsDone.length; i++) {
 
-                if (testsDone[i]['period'] == currentPeriodId && testsDone[i]['subject'] == subjectId) {
-                    anyTestDone = true;
+                if (testsDone[i]['subject'] == subjectId) {
+                    option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
                 }
             }
 
-            var option = "<option></option>";
+            //clear the test field and append the test options
+            $("#marksTest").html('').append(option);
 
-            //loop through all tests done looking for the one corrsponding to the desired subject
-            if (anyTestDone == true) {
-                for (var i = 0; i < testsDone.length; i++) {
+            //When the view result button is clicked
+            $("#viewResults").click(function () {
+                event.preventDefault();
+                var subject = $("#marksSubject").find('option:selected').attr('value');
+                var grade = $("#marksGrade").find('option:selected').attr('value');
+                var test = $("#marksTest").find('option:selected').attr('value');
 
-                    if (testsDone[i]['subject'] == subjectId) {
-                        option += "<option value='" + testsDone[i]['id'] + "'>" + testsDone[i]['name'] + "</option>"
+                if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
+                    //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
+                    var formData = {
+                        subject: subject,
+                        grade: grade,
+                        test: test
                     }
-                }
-
-                //clear the test field and append the test options
-                $("#marksTest").html('').append(option);
-
-                //When the view result button is clicked
-                $("#viewResults").click(function () {
-                    event.preventDefault();
-                    var subject = $("#marksSubject").find('option:selected').attr('value');
-                    var grade = $("#marksGrade").find('option:selected').attr('value');
-                    var test = $("#marksTest").find('option:selected').attr('value');
-
-                    if (subject !== "" && grade !== "" && test !== "" && test !== undefined) {
-                        //if ($("#marksTest").has('option').length > 0 && $("#marksTest").find('option:selected').attr('value') !== "") {
-                        var formData = {
-                            subject: subject,
-                            grade: grade,
-                            test: test
+                    console.log(test);
+                    $.ajax({
+                        url: "modules/dean/fetch/test.php",
+                        method: "post",
+                        data: formData,
+                        success: function (data) {
+                            // Location : /retrieve/marks.js
+                            appendMarks(data, test);
                         }
-                        console.log(test);
-                        $.ajax({
-                            url: "modules/dean/fetch/test.php",
-                            method: "post",
-                            data: formData,
-                            success: function (data) {
-                                // Location : /retrieve/marks.js
-                                appendMarks(data, test);
-                            }
-                        })
-                    }
-                    return false;
-                })
-            }
+                    })
+                }
+                return false;
+            })
+        }
 
-            
+
         return false;
     })
 }
@@ -143,7 +143,7 @@ function showNewAssessmentForm() {
     $('body').append(form);
     //$("#grade").select2()
 
-    $("#testSubject").html("<option value=''></option>"+teacherSubjectList());
+    $("#testSubject").html("<option value=''></option>" + teacherSubjectList());
 
     addListeners();
     return false;
@@ -255,11 +255,11 @@ function addListeners() {
 }
 
 
-function teacherSubjectList(){
-    var html="";
+function teacherSubjectList() {
+    var html = "";
 
-    for(var i=0;i<subjects.length;i++){
-        html+="<option value="+subjects[i]['id']+">"+subjects[i]['subject']+' '+subjects[i]['name']['grade']+subjects[i]['name']['stream']+"</option>";
+    for (var i = 0; i < subjects.length; i++) {
+        html += "<option value=" + subjects[i]['id'] + ">" + subjects[i]['subject'] + ' ' + subjects[i]['name']['grade'] + subjects[i]['name']['stream'] + "</option>";
     }
     return html;
 }

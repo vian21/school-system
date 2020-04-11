@@ -4,7 +4,7 @@ $(document).ready(function () {
         fetchTeachers();
 
         //fetch all student and add them to an array and add them to select option list using the student's array
-        fetchStudents().then(function(){
+        fetchStudents().then(function () {
             dashboard()
         });
 
@@ -15,7 +15,7 @@ $(document).ready(function () {
         fetchSubjects();
     })
 
-    $("#addTerm").click(function(){
+    $("#addTerm").click(function () {
         // located : ../create/period.js
         newPeriodForm();
     })

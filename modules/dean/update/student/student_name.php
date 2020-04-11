@@ -2,7 +2,7 @@
 
 if (isset($_POST['id']) and is_numeric($_POST['id'])) {
     if ($_POST['name'] != "") {
-        include ("../../../config.php");
+        include("../../../config.php");
 
         $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
         $id = $_POST['id'];

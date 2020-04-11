@@ -1,11 +1,11 @@
-function removeClass(teacher,subject) {
+function removeClass(teacher, subject) {
     $.ajax({
         url: "modules/dean/delete/teaching.php",
         method: "post",
         data: {
             teacher: teacher,
-            subject:subject,
-            year:currentPeriodId
+            subject: subject,
+            year: currentPeriodId
         },
         success: function (data) {
             if (data == 'ok') {

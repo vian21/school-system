@@ -6,7 +6,7 @@ if (
     is_numeric($_POST['id']) and
     is_numeric($_POST['grade'])
 ) {
-    include ("../../../config.php");
+    include("../../../config.php");
 
     $id = $_POST['id'];
     $grade = $_POST['grade'];

@@ -5,10 +5,10 @@ function enroll(student_id, subject_id, student_index) {
         data: {
             student: student_id,
             subject: subject_id,
-            period:currentPeriodId,
+            period: currentPeriodId,
             //start and end of year contained in the global variables 'start' and 'end'
-            start:start,
-            end:end,
+            start: start,
+            end: end,
         },
         success: function (data) {
             if (data == 'ok') {

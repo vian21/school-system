@@ -52,7 +52,7 @@ $id = $_SESSION['id'];
 <script src="src/js/functions.js"></script>
 
 <script>
-var userType=1;
+    var userType = 1;
     var userId = <?php echo $id . ";\n"; ?>
     <?php echo file_get_contents('./src/js/variables.js'); ?>
 

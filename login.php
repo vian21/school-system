@@ -10,26 +10,26 @@
 </head>
 <style>
     body {
-        margin:0;
+        margin: 0;
         background-color: #ffff;
         font-family: Arial, Helvetica, sans-serif;
     }
 
     form {
-        width:250px;
+        width: 250px;
         text-align: center;
-        padding-top:100px;
+        padding-top: 100px;
     }
 
     form input {
-        width:100%;
+        width: 100%;
         height: 45px;
         font-family: Montserrat-Bold;
 
     }
 
     #submit {
-        width:100%;
+        width: 100%;
         color: white;
         height: 45px;
 
@@ -39,12 +39,12 @@
 
 <body>
     <center>
-    <form action="auth.php" method="post">
-        <h1>Login</h1><br>
-        <input type="email" name="email" id='email' placeholder="Enter email" required><br><br>
-        <input type="password" name="password" id='password' placeholder="Enter password" required><br><br>
-        <button type="submit" id="submit">Login</button>
-    </form>
+        <form action="auth.php" method="post">
+            <h1>Login</h1><br>
+            <input type="email" name="email" id='email' placeholder="Enter email" required><br><br>
+            <input type="password" name="password" id='password' placeholder="Enter password" required><br><br>
+            <button type="submit" id="submit">Login</button>
+        </form>
     </center>
 </body>
 

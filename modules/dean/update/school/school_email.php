@@ -3,7 +3,7 @@
 if (
     isset($_POST['id'])
 ) {
-    include ("../../../config.php");
+    include("../../../config.php");
 
     $email = $_POST['email'];
     $id = $_POST['id'];

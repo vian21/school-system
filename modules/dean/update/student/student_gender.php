@@ -7,7 +7,7 @@ if (
     isset($_POST['id']) and
     is_numeric($_POST['id'])
 ) {
-    include ("../../../config.php");
+    include("../../../config.php");
 
     $id = $_POST['id'];
     $gender = $_POST['gender'];

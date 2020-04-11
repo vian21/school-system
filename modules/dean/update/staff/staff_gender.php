@@ -6,7 +6,7 @@ if (
     is_numeric($_POST['id'])
 ) {
     if ($_POST['gender'] != "") {
-        include ("../../../config.php");
+        include("../../../config.php");
         $gender = strip_tags(mysqli_real_escape_string($connect, $_POST['gender']));
         $id = $_POST['id'];
         $change_gender = $connect->query("UPDATE users SET gender='$gender' WHERE id=$id");

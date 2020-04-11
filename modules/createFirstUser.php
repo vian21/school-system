@@ -31,9 +31,9 @@ function createTeacher($name, $email, $password)
 
     if ($create) {
         echo "<h1>teacher created.</h1>";
-        } else {
+    } else {
         echo "Failed to create teacher";
     }
 }
-createTeacher('patrick','teacher@gmail.com','123');
+createTeacher('patrick', 'teacher@gmail.com', '123');
 //createAdmin('admin', 'admin@gmail.com', '123');

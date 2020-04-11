@@ -65,7 +65,7 @@ function studentsTab() {
 ")
     addToForm();
 
-        $("#schoolImage").attr("src", "src/img/uploaded/" + schoolImage);
+    $("#schoolImage").attr("src", "src/img/uploaded/" + schoolImage);
 
     $("#searchStudent").on("change", function () {
 
@@ -249,9 +249,9 @@ function studentsTab() {
                 info.append('period', period);
                 info.append('school', schoolId)
                 info.append('year', period)
-                
-                info.append('start',start)
-                info.append('end',end);
+
+                info.append('start', start)
+                info.append('end', end);
 
                 //add(2, info);
                 createStudent(info);

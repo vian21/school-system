@@ -21,24 +21,24 @@ if (
     $assessment_name = mysqli_real_escape_string($connect, $_POST['name']);
     $students_taking_that_subject = fetchStudentsTaking($subject, $period_id);
     $month = " ";
-// 1 for test
+    // 1 for test
     if ($type == 1) {
         $month = mysqli_real_escape_string($connect, $_POST['month']) + 1;
 
         $create_assessment = $connect->query("INSERT INTO assessments(school,period,name,month,type,subject) VALUES($school_id,$period_id,'$assessment_name',$month,$type,$subject)");
     }
     //if exam remove month field on query
-    elseif ($type==2) {
+    elseif ($type == 2) {
         $create_assessment = $connect->query("INSERT INTO assessments(school,period,name,type,subject) VALUES($school_id,$period_id,'$assessment_name',$type,$subject)");
     }
 
-    
+
 
     //get id of newly created test
     //if test type is an exam dont check with month
     if ($type == 2) {
         $test_id_query = mysqli_fetch_assoc($connect->query("SELECT id FROM assessments WHERE school = $school_id AND period = $period_id AND name = '$assessment_name' AND type = $type AND subject = $subject"));
-    } 
+    }
     //if test check assessment id with month
     else {
         $test_id_query = mysqli_fetch_assoc($connect->query("SELECT id FROM assessments WHERE school = $school_id AND period = $period_id AND name = '$assessment_name' AND month = $month AND type = $type AND subject = $subject"));

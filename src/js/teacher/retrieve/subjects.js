@@ -6,12 +6,12 @@ async function fetchSubjectsTaught() {
         method: 'post',
         data: {
             user: userId,
-            year:currentPeriodId
+            year: currentPeriodId
         },
         success: function (response) {
             if (isJSON(response)) {
                 var info = JSON.parse(response);
-                subjects=info;
+                subjects = info;
 
             }
 

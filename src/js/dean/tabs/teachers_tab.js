@@ -95,15 +95,15 @@ function getTeacherInfo(position) {
     teacherInfoTemplate += "Job : <select id='staffTitle'>";
     teacherInfoTemplate += staffTitlesOptions();
     teacherInfoTemplate += "</select><br>";
-    teacherInfoTemplate+="<b>Change password: </b><input type=password id='newPassword'>"
+    teacherInfoTemplate += "<b>Change password: </b><input type=password id='newPassword'>"
     teacherInfoTemplate += "<br><div id='msgBoard'></div>"
 
     if (teachersArray[position]['type'] == 1) {
 
         teacherInfoTemplate += `
         <h4>Subjects taught</h4>\
-        <button class='new' onclick=addClass(`+teachersArray[position]['id']+`)>Add</button>`
-        teacherInfoTemplate+=`<table>\
+        <button class='new' onclick=addClass(`+ teachersArray[position]['id'] + `)>Add</button>`
+        teacherInfoTemplate += `<table>\
         <tr><th>#</th>\
         <th>subject</th>\
         <th></th>\
@@ -116,7 +116,7 @@ function getTeacherInfo(position) {
             table += "<tr>";
             table += "<td>" + number + "</td>"
             table += "<td>" + index['subject'] + ' ' + index['stream']['grade'] + index['stream']['stream'] + "</td>";
-            table += "<td><button class='delete' onclick=removeClass("+teachersArray[position]['id']+','+index['id']+")>Delete</button></td>"
+            table += "<td><button class='delete' onclick=removeClass(" + teachersArray[position]['id'] + ',' + index['id'] + ")>Delete</button></td>"
             table += "<tr>";
             template += table;
         }

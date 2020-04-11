@@ -1,6 +1,6 @@
 <?php
 
-    include("../../functions.php");
+include("../../functions.php");
 
-    $school_id = $_POST['id'];
-    echoJson(fetchAllSubjects('all', $school_id));
+$school_id = $_POST['id'];
+echoJson(fetchAllSubjects('all', $school_id));

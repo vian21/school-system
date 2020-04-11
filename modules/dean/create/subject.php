@@ -11,7 +11,7 @@ if (
 
     && !empty($_POST['name'])
     && !empty($_POST['grade'])
-    && $_POST['type']!==''
+    && $_POST['type'] !== ''
     && !empty($_POST['hours'])
 ) {
 

@@ -55,7 +55,7 @@ $id = $_SESSION['id'];
         </div>
 </body>
 <script>
-    var userType=0;
+    var userType = 0;
     var numberOfStudents = <?php echo countStudents(1, 0) . ";\n"; ?>
     var numberOfMaleStudents = <?php echo countMaleStudents() . ";\n"; ?>
     var numberOfFemaleStudents = <?php echo countFemaleStudents() . ";\n"; ?>
@@ -76,4 +76,3 @@ $id = $_SESSION['id'];
 </script>
 
 </html>
-

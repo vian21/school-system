@@ -267,7 +267,7 @@ function annualDecision($gpa)
 
                         echo '<td style="font-weight:bold;border:1px solid black;">' . round(array_sum($total_term_percentage_array[$period['name']]) / $number_of_subjects) . '</td>';
                         echo '<td style="border:1px solid black;background-color:lightgray;"></td>';
-                    }                    
+                    }
                     //Annual
 
                     $annual_percentage = $total_percentage / $number_of_subjects;

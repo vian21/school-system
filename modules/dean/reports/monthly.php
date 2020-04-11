@@ -193,12 +193,10 @@ function getSubjectName($subject_id)
                     <td style="text-align: right;font-size:11px;"><?php echo $percentage; ?></td>
                     <td style="background-color:lightgray;"></td>
                     <td style="text-align: right;"><?php
-                                                    if($total_hours!==0){
+                                                    if ($total_hours !== 0) {
                                                         $total_gpa = round($total_cgpa / $total_hours, 1);
-
-                                                    }
-                                                    else{
-                                                        $total_gpa=0;
+                                                    } else {
+                                                        $total_gpa = 0;
                                                     }
                                                     echo $total_gpa;
                                                     ?></td>

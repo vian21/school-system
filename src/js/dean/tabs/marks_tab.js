@@ -158,10 +158,10 @@ function showNewAssessmentForm() {
                     </form>";
 
     $('body').append(form);
-    $("#grade").html("<option value=''></option>"+streamsOptions())
+    $("#grade").html("<option value=''></option>" + streamsOptions())
     //$("#grade").select2()
 
-    $("#subject").html("<option value=''></option>"+subjectsGradeOptions());
+    $("#subject").html("<option value=''></option>" + subjectsGradeOptions());
 
     addListeners();
     return false;

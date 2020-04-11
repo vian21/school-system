@@ -17,7 +17,7 @@ function updateStudentName(studentId, newname) {
                 $("#msgBoard").append("Data saved successfully")
                 $("#msgBoard").fadeIn().delay(2000).fadeOut();
 
-                
+
 
             }
             else {
@@ -37,9 +37,9 @@ function updateStudentGrade(studentId, newGrade) {
         data: {
             id: studentId,
             grade: newGrade,
-            period:currentPeriodId,
-            start:start,
-            end:end
+            period: currentPeriodId,
+            start: start,
+            end: end
         },
         success: function (response) {
             if (response == 'ok') {
@@ -90,7 +90,7 @@ function updateStudentDOB(studentId, newDOB) {
     var url = "modules/dean/update/student/student_dob.php";
     $.ajax({
         url: url,
-        method:"post",
+        method: "post",
         data: {
             id: studentId,
             dob: newDOB

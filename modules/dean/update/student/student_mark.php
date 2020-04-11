@@ -1,7 +1,7 @@
 <?php
 if (isset($_POST['student_id']) and isset($_POST['mark']) and is_numeric($_POST['mark']) and is_numeric($_POST['student_id'])) {
     //echo "ok";
-    include ("../../../config.php");
+    include("../../../config.php");
     $student_id = mysqli_real_escape_string($connect, $_POST['student_id']);
     $mark = mysqli_real_escape_string($connect, $_POST['mark']);
     $test = mysqli_real_escape_string($connect, $_POST['test']);

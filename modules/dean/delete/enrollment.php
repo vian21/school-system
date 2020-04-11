@@ -15,6 +15,5 @@ if (
         echo "ok";
     } else {
         echo "ko";
-//echo mysqli_error($connect);
     }
 }

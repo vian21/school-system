@@ -13,7 +13,7 @@ if (
     $type = $_POST['type'];
     $hours = $_POST['hours'];
 
-    include ("../../../config.php");
+    include("../../../config.php");
 
     $update = $connect->query("UPDATE subjects SET subject_name='$name', stream=$grade, hours=$hours, type=$type WHERE id=$id");
 

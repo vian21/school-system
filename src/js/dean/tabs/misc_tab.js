@@ -130,7 +130,7 @@ function misc(container) {
             var grade = $("#grade").val();
 
             if (grade !== '') {
-                var url = "modules/dean/lists/students.php?grade=" + grade+"&school="+schoolId;
+                var url = "modules/dean/lists/students.php?grade=" + grade + "&school=" + schoolId;
                 window.open(url)
             }
         })

@@ -3,7 +3,7 @@ ob_start();
 if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff'])) {
     include '../../config.php';
     include '../../functions.php';
-    $school =fetchSchoolInfo($_GET['staff']);
+    $school = fetchSchoolInfo($_GET['staff']);
     $teachers = fetchAllTeachers($school['id']);
     if (!empty($teachers) and $teachers !== ' ') {
 ?>
@@ -25,6 +25,7 @@ if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff
                 .heading {
                     width: 100%;
                     border: 2px solid black;
+                    text-align: center;
                 }
 
                 table {
@@ -74,7 +75,7 @@ if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff
 
         <body>
 
-    <table style="width:100%;border-collapse:collapse;border:none">
+            <table style="width:100%;border-collapse:collapse;border:none">
                 <tr style="border:none">
                     <th style="width:20%;border:none;"></th>
                     <th style="width:80%;border:none;"></th>

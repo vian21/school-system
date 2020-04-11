@@ -4,10 +4,9 @@ include("../../functions.php");
 if (
     isset($_POST['id'])
 ) {
-   
+
 
     $school_id = $_POST['id'];
 
     echoJson(fetchAcademicPeriods($school_id));
 }
-

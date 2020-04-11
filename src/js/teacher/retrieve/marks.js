@@ -17,7 +17,7 @@ function appendMarks(json, testID) {
             //console.log(jsonArray[i]);
         }
         tabletemplate += "</table>";
-        
+
         tabletemplate += "<br><div id='msgBoard'></div>"
 
         tabletemplate += "<button class='delete' onclick='deleteAssessment(" + testID + ")'>Delete</button>"

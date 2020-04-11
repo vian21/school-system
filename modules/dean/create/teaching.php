@@ -9,7 +9,7 @@ if (
 
     $teacher = $_POST['teacher'];
     $subject = $_POST['subject'];
-    $year=$_POST['year'];
+    $year = $_POST['year'];
 
     $enroll = $connect->query("INSERT INTO teaches(teacher,subject,year) VALUES($teacher,$subject,$year)");
 
