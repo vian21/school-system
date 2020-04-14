@@ -1,20 +1,16 @@
 <?php
-
-//insert period
+//delete period
 if (
     isset($_POST['id']) and
-    isset($_POST['year']) and
-    isset($_POST['name'])
+    is_numeric($_POST['id'])
 ) {
     include("../../config.php");
 
-    $school_id = $_POST['id'];
-    $year = $_POST['year'];
-    $name = $_POST['name'];
+    $id = $_POST['id'];
 
-    $insert = $connect->query("INSERT INTO academic_periods(academic_year,school,name) VALUES('$year',$school_id,'$name')");
+    $delete = $connect->query("DELETE FROM academic_periods WHERE id=$id");
 
-    if ($insert) {
+    if ($delete) {
         echo 'ok';
     } else {
         echo 'ko';

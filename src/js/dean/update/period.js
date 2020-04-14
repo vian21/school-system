@@ -1,23 +1,25 @@
-function newPeriodForm() {
-    var htmlForm = "<div class='modal'>\
-                    <form>\
-                        <input type='number' id='startYear' placeholder='From'><br>\
-                        <input type='number' id='endYear' placeholder='To'><br>\
-                        <select id='type'>\
-                            <option value=0>Term</option>\
-                            <option value=1>Semester</option>\
-                        </select><br>\
-                        <input type='number' id='periodNumber' placeholder='Number'><br>\
-                        <button class='delete' id='cancel'>Cancel</button>\
-                        <button class='new' id='create'>Create</button>\
-                    </form>\
-                </div>";
+function editPeriodForm() {
+    var htmlForm = "<div class='modal'><form>";
+    htmlForm += "<input type='number' id='startYear' placeholder='From' value=" + start + "><br>"
+    htmlForm += "<input type='number' id='endYear' placeholder='To' value=" + end + "><br>"
+    htmlForm += "<select id='type'>"
+    htmlForm += "<option value=0>Term</option>"
+    htmlForm += "<option value=1>Semester</option>"
+    htmlForm += "</select><br>"
+    htmlForm += "<input type='number' id='periodNumber' placeholder='Number'><br>"
+    htmlForm += "<button class='new' id='create'>Save</button><button class='delete' id='cancel'>Cancel</button><button class='delete' id='delete'>delete</button></form></div>";
     $('body').append(htmlForm);
 
     $("#cancel").click(function () {
         event.preventDefault();
 
         deleteModal();
+    })
+
+    $("#delete").click(function () {
+        event.preventDefault();
+
+        deletePeriod();
     })
 
     $("#create").click(function () {
@@ -50,21 +52,24 @@ function newPeriodForm() {
         }
 
         if (validStart == true && validEnd == true && validNumber == true) {
+            var academicYear = startYear + '-' + endYear;
             var periodName = periodTypes[periodType] + ' ' + periodNumber;
             $("#create").attr('disabled', true);
 
-            newPeriod(periodName, startYear, endYear);
+            editPeriod(currentPeriodId, periodName, startYear, endYear);
         }
     })
 }
-function newPeriod(name, start, end) {
-    var url = "modules/dean/create/period.php"
+
+function editPeriod(periodId, name, start, end) {
+    var url = "modules/dean/update/misc/period.php"
 
     $.ajax({
         url: url,
         method: "post",
         data: {
-            id: schoolId,
+            period: periodId,
+            school: schoolId,
             name: name,
             start: start,
             end: end
@@ -74,7 +79,7 @@ function newPeriod(name, start, end) {
                 fetchAcademicPeriods().then(function () {
                     fetchStudents().then(function () {
 
-                        alert("Period successfully created");
+                        alert("Period successfully edited");
 
                         deleteModal();
 
@@ -85,7 +90,7 @@ function newPeriod(name, start, end) {
             else {
                 $("#create").attr('disabled', false);
 
-                alert("Failed to create period")
+                alert("Failed to edit period")
             }
         }
     })

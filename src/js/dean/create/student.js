@@ -18,6 +18,8 @@ function createStudent(data) {
                 })
             }
             else {
+                $("#addStudent").attr('disabled', false);
+
                 alert("Failed to insert student")
             }
         }

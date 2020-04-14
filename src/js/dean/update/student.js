@@ -35,6 +35,7 @@ function updateStudentGrade(studentId, newGrade) {
         url: url,
         method: "post",
         data: {
+            school: schoolId,
             id: studentId,
             grade: newGrade,
             period: currentPeriodId,
@@ -43,12 +44,11 @@ function updateStudentGrade(studentId, newGrade) {
         },
         success: function (response) {
             if (response == 'ok') {
-                fetchStudents()
+                fetchStudents().then(function () {
 
-                $("#msgBoard").html('');
-                $("#msgBoard").append("Data saved successfully")
-                $("#msgBoard").fadeIn().delay(2000).fadeOut();
-                studentsTab();
+                    alert("Grade changed")
+                    studentsTab();
+                })
             }
             else {
                 $("#msgBoard").html('');
@@ -70,11 +70,12 @@ function updateStudentGender(studentId, newGender) {
         },
         success: function (response) {
             if (response == 'ok') {
-                fetchStudents()
+                fetchStudents().then(function () {
 
-                $("#msgBoard").html('');
-                $("#msgBoard").append("Data saved successfully")
-                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+                    $("#msgBoard").html('');
+                    $("#msgBoard").append("Data saved successfully")
+                    $("#msgBoard").fadeIn().delay(2000).fadeOut();
+                })
             }
             else {
 
@@ -97,11 +98,13 @@ function updateStudentDOB(studentId, newDOB) {
         },
         success: function (response) {
             if (response == 'ok') {
-                fetchStudents()
+                fetchStudents().then(function () {
 
-                $("#msgBoard").html('');
-                $("#msgBoard").append("Data saved successfully")
-                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+                    $("#msgBoard").html('');
+                    $("#msgBoard").append("Data saved successfully")
+                    $("#msgBoard").fadeIn().delay(2000).fadeOut();
+                })
+
             }
             else {
 

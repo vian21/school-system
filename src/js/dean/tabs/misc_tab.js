@@ -58,8 +58,7 @@ function misc(container) {
 
                 var image = $("#imgChoose")[0].files[0];
                 //@ src/js/dean/update/school_info.js
-                console.log(image)
-                updateSchoolImage(schoolId, image, schoolImage);
+                updateSchoolImage(schoolId, image);
             }
         }
         $("#imgChoose").change(function () {
@@ -67,7 +66,7 @@ function misc(container) {
         });
 
         $("#" + id).append("<span>Name : </span>" + '<input id="schoolName" value="' + schoolName + '"><br>');
-        $("#" + id).append("<span>Name : </span>" + '<input id="schoolMotto" value="' + schoolMotto + '"><br>');
+        $("#" + id).append("<span>Motto : </span>" + '<input id="schoolMotto" value="' + schoolMotto + '"><br>');
 
         var typeOptions;
 

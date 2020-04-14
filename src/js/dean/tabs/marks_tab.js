@@ -115,7 +115,8 @@ function marksForm() {
                             grade: grade,
                             test: test
                         }
-                        console.log(test);
+                        $("#viewResults").attr('disabled', true);
+
                         $.ajax({
                             url: "modules/dean/fetch/test.php",
                             method: "post",
@@ -123,6 +124,8 @@ function marksForm() {
                             success: function (data) {
                                 // Location : /retrieve/marks.js
                                 appendMarks(data, test);
+                                $("#viewResults").attr('disabled', false);
+
                             }
                         })
                     }
@@ -227,6 +230,8 @@ function addListeners() {
             else {
                 form.append('name', 'Exam');
             }
+            $("#create").attr('disabled', true);
+
             createAssessment(form);
 
         }

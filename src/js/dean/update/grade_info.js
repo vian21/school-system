@@ -58,6 +58,8 @@ function editGradeForm(position) {
                 stream: stream.toUpperCase()
             }
             //add(4, form);
+            $("#save").attr('disabled', true);
+
             updateGrade(newData)
         }
     })
@@ -72,17 +74,21 @@ function updateGrade(newInfo) {
         data: newInfo,
         success: function (response) {
             if (response == 'ok') {
-                deleteModal();
                 fetchStreams()
                     .then(function () {
                         gradesTable()
+                        fetchStudents();
                     })
                     .then(function () {
                         alert("Data successfully updated.");
+                        deleteModal();
+
                     })
 
             }
             else {
+                $("#save").attr('disabled', true);
+
                 alert("Failed to update data.");
             }
 

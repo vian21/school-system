@@ -122,7 +122,10 @@ function studentsTab() {
         })
 
         $("#studentInfoGrade").change(function () {
-            updateStudentGrade(studentSelected['id'], $("#studentInfoGrade").val())
+            if (studentSelected['stream']['id'] !== $("#studentInfoGrade").val()) {
+                updateStudentGrade(studentSelected['id'], $("#studentInfoGrade").val())
+
+            }
         })
 
         $("#studentInfoDOB").on('blur', function () {
@@ -140,7 +143,7 @@ function studentsTab() {
         var form = "<div id='addStudentModal' class='modal'>\
                         <form enctype='multipart/form-data'>\
                             <h4>Name :</h4>\
-                                <input type='text' name='name' id='studentName' required>\
+                                <input type='text' name='name' id='studentName' required  autocomplete='off'>\
                             \
                             \
                             <h4>Date of birth:</h4>\
@@ -151,11 +154,11 @@ function studentsTab() {
                             \
                             \
                             <h4>Student's email :</h4>\
-                                <input type='email' name='email' id='studentEmail'>\
+                                <input type='email' name='email' id='studentEmail' autocomplete='off'>\
                             \
                             \
                             <h4>student's telephone number :</h4>\
-                                <input type='number' name='tel' id='studentTel'>\
+                                <input type='number' name='tel' id='studentTel' autocomplete='off'>\
                             \
                             \
                             <h4>Grade :</h4><select name='grade' id='studentGrade' required>\
@@ -188,7 +191,6 @@ function studentsTab() {
         //Submit the add student form
         $("#addStudent").click((event) => {
             event.preventDefault();
-
             var name = $("#studentName").val();
             var DOB = $("#studentDOB").val();
             var email = $("#studentEmail").val();
@@ -197,6 +199,7 @@ function studentsTab() {
             var yearEnd = $("#endYear").val();
             var grade = $("#studentGrade").val();
             var gender = $("#gender").val();
+            var school = schoolId;
 
 
             var validName, validYearStart, validYearEnd, validGrade, validDOB;
@@ -249,11 +252,14 @@ function studentsTab() {
                 info.append('period', period);
                 info.append('school', schoolId)
                 info.append('year', period)
+                info.append('school', school)
 
                 info.append('start', start)
                 info.append('end', end);
 
                 //add(2, info);
+                $("#addStudent").attr('disabled', true);
+
                 createStudent(info);
             }
         })

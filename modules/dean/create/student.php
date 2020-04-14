@@ -17,12 +17,14 @@ if (
     $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
     $grade = mysqli_real_escape_string($connect, $_POST['grade']);
     $DOB = $_POST['DOB'];
-    $period = mysqli_real_escape_string($connect, $_POST['period']);
+    $year = mysqli_real_escape_string($connect, $_POST['year']);
+    $school = mysqli_real_escape_string($connect, $_POST['school']);
+
 
     $start = $_POST['start'];
     $end = $_POST['end'];
 
-    $insert = $connect->query("INSERT INTO students(name,gender,email,tel,grade,DOB) VALUES('$name',$gender,'$email','$tel','$grade','$DOB')");
+    $insert = $connect->query("INSERT INTO students(name,gender,email,tel,DOB,school) VALUES('$name',$gender,'$email','$tel','$DOB',$school)");
 
     if (!$insert) {
         echo "ko";
@@ -34,10 +36,13 @@ if (
     //id of newly created student
     $id = $connect->insert_id;
 
-    $compulsary_courses = fetchCompulsarySubjects($grade);
+    //enroll student in academic year
+    $insert = $connect->query("INSERT INTO academic_enrollments(student,grade,year,start,end,school) VALUES($id,$grade,$year,$start,$end,$school)");
+
+    $compulsary_courses = fetchCompulsarySubjects($grade, $school);
 
     foreach ($compulsary_courses as $subject) {
-        $connect->query("INSERT INTO enrollment(student_id,subject,period,start,end) VALUES($id,$subject,$period,$start,$end)");
+        $connect->query("INSERT INTO enrollment(student_id,subject,period,start,end) VALUES($id,$subject,$year,$start,$end)");
     }
 }
 //}

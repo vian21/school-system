@@ -18,6 +18,8 @@ function createAssessment(form) {
                 marks();
             }
             else {
+                $("#create").attr('disabled', false);
+
                 alert("Failed to create assessement");
             }
         }

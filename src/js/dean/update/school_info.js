@@ -1,11 +1,11 @@
-function updateSchoolImage(schoolId, newImage, oldImage) {
+function updateSchoolImage(schoolId, newImage) {
     var url = "modules/dean/update/school/school_image.php";
     var form = new FormData();
     form.append('id', schoolId);
 
     form.append('image', newImage);
 
-    form.append('old', oldImage);
+    form.append('old', schoolImage);
 
 
     $.ajax({

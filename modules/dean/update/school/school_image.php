@@ -13,11 +13,10 @@ if (isset($_FILES['image'])) {
     } else {
         if (move_uploaded_file($_FILES['image']['tmp_name'], $location)) {
             //Delete the image if they don't have same name because by default it will replace the old one
-            if ($location != $oldImgLocation) {
+            if (isset($oldImage) && !empty($oldImage) && $location !== $oldImgLocation) {
+
                 unlink($oldImgLocation);
             }
-        } else {
-            echo "k";
         }
     }
     //Change image location in database

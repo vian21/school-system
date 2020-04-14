@@ -2,9 +2,11 @@
 
 include("../../functions.php");
 
+$year = $_POST['year'];
+$school = $_POST['school_id'];
 $students = array();
-$students_array = fetchAllStudents('all');
 
+$students_array = fetchAllStudents('all', $school);
 if (!empty($students_array)) {
     foreach ($students_array as $column) {
         $students_sub_array = array();
@@ -12,8 +14,14 @@ if (!empty($students_array)) {
         $students_sub_array['name'] = $column['name'];
         $students_sub_array['DOB'] = $column['DOB'];
         $students_sub_array['gender'] = $column['gender'];
-        $students_sub_array['stream'] = fetchStreamName($column['grade']);
-        $students_sub_array['subjects'] = fetchSubjectsLearnt($column['id'], $column['grade']);
+        $grade = whatGrade($column['id'], $year);
+        if ($grade != "") {
+            $students_sub_array['stream'] = fetchStreamName($grade);
+            $students_sub_array['subjects'] = fetchSubjectsLearnt($column['id'], $grade);
+        } else {
+            $students_sub_array['stream'] = "";
+            $students_sub_array['subjects'] = "";
+        }
         $students_sub_array['image'] = $column['image'];
         $students_sub_array['email'] = $column['email'];
         $students_sub_array['tel'] = $column['tel'];

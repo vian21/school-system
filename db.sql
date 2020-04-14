@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 11, 2020 at 02:12 PM
+-- Generation Time: Apr 14, 2020 at 10:57 PM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -30,9 +30,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `academic_enrollments` (
   `id` int(11) NOT NULL,
-  `student_id` int(11) NOT NULL,
+  `student` int(11) NOT NULL,
+  `grade` int(11) NOT NULL,
+  `year` int(11) NOT NULL,
   `start` int(11) NOT NULL,
-  `end` int(11) NOT NULL
+  `end` int(11) NOT NULL,
+  `school` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -138,7 +141,6 @@ CREATE TABLE `students` (
   `image` text NOT NULL,
   `email` text NOT NULL,
   `tel` text NOT NULL,
-  `grade` text NOT NULL,
   `DOB` date NOT NULL,
   `password` text NOT NULL,
   `status` int(11) NOT NULL,

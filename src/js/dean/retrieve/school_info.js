@@ -17,6 +17,12 @@ async function fetchSchoolInfo() {
                 schoolEmail = info['email'];
                 schoolImage = info['image'];
 
+
+                numberOfStudents = info['students'];
+                numberOfMaleStudents = info['male'];
+                numberOfFemaleStudents = info['female'];
+                numberOfTeachers = info['teachers'];
+
                 schoolWebsite = info['website'];
             }
 

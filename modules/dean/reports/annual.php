@@ -17,12 +17,12 @@ $periods = academic_periods($school_id, $start, $end);
 $grade = $_GET['grade'];
 $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
 
-$students = fetchAllStudents($grade);
+$students = fetchAllStudents($grade, $school_id);
 
-function subjectsTakenBy($student, $school_id, $start, $end)
+function subjectsTakenBy($student, $school_id, $period, $start, $end)
 {
     include '../../config.php';
-    $get_subjects = $connect->query("SELECT * FROM enrollment WHERE student_id=$student AND start=$start AND end=$end");
+    $get_subjects = $connect->query("SELECT * FROM enrollment WHERE student_id=$student AND period=$period AND start=$start AND end=$end");
     $subjects = array();
     while ($column = mysqli_fetch_assoc($get_subjects)) {
         $subjects[] = $column['subject'];
@@ -59,13 +59,16 @@ function getSumOfMarks($student_id, $subject, $assessment_type, $period_id)
 {
     include("../../config.php");
 
-    $getSumQuery = $connect->query("SELECT SUM(marks) AS mark FROM marks WHERE student_id=$student_id AND subject=$subject AND type=$assessment_type AND period=$period_id");
-    $sumArray = mysqli_fetch_assoc($getSumQuery);
-    $mark = $sumArray['mark'];
-    if ($mark !== null) {
-        return $mark;
-    } else {
-        return 0;
+    $getSumQuery = mysqli_fetch_assoc($connect->query("SELECT SUM(marks) AS mark FROM marks WHERE student_id=$student_id AND subject=$subject AND type=$assessment_type AND period=$period_id"));
+    //$sumArray = mysqli_fetch_assoc($getSumQuery);
+    $number_of_assessments_done = mysqli_num_rows($connect->query("SELECT * FROM marks WHERE student_id=$student_id AND subject=$subject AND type=$assessment_type AND period=$period_id"));
+    if ($number_of_assessments_done != 0) {
+        $mark = $getSumQuery['mark'] / $number_of_assessments_done;
+        if ($mark !== null) {
+            return $mark;
+        } else {
+            return 0;
+        }
     }
 }
 
@@ -119,7 +122,7 @@ function annualDecision($gpa)
                 $total_term_percentage_array[$period['name']] = array();
             }
 
-            $subjects_taken = subjectsTakenBY($id, $school_id, $start, $end);
+            $subjects_taken = subjectsTakenBY($id, $school_id, $period['id'], $start, $end);
             $number_of_subjects = sizeof($subjects_taken);
 
     ?>
@@ -132,7 +135,7 @@ function annualDecision($gpa)
 
                 <tr style="border:none">
                     <td rowspan="3" style="border:none">
-                        <img src="../../../src/img/logo.png" alt='' style="width: 100px;" />
+                        <img src="../../../src/img/uploaded/<?php echo $school_info['image'] ?>" alt='' style="width: 100px;" />
 
                     </td>
 
@@ -154,19 +157,9 @@ function annualDecision($gpa)
                 </tr>
             </table>
 
-            <table>
-                <tr>
-                    <td>Name: <?php echo $name; ?></td>
-                </tr>
-                <tr>
-                    <td>ID: <?php echo $id; ?></td>
-                </tr>
-                <tr>
-                    <td>Grade: <?php echo $stream; ?></td>
-                </tr>
-            </table>
-            <br>
-            <br>
+            <h6 style="font-size:11px;">Name: <?php echo $name; ?></h6>
+            <h6 style="font-size:11px;">ID: <?php echo $id; ?></h6>
+            <h6 style="font-size:11px;">Grade: <?php echo $stream; ?></h6>
             <table id='main' style="font-size:10px;">
                 <tr>
                     <th colspan="3" rowspan="2" style="font-size:11px;text-align:center;border:1px solid black;font-weight:bold;">course</th>
@@ -273,7 +266,7 @@ function annualDecision($gpa)
                     $annual_percentage = $total_percentage / $number_of_subjects;
                     $annual_CGPA = $total_CGPA / $total_hours;
                     echo '<td style="font-weight:bold;border:1px solid black;">' . round($annual_percentage) . '</td>';
-                    echo '<td style="font-weight:bold;border:1px solid black;">' . grade($annual_percentage) . '</td>';
+                    echo '<td style="font-weight:bold;border:1px solid black;background-color:lightgray;"></td>';
                     echo '<td style="font-weight:bold;border:1px solid black;">' . round($annual_CGPA, 1) . '</td>';
 
 
@@ -303,7 +296,8 @@ function annualDecision($gpa)
                 }
                 ?>
             </table>
-            <table id='mid' style="font-size:10px;">
+
+            <table id='mid' style="font-size:9px;">
                 <tr>
                     <th style="width:70%;"></th>
                     <th style="width:30%;"></th>

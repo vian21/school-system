@@ -5,6 +5,10 @@ var schoolType;
 var schoolEmail;
 var schoolImage;
 var schoolWebsite;
+var numberOfStudents;
+var numberOfMaleStudents;
+var numberOfFemaleStudents;
+var numberOfTeachers;
 
 var genders = ['Male', 'Female'];
 var schoolTypes = ['Day School', 'Boarding School'];

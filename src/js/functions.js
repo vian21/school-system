@@ -41,8 +41,11 @@ function changeTermListener() {
             fetchTests().then(function () {
                 if (userType == 0) {
 
-                    alert("Term changed successfully")
-                    studentsTab();
+                    fetchStudents().then(function () {
+                        studentsTab();
+                        alert("Term changed successfully")
+
+                    })
                 }
                 if (userType == 1) {
                     fetchSubjectsTaught().then(function () {

@@ -44,6 +44,7 @@ function getSubjectName($subject_id)
     $get_name = mysqli_fetch_assoc($connect->query("SELECT*FROM subjects WHERE id=$subject_id"));
     return $get_name['subject_name'];
 } ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -79,7 +80,7 @@ function getSubjectName($subject_id)
 
 
     $month = $_GET['month'];
-    $students = fetchAllStudents($grade);
+    $students = fetchAllStudents($grade, $school['id']);
     //varaiable to track page number and loops to avoid additional page breaks
     $number = 0;
     if (!empty($students) and is_array($students)) {
@@ -218,7 +219,6 @@ function getSubjectName($subject_id)
                 }
                 ?>
             </table>
-            <h6></h6>
             <!-- comment section-->
             <table style="width:100%;border:none;font-size:10px;">
                 <tr style="border:none">
@@ -365,11 +365,9 @@ function getSubjectName($subject_id)
                 </tr>
             </table>
 
-
             <h6></h6> <!-- signatures -->
             <h5 style="text-align: center;">Head Master's Signature <span>______________________ </span>Academic Dean's Signature <span>______________________</span></h5>
     <?
-
             //add page break if not last page
             if (count($students) !== $number) {
                 echo '<div style="page-break-before: always;"></div>';

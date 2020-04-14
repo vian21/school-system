@@ -8,5 +8,11 @@ if (
 
     $user_id = $_POST['user'];
     $school_id = getSchoolId($user_id);
-    echoJson(fetchSchoolInfo($school_id));
+    $info = fetchSchoolInfo($school_id);
+    $info['students'] = countStudents(1, 0, $school_id);
+    $info['teachers'] = countTeachers($school_id);
+    $info['male'] = countMaleStudents($school_id);
+    $info['female'] = countFemaleStudents($school_id);
+
+    echoJson($info);
 }

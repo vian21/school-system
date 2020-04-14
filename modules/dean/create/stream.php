@@ -12,7 +12,7 @@ if (
     $grade = $_POST['grade'];
     $stream = $_POST['stream'];
 
-    include 'config.php';
+    include("../../config.php");
 
     $insert = $connect->query("INSERT INTO streams(grade,stream) VALUES($grade,'$stream')");
 

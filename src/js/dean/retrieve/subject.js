@@ -8,6 +8,7 @@ async function fetchSubjects() {
         },
         success: function (response) {
             if (isJSON(response)) {
+
                 subjects = JSON.parse(response);
 
                 return true;

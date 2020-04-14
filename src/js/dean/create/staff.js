@@ -2,22 +2,22 @@
 function showStaffForm() {
     var form = "<div id='addTeacherModal' class='modal'>\
                     <form id='addStaffForm'>\
-                        <h4>Name</h4><input type='text' name='name' id='staffName' required>\
+                        <h4>Name</h4><input type='text' name='name' id='staffName' required  autocomplete='off'>\
                         <br>\
                         <h4>Gender :</h4><select name='gender' id='gender' required>\
                             <option value='0'>Male</option>\
                             <option value='1'>Female</option>\
                         </select>\
                         <br>\
-                        <h4>Email</h4><input type='email' name='email' id='staffEmail'>\
+                        <h4>Email</h4><input type='email' name='email' id='staffEmail' autocomplete='off'>\
                          <h4>Telephone</h4>\
-                         <input type='number' name='tel' id='staffTel'>\
+                         <input type='number' name='tel' id='staffTel' autocomplete='off'>\
                         <h4>Type</h4>\
                         <select id='staffType'>\
                         <option value='0'>Dean</option>\
                         <option value='1'>Teacher</option></select><br>\
                         <h4>password: </h4>\
-                        <input type='password' autocomplete='off' id='password'><br>\
+                        <input type='password' id='password' autocomplete='new-password'><br>\
                         <button class='delete' id='cancelStaffForm'>Cancel</button>\
                         <button class='new' type='submit' id='addStaff'>Add</button>\
                     </form>\
@@ -117,6 +117,7 @@ function showStaffForm() {
             if ($("#staffType").val() == 1) {
                 info.append('grade', grade);
             }
+            $("#addStaff").attr('disabled', true);
 
             createStaff(info);
         }
@@ -145,6 +146,8 @@ function createStaff(data) {
                 })
             }
             else {
+                $("#addStaff").attr('disabled', false);
+
                 alert("Failed to create staff")
             }
         }

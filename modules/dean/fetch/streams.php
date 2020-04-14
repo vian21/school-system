@@ -1,4 +1,4 @@
 <?php
 include("../../functions.php");
-
-echoJson(fetchAllStreams());
+$school = $_POST['school'];
+echoJson(fetchAllStreams($school));

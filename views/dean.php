@@ -25,6 +25,8 @@ $id = $_SESSION['id'];
             <span></span>
         </div>
         <div id=term>
+            <button id='editTerm'>Edit</button>
+
             <select id=termOptions>
             </select>
             <button id='addTerm'>+</button>
@@ -56,11 +58,6 @@ $id = $_SESSION['id'];
 </body>
 <script>
     var userType = 0;
-    var numberOfStudents = <?php echo countStudents(1, 0) . ";\n"; ?>
-    var numberOfMaleStudents = <?php echo countMaleStudents() . ";\n"; ?>
-    var numberOfFemaleStudents = <?php echo countFemaleStudents() . ";\n"; ?>
-
-    var numberOfTeachers = <?php echo countTeachers() . ";\n"; ?>
     var userId = <?php echo $id . ";\n"; ?>
 
     //fetch and compress all js files

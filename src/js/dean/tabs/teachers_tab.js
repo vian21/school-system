@@ -72,6 +72,7 @@ function getTeacherInfo(position) {
     //The position at which the teacher is located
     // var position = $("#searchTeacherBox").select2('val');
     var teacherId = teachersArray[position]['id'];
+    $('input').attr("autocomplete", 'off');
 
     teacherInfoTemplate = "<br><img src='src/img/";
     var img;
@@ -82,20 +83,20 @@ function getTeacherInfo(position) {
         img = teachersArray[position]['image'];
     }
     teacherInfoTemplate += img + "'><br>";
-    teacherInfoTemplate += '<span>Name : </span><input id="teacherName" value="' + teachersArray[position]['name'] + '"><br>';
+    teacherInfoTemplate += '<span>Name : </span><input id="teacherName" value="' + teachersArray[position]['name'] + '" " autocomplete="off"><br>';
 
     teacherInfoTemplate += "Gender: <select id='staffGender'>";
     teacherInfoTemplate += "<option value='0'>Male</option>";
     teacherInfoTemplate += "<option value='1'>Female</option>";
     teacherInfoTemplate += "</select><br>";
 
-    teacherInfoTemplate += "<span>Email : </span><input id='teacherEmail' value=" + teachersArray[position]['email'] + "><br>";
-    teacherInfoTemplate += "<span>Tel : </span><input id='teacherTel' value=" + teachersArray[position]['tel'] + "><br>";
+    teacherInfoTemplate += "<span>Email : </span><input id='teacherEmail' type='email' value=" + teachersArray[position]['email'] + " autocomplete='off'><br>";
+    teacherInfoTemplate += "<span>Tel : </span><input id='teacherTel' type='tel' value='" + teachersArray[position]['tel'] + "' autocomplete='new-password'><br>";
 
     teacherInfoTemplate += "Job : <select id='staffTitle'>";
     teacherInfoTemplate += staffTitlesOptions();
     teacherInfoTemplate += "</select><br>";
-    teacherInfoTemplate += "<b>Change password: </b><input type=password id='newPassword'>"
+    teacherInfoTemplate += "<b>Change password: </b><input type=password id='newPassword' autocomplete='new-password'>"
     teacherInfoTemplate += "<br><div id='msgBoard'></div>"
 
     if (teachersArray[position]['type'] == 1) {

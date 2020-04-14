@@ -1,8 +1,13 @@
 async function fetchStudents() {
-    var url = "modules/dean/fetch/students.php?school_id=" + schoolId;
+    var url = "modules/dean/fetch/students.php";
 
     await $.ajax({
         url: url,
+        method: "post",
+        data: {
+            year: currentPeriodId,
+            school_id: schoolId
+        },
         success: function (response) {
             if (isJSON(response)) {
                 studentsArray = JSON.parse(response);

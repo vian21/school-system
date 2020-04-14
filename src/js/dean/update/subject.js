@@ -74,6 +74,8 @@ function editSubject(position) {
             form.append('type', type);
             form.append('hours', hours);
             //add(4, form);
+            $("#save").attr('disabled', true);
+
             updateSubject(form);
 
         }
@@ -82,7 +84,7 @@ function editSubject(position) {
 
 function updateSubject(info) {
     $.ajax({
-        url: "modules/dean/update/subject.php",
+        url: "modules/dean/update/misc/subject.php",
         enctype: 'multipart/form-data',
         processData: false,
         contentType: false,
@@ -92,15 +94,15 @@ function updateSubject(info) {
             if (data == 'ok') {
                 fetchSubjects().then(fetchStudents()).then(function () {
                     alert("Subject edited.");
-
-                    deleteModal();
-
                     subjectsTable();
+                    deleteModal();
 
                 })
 
             }
             else {
+                $("#save").attr('disabled', true);
+
                 alert("Failed to edit subject");
             }
         }

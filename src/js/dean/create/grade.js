@@ -47,7 +47,7 @@ function newGradeForm() {
             form.append('grade', grade);
             form.append('stream', stream.toUpperCase());
 
-            //add(4, form);
+            $("#create").attr('disabled', true);
             createGrade(form)
         }
     })
@@ -62,16 +62,21 @@ function createGrade(data) {
         method: "post",
         data: data,
         success: (data) => {
-            $('.modal').remove();
 
             if (data == 'ok') {
-                fetchStreams();
+                fetchStreams().then(function () {
 
-                alert("Grade successfully created");
+                    alert("Grade successfully created");
 
-                misc('container');
+                    gradesTable();
+                    $('.modal').remove();
+
+                })
+
             }
             else {
+                $("#create").attr('disabled', false);
+
                 alert("Failed to create grade");
             }
         }

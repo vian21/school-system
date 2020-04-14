@@ -8,11 +8,13 @@ function deleteSubject(id) {
         },
         success: function (data) {
             if (data == 'ok') {
-                fetchSubjects();
+                fetchSubjects().then(function () {
+                    alert("Subject successfully deleted");
 
-                alert("Subject successfully deleted");
+                    subjectsTable()
+                })
 
-                misc('container');
+
             }
             else {
                 alert("Failed to delete subject");

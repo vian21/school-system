@@ -21,6 +21,7 @@ function createAdmin($name, $email, $password)
         echo "Failed to create admin";
     }
 }
+
 function createTeacher($name, $email, $password)
 {
     include 'config.php';
@@ -35,5 +36,5 @@ function createTeacher($name, $email, $password)
         echo "Failed to create teacher";
     }
 }
-createTeacher('patrick', 'teacher@gmail.com', '123');
-//createAdmin('admin', 'admin@gmail.com', '123');
+//createTeacher('patrick', 'teacher@gmail.com', '123');
+createAdmin('admin', 'admin@gmail.com', '123');

@@ -14,6 +14,8 @@ function addClass(teacher) {
     $("#add").click(function () {
         event.preventDefault();
         var subject = $("#subject").val();
+        $("#add").attr('disabled', true);
+
         $.ajax({
             method: 'post',
             url: "modules/dean/create/teaching.php",
@@ -26,13 +28,15 @@ function addClass(teacher) {
             success: function (response) {
                 if (response == 'ok') {
                     fetchTeachers().then(function () {
-                        deleteModal();
                         alert("Class added to teacher")
                         makeTeachersTable();
+                        deleteModal();
                     })
 
                 }
                 else {
+                    $("#add").attr('disabled', false);
+
                     alert("Failed to add class to teacher")
                 }
             }

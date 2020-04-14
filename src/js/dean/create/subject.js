@@ -78,6 +78,8 @@ function newsubjectForm() {
             form.append('id', schoolId)
 
             //add(3, form);
+            $("#create").attr('disabled', true);
+
             createSubject(form);
         }
     })
@@ -95,6 +97,7 @@ function createSubject(data) {
         success: (response) => {
             if (response == 'ok') {
                 fetchSubjects().then(function () {
+                    fetchStudents();
                     deleteModal();
                     alert("Subject successfully inserted")
                     subjectsTable();
@@ -102,6 +105,8 @@ function createSubject(data) {
 
             }
             else {
+                $("#create").attr('disabled', false);
+
                 alert("Failed to insert subject")
             }
 
