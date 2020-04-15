@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 14, 2020 at 10:57 PM
+-- Generation Time: Apr 15, 2020 at 07:48 PM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -125,7 +125,8 @@ CREATE TABLE `schools` (
 CREATE TABLE `streams` (
   `id` int(11) NOT NULL,
   `grade` int(11) NOT NULL,
-  `stream` text NOT NULL
+  `stream` text NOT NULL,
+  `school` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

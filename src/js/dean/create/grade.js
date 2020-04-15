@@ -46,6 +46,8 @@ function newGradeForm() {
             var form = new FormData();
             form.append('grade', grade);
             form.append('stream', stream.toUpperCase());
+            form.append('school', schoolId);
+
 
             $("#create").attr('disabled', true);
             createGrade(form)

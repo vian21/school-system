@@ -296,7 +296,7 @@ function fetchAllTeachers($school_id)
 function fetchAllStreams($school)
 {
     include 'config.php';
-    $get_streams = $connect->query("SELECT*FROM streams ORDER BY `streams`.`grade` DESC");
+    $get_streams = $connect->query("SELECT*FROM streams where school=$school ORDER BY `streams`.`grade` DESC");
 
     $streams = array();
 
