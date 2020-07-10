@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 15, 2020 at 07:48 PM
+-- Generation Time: Jul 10, 2020 at 11:31 AM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -55,6 +55,21 @@ CREATE TABLE `academic_periods` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `accounting`
+--
+
+CREATE TABLE `accounting` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `item` text NOT NULL,
+  `type` int(11) NOT NULL,
+  `amount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `assessments`
 --
 
@@ -65,7 +80,44 @@ CREATE TABLE `assessments` (
   `name` text NOT NULL,
   `month` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `subject` int(11) NOT NULL
+  `subject` int(11) NOT NULL,
+  `grade` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `comment` text NOT NULL,
+  `educator` text NOT NULL,
+  `period` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `discipline`
+--
+
+CREATE TABLE `discipline` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `type` int(11) NOT NULL,
+  `marks` int(11) NOT NULL,
+  `comment` text NOT NULL,
+  `educator` int(11) NOT NULL,
+  `period` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -81,6 +133,21 @@ CREATE TABLE `enrollment` (
   `period` int(11) NOT NULL,
   `start` int(11) NOT NULL,
   `end` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `grading`
+--
+
+CREATE TABLE `grading` (
+  `id` int(11) NOT NULL,
+  `school_id` int(11) NOT NULL,
+  `max` int(11) NOT NULL,
+  `min` int(11) NOT NULL,
+  `grade` text NOT NULL,
+  `gpa` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -113,7 +180,11 @@ CREATE TABLE `schools` (
   `type` int(11) NOT NULL,
   `email` text NOT NULL,
   `image` text NOT NULL,
-  `website` text NOT NULL
+  `website` text NOT NULL,
+  `last_paid` text NOT NULL,
+  `end` text NOT NULL,
+  `time` int(11) NOT NULL,
+  `reports` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -138,12 +209,14 @@ CREATE TABLE `streams` (
 CREATE TABLE `students` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
+  `uniqueID` text NOT NULL,
+  `password` text NOT NULL,
+  `admissionID` text NOT NULL,
   `gender` int(11) NOT NULL,
   `image` text NOT NULL,
   `email` text NOT NULL,
   `tel` text NOT NULL,
   `DOB` date NOT NULL,
-  `password` text NOT NULL,
   `status` int(11) NOT NULL,
   `account_status` int(11) NOT NULL,
   `school` int(11) NOT NULL
@@ -174,7 +247,23 @@ CREATE TABLE `teaches` (
   `id` int(11) NOT NULL,
   `subject` int(11) NOT NULL,
   `teacher` int(11) NOT NULL,
-  `year` int(11) NOT NULL
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL,
+  `school_id` int(11) NOT NULL,
+  `school_name` text NOT NULL,
+  `date` date NOT NULL,
+  `period` int(11) NOT NULL,
+  `end` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -186,6 +275,7 @@ CREATE TABLE `teaches` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
+  `uniqueID` text NOT NULL,
   `gender` int(11) NOT NULL,
   `email` text NOT NULL,
   `tel` text NOT NULL,
@@ -213,15 +303,39 @@ ALTER TABLE `academic_periods`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `accounting`
+--
+ALTER TABLE `accounting`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `assessments`
 --
 ALTER TABLE `assessments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `discipline`
+--
+ALTER TABLE `discipline`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `enrollment`
 --
 ALTER TABLE `enrollment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `grading`
+--
+ALTER TABLE `grading`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -261,6 +375,12 @@ ALTER TABLE `teaches`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -283,15 +403,39 @@ ALTER TABLE `academic_periods`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `accounting`
+--
+ALTER TABLE `accounting`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `assessments`
 --
 ALTER TABLE `assessments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `discipline`
+--
+ALTER TABLE `discipline`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `enrollment`
 --
 ALTER TABLE `enrollment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `grading`
+--
+ALTER TABLE `grading`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -328,6 +472,12 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `teaches`
 --
 ALTER TABLE `teaches`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
