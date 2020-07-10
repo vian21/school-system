@@ -66,7 +66,7 @@ function editGradeForm(position) {
 }
 
 function updateGrade(newInfo) {
-    var url = "modules/dean/update/misc/grade.php";
+    var url = app_url+"modules/dean/update/misc/grade.php";
     $.ajax({
         url: url,
         method: "post",

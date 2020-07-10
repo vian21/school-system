@@ -1,6 +1,6 @@
 
 function createStudent(data) {
-    var url = "modules/dean/create/student.php";
+    var url = app_url+"modules/dean/create/student.php";
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',

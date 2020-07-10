@@ -1,6 +1,6 @@
 function enroll(student_id, subject_id, student_index) {
     $.ajax({
-        url: "modules/dean/create/enrollment.php",
+        url: app_url+"modules/dean/create/enrollment.php",
         method: "post",
         data: {
             student: student_id,

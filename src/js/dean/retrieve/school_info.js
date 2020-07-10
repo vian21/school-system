@@ -1,11 +1,12 @@
 async function fetchSchoolInfo() {
-    var url = "modules/dean/fetch/info.php";
+    var url = app_url + "modules/dean/fetch/info.php";
 
     await $.ajax({
         url: url,
         method: 'post',
         data: {
-            user: userId
+            user: userId,
+            school: schoolId
         },
         success: function (response) {
             if (isJSON(response)) {
@@ -16,7 +17,8 @@ async function fetchSchoolInfo() {
                 schoolType = info['type'];
                 schoolEmail = info['email'];
                 schoolImage = info['image'];
-
+                reportsFolder = info['reports']
+                paid = info['paid'];
 
                 numberOfStudents = info['students'];
                 numberOfMaleStudents = info['male'];

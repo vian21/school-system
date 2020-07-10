@@ -11,8 +11,8 @@ function editSubject(position) {
     form += "<option value=0>Compulsary</option>"
     form += "<option value=1>Elective</option>"
     form += "</select><br>"
-    form += "<input type='number' name='hours' id='hours' value=" + subjects[position]['hours'] + "><br>"
-    form += "<button id='cancel'>Cancel</button>"
+    form += "<input type='number' name='hours' id='hours' value=" + subjects[position]['hours'] + "><br><br>"
+    form += "<button id='cancel' class='delete'>Cancel</button>"
     form += "<button id='save' type='submit'>Save</button>"
     form += "</form></div>";
 
@@ -84,7 +84,7 @@ function editSubject(position) {
 
 function updateSubject(info) {
     $.ajax({
-        url: "modules/dean/update/misc/subject.php",
+        url: app_url+"modules/dean/update/misc/subject.php",
         enctype: 'multipart/form-data',
         processData: false,
         contentType: false,

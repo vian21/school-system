@@ -1,5 +1,8 @@
 <?php
 $id = $_SESSION['id'];
+if (!isset($_SESSION['id'])) {
+	header("location:../login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,14 +23,14 @@ $id = $_SESSION['id'];
     <!-- Navbar -->
     <div id='navBar'>
         <div id="dropdown">
-            <span>==</span>
+            <span></span>
         </div>
         <div id=term>
             <select id=termOptions>
             </select>
         </div>
         <div id="logout">
-            <span><a href="./modules/logout.php">Logout</a></span>
+        <a href="<?php echo $app_url; ?>modules/logout.php"><button>Logout</button></a>
         </div>
     </div>
     <!-- Main div -->
@@ -52,8 +55,19 @@ $id = $_SESSION['id'];
 <script src="src/js/functions.js"></script>
 
 <script>
-    var userType = 1;
+    var userType = 2;
     var userId = <?php echo $id . ";\n"; ?>
+
+    <?php
+    if(isset($_GET['admin'])){
+        $school_id = $_GET['school'];
+    }
+    else{
+        $school_id = getSchoolId(1,$id);
+    }
+    ?>
+    var schoolId=<?php echo $school_id;?>;
+    
     <?php echo file_get_contents('./src/js/variables.js'); ?>
 
     <?php echo compressCodeIn('./src/js/teacher/create/') ?>

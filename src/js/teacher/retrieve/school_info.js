@@ -5,7 +5,8 @@ async function fetchSchoolInfo() {
         url: url,
         method: 'post',
         data: {
-            user: userId
+            user: userId,
+            school:schoolId
         },
         success: function (response) {
             if (isJSON(response)) {
@@ -16,6 +17,7 @@ async function fetchSchoolInfo() {
                 schoolType = info['type'];
                 schoolEmail = info['email'];
                 schoolImage = info['image'];
+                paid = info['paid'];
 
                 schoolWebsite = info['website'];
             }

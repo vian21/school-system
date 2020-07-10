@@ -4,11 +4,11 @@ function misc(container) {
     $('#' + container).html('');
 
     $('#' + container).append("<button id='schoolInfo'>Info</button>");
+    $('#' + container).append("<button id='scale'>Grading scale</button>");
+
     $('#' + container).append("<button id='lists'>Lists</button>");
     $('#' + container).append("<button id='grades'>Grades</button>");
-    $('#' + container).append("<button id='newGrade'>New grade</button>");
     $('#' + container).append("<button id='subjects'>subjects</button>");
-    $('#' + container).append("<button id='newSubject'>New subject</button>");
     $('#' + container).append("<div id='board'><div>");
 
     $("#schoolInfo").click(function () {
@@ -19,21 +19,19 @@ function misc(container) {
         list('board');
     })
 
+    $("#scale").click(function () {
+        scale();
+    })
+
     $("#grades").click(function () {
         gradesTable();
     })
 
-    $("#newGrade").click(function () {
-        newGradeForm();
-    })
 
     $("#subjects").click(function () {
         subjectsTable();
     })
 
-    $("#newSubject").click(function () {
-        newsubjectForm();
-    })
 
     function info(id) {
         $("#" + id).html('')
@@ -129,13 +127,19 @@ function misc(container) {
             var grade = $("#grade").val();
 
             if (grade !== '') {
-                var url = "modules/dean/lists/students.php?grade=" + grade + "&school=" + schoolId;
+                var url = "modules/dean/lists/students.php?grade=" + grade + "&school=" + schoolId+"&period="+currentPeriodId;
                 window.open(url)
             }
         })
     }
 }
 function subjectsTable() {
+    $("#board").html("<button id='newSubject' class='new'>New subject</button>");
+
+    $("#newSubject").click(function () {
+        newsubjectForm();
+    })
+
     var table = "<table>\
     <tr>\
         <th>#</th>\
@@ -183,7 +187,7 @@ function subjectsTable() {
 
     table += "</table>";
 
-    $("#board").html(table);
+    $("#board").append(table);
 
     $(".editSubject").click(function () {
         //location: ../update/subject.js
@@ -196,7 +200,14 @@ function subjectsTable() {
     })
 
 }
+
 function gradesTable() {
+    $("#board").html("<button id='newGrade' class='new'>New grade</button><br>");
+
+    $("#newGrade").click(function () {
+        newGradeForm();
+    })
+
     var table = "<table>\
                     <tr>\
                         <th>#</th>\
@@ -230,7 +241,7 @@ function gradesTable() {
 
     table += "</table>";
 
-    $("#board").html(table);
+    $("#board").append(table);
 
     $(".editGrade").click(function () {
         console.log(i)
@@ -240,6 +251,60 @@ function gradesTable() {
     $(".deleteGrade").click(function () {
         console.log($(this).attr('id'))
         deleteGrade($(this).attr('id'));
+    })
+
+}
+
+
+function scale() {
+    $("#board").html("<button id='newGrading' class='new'>New Grading</button>");
+
+    $("#newGrading").click(function () {
+        newGradingForm();
+    })
+
+    var table = "<table>\
+    <tr>\
+        <th>#</th>\
+        <th>Max</th>\
+        <th>Min</th>\
+        <th>Grade</th>\
+        <th>GPA</th>\
+        <th></th>\
+        <th></th>\
+    </tr>";
+
+    var counter = 0;
+
+    for (var i = 0; i < grading.length; i++) {
+        counter++;
+
+        table += "<tr>";
+        table += "<td>" + counter + "</td>";
+        table += "<td>" + grading[i]['max'] + "</td>";
+        table += "<td>" + grading[i]['min'] + "</td>";
+
+        table += "<td>" + grading[i]['grade'] + "</td>";
+        table += "<td>" + grading[i]['gpa'] + "</td>";
+
+        table += "<td><button  class='editGrading new' id=" + i + ">Edit</button></td>";
+        table += "<td><button  class='deleteGrading delete' id=" + grading[i]['id'] + ">Delete</button></td>";
+        table += "</tr>";
+    }
+
+
+    table += "</table>";
+
+    $("#board").append(table);
+
+    $(".editGrading").click(function () {
+        //location: ../update/grading.js
+        editGrading($(this).attr('id'));
+    })
+
+    $(".deleteGrading").click(function () {
+        //location: ../delete/subject.js
+        deleteGrading($(this).attr('id'));
     })
 
 }

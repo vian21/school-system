@@ -3,9 +3,10 @@ include("../../config.php");
 include("../../functions.php");
 
 $teacher_id = $_POST['user'];
-$year = $_POST['year'];
+$start = $_POST['start'];
+$end = $_POST['end'];
 
-$get_subjects = $connect->query("SELECT*FROM teaches WHERE teacher=$teacher_id and year=$year");
+$get_subjects = $connect->query("SELECT*FROM teaches WHERE teacher=$teacher_id and start=$start and end=$end");
 $array = array();
 foreach ($get_subjects as $row) {
     $sub_array = array();

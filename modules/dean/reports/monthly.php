@@ -1,5 +1,6 @@
 <?php
 ob_start();
+session_start();
 include '../../config.php';
 include '../../functions.php';
 
@@ -13,6 +14,9 @@ $end = $_GET['end'];
 $grade = $_GET['grade'];
 $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
 
+if(isset($_GET['student'])){
+    $student_id=$_GET['student'];
+}
 function subjectsTakenBy($student, $period)
 {
     include '../../config.php';
@@ -80,7 +84,13 @@ function getSubjectName($subject_id)
 
 
     $month = $_GET['month'];
-    $students = fetchAllStudents($grade, $school['id']);
+    if(isset($_GET['student'])){
+        $students = fetchAllStudents($grade, $school['id'],$student_id);
+
+    }else{
+        $students = fetchAllStudents($grade, $school['id']);
+
+    }
     //varaiable to track page number and loops to avoid additional page breaks
     $number = 0;
     if (!empty($students) and is_array($students)) {
@@ -163,14 +173,14 @@ function getSubjectName($subject_id)
                                 <td colspan="2" style="font-size:11px;"><?php echo getSubjectName($subject); ?></td>
                                 <td style="text-align: center;font-size:11px;"><?php echo $hours; ?></td>
                                 <td style="text-align: right;font-size:11px;"><?php echo $mark; ?></td>
-                                <td style="text-align: center;font-size:11px;"><?php echo grade($mark); ?></td>
-                                <td style="text-align: right;"><?php echo GPA($mark) * $hours; ?></td>
+                                <td style="text-align: center;font-size:11px;"><?php echo grade($school['id'], (int)$mark); ?></td>
+                                <td style="text-align: right;"><?php echo GPA($school['id'], $mark) * $hours; ?></td>
                             </tr>
                 <?php
                             $number_of_subjects++;
                             $total += $mark;
                             $total_hours += $hours;
-                            $total_cgpa += GPA($mark) * $hours;
+                            $total_cgpa += GPA($school['id'], $mark) * $hours;
                         }
                     }
                 }
@@ -312,58 +322,9 @@ function getSubjectName($subject_id)
             </table>
 
             <h6></h6> <!-- Grading scale-->
-            <table id="scale" style="width: 100%;font-size:8px;">
-                <tr>
-                    <td colspan="3" rowspan="3" style="border:1px solid black;padding-top:10px;text-align:center;">Grading scale</td>
-                    <td colspan="2" style="border:1px solid black;">scale</td>
-                    <td style="border:1px solid black;">0-59</td>
-                    <td style="border:1px solid black;">60-62</td>
-                    <td style="border:1px solid black;">62-66</td>
-                    <td style="border:1px solid black;">67-69</td>
-                    <td style="border:1px solid black;">70-72</td>
-                    <td style="border:1px solid black;">73-76</td>
-                    <td style="border:1px solid black;">77-79</td>
-                    <td style="border:1px solid black;">80-82</td>
-                    <td style="border:1px solid black;">83-86</td>
-                    <td style="border:1px solid black;">87-89</td>
-                    <td style="border:1px solid black;">90-92</td>
-                    <td style="border:1px solid black;">93-100</td>
-
-                </tr>
-
-                <tr>
-                    <td colspan="2">Grade</td>
-                    <td style="border:1px solid black;">F</td>
-                    <td style="border:1px solid black;">D-</td>
-                    <td style="border:1px solid black;">D</td>
-                    <td style="border:1px solid black;">D+</td>
-                    <td style="border:1px solid black;">C-</td>
-                    <td style="border:1px solid black;">C</td>
-                    <td style="border:1px solid black;">C+</td>
-                    <td style="border:1px solid black;">B-</td>
-                    <td style="border:1px solid black;">B</td>
-                    <td style="border:1px solid black;">B+</td>
-                    <td style="border:1px solid black;">A-</td>
-                    <td style="border:1px solid black;">A</td>
-
-                </tr>
-
-                <tr>
-                    <td colspan="2" style="border:1px solid black;">GPA</td>
-                    <td style="border:1px solid black;">0.00</td>
-                    <td style="border:1px solid black;">0.70</td>
-                    <td style="border:1px solid black;">1.00</td>
-                    <td style="border:1px solid black;">1.30</td>
-                    <td style="border:1px solid black;">1.70</td>
-                    <td style="border:1px solid black;">2.00</td>
-                    <td style="border:1px solid black;">2.30</td>
-                    <td style="border:1px solid black;">2.70</td>
-                    <td style="border:1px solid black;">3.00</td>
-                    <td style="border:1px solid black;">3.30</td>
-                    <td style="border:1px solid black;">3.70</td>
-                    <td style="border:1px solid black;">4.00</td>
-                </tr>
-            </table>
+            <?php
+                echo gradingTable($school['id']);
+            ?>
 
             <h6></h6> <!-- signatures -->
             <h5 style="text-align: center;">Head Master's Signature <span>______________________ </span>Academic Dean's Signature <span>______________________</span></h5>
@@ -401,4 +362,10 @@ $tcpdf->AddPage();
 $tcpdf->writeHTML($html, true, false, false, false, '');
 
 //Close and output PDF document
-$tcpdf->Output('report.pdf', 'I');
+
+if (isset($_GET['student']) && $_GET['student'] != $_SESSION['id']) {
+    $tcpdf->close();
+    echo "<script>window.close()</script>";
+} else {
+    $tcpdf->Output('report.pdf', 'I');
+}

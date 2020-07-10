@@ -24,7 +24,9 @@ if (
     $start = $_POST['start'];
     $end = $_POST['end'];
 
-    $insert = $connect->query("INSERT INTO students(name,gender,email,tel,DOB,school) VALUES('$name',$gender,'$email','$tel','$DOB',$school)");
+    $uniqueID=uniqid('',true);
+
+    $insert = $connect->query("INSERT INTO students(name,uniqueID,gender,email,tel,DOB,school) VALUES('$name','$uniqueID',$gender,'$email','$tel','$DOB',$school)");
 
     if (!$insert) {
         echo "ko";

@@ -1,24 +1,27 @@
 function removeClass(teacher, subject) {
-    $.ajax({
-        url: "modules/dean/delete/teaching.php",
-        method: "post",
-        data: {
-            teacher: teacher,
-            subject: subject,
-            year: currentPeriodId
-        },
-        success: function (data) {
-            if (data == 'ok') {
+    if (confirm("Are you sure to delete teacher's assigned subject?")) {
+        $.ajax({
+            url: app_url + "modules/dean/delete/teaching.php",
+            method: "post",
+            data: {
+                teacher: teacher,
+                subject: subject,
+                year: currentPeriodId
+            },
+            success: function (data) {
+                if (data == 'ok') {
 
-                fetchTeachers().then(function () {
-                    alert("Class removed from teacher");
+                    fetchTeachers().then(function () {
+                        alert("Class removed from teacher");
 
-                    makeTeachersTable();
-                })
+                        makeTeachersTable();
+                    })
+                }
+                else {
+                    alert("Failed to remove class");
+                }
             }
-            else {
-                alert("Failed to remove class");
-            }
-        }
-    })
+        })
+    }
+
 }

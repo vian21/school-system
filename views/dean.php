@@ -1,5 +1,8 @@
 <?php
 $id = $_SESSION['id'];
+if (!isset($_SESSION['id'])) {
+	header("location:../login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,9 +15,7 @@ $id = $_SESSION['id'];
     <?php include './modules/staticFiles.php' ?>
     <?php include './modules/functions.php' ?>
 
-    <link rel="stylesheet" href="src/css/dean.css">
-    <link rel="stylesheet" href="src/css/select2.css">
-    <script src="./src/js/select2.js"></script>
+    <link rel="stylesheet" href="<?php echo $app_url; ?>src/css/dean.css">
     <title>Dean</title>
 </head>
 
@@ -32,14 +33,14 @@ $id = $_SESSION['id'];
             <button id='addTerm'>+</button>
         </div>
         <div id="logout">
-            <span><a href="./modules/logout.php">Logout</a></span>
+        <a href="<?php echo $app_url; ?>modules/logout.php"><button>Logout</button></a>
         </div>
     </div>
     <!-- Main div -->
     <div id="main">
         <div id="sidebar">
             <div id="user">
-                <center><img src="src/img/<?php echo fetchImage(1, $id); ?>" alt="" id="img"></center>
+                <center><img src="<?php echo $app_url; ?>src/img/<?php echo fetchImage(1, $id); ?>" alt="" id="img"></center>
                 <span id="username">Name: <?php echo fetchName(1, $id); ?></span>
                 <span id="jobTitle"><?php echo fetchJobTitle($id); ?></span>
             </div>
@@ -49,7 +50,8 @@ $id = $_SESSION['id'];
                 <button id="tab1">Students</button>
                 <button id="tab2">Teachers</button>
                 <button id="tab3">Marks</button>
-                <button id="tab4">Misc</button>
+                <button id="tab4">Accounting</button>
+                <button id="tab5">Misc</button>
             </div>
             <div id="desk">
 
@@ -57,8 +59,18 @@ $id = $_SESSION['id'];
         </div>
 </body>
 <script>
-    var userType = 0;
+    var userType = 1;
     var userId = <?php echo $id . ";\n"; ?>
+    <?php
+    if(isset($_GET['admin'])){
+        $school_id = $_GET['school'];
+    }
+    else{
+        $school_id = getSchoolId(1,$id);
+    }
+    ?>
+    var schoolId=<?php echo $school_id;?>;
+
 
     //fetch and compress all js files
     <?php echo file_get_contents('./src/js/variables.js'); ?>

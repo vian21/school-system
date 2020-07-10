@@ -1,5 +1,5 @@
 function updateSchoolImage(schoolId, newImage) {
-    var url = "modules/dean/update/school/school_image.php";
+    var url = app_url+"modules/dean/update/school/school_image.php";
     var form = new FormData();
     form.append('id', schoolId);
 
@@ -33,7 +33,7 @@ function updateSchoolImage(schoolId, newImage) {
 }
 
 function updateSchoolName(schoolId, newName) {
-    var url = "modules/dean/update/school/school_name.php";
+    var url = app_url+"modules/dean/update/school/school_name.php";
 
     $.ajax({
         url: url,
@@ -59,7 +59,7 @@ function updateSchoolName(schoolId, newName) {
     })
 }
 function updateSchoolMotto(schoolId, newMotto) {
-    var url = "modules/dean/update/school/school_motto.php";
+    var url = app_url+"modules/dean/update/school/school_motto.php";
 
     $.ajax({
         url: url,
@@ -85,7 +85,7 @@ function updateSchoolMotto(schoolId, newMotto) {
     })
 }
 function updateSchoolType(schoolId, newType) {
-    var url = "modules/dean/update/school/school_type.php";
+    var url = app_url+"modules/dean/update/school/school_type.php";
 
     $.ajax({
         url: url,
@@ -112,7 +112,7 @@ function updateSchoolType(schoolId, newType) {
 }
 
 function updateSchoolWebsite(schoolId, newWebsite) {
-    var url = "modules/dean/update/school/school_website.php";
+    var url = app_url+"modules/dean/update/school/school_website.php";
 
     $.ajax({
         url: url,
@@ -138,7 +138,7 @@ function updateSchoolWebsite(schoolId, newWebsite) {
     })
 }
 function updateSchoolEmail(schoolId, newEmail) {
-    var url = "modules/dean/update/school/school_email.php";
+    var url = app_url+"modules/dean/update/school/school_email.php";
 
     $.ajax({
         url: url,

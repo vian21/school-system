@@ -1,5 +1,7 @@
 <?php
 ob_start();
+session_start();
+
 include("../../config.php");
 include("../../functions.php");
 
@@ -17,8 +19,15 @@ $periods = academic_periods($school_id, $start, $end);
 $grade = $_GET['grade'];
 $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
 
-$students = fetchAllStudents($grade, $school_id);
+if (isset($_GET['student'])) {
+    $student_id = $_GET['student'];
+}
 
+if (isset($_GET['student'])) {
+    $students = fetchAllStudents($grade, $school_id, $student_id);
+} else {
+    $students = fetchAllStudents($grade, $school_id);
+}
 function subjectsTakenBy($student, $school_id, $period, $start, $end)
 {
     include '../../config.php';
@@ -47,6 +56,16 @@ function academic_periods($school_id, $startYear, $endYear)
     return $periods;
 }
 
+
+function annualDecision($gpa)
+{
+    if ($gpa < 1.00) {
+        echo "Repeated";
+    } else {
+        echo "promoted";
+    }
+}
+
 function getSubjectName($subject_id)
 {
     include '../../config.php';
@@ -72,14 +91,6 @@ function getSumOfMarks($student_id, $subject, $assessment_type, $period_id)
     }
 }
 
-function annualDecision($gpa)
-{
-    if ($gpa < 1.00) {
-        echo "Repeated";
-    } else {
-        echo "promoted";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,6 +105,7 @@ function annualDecision($gpa)
             margin: 0;
         }
     </style>
+
 </head>
 
 <body>
@@ -105,14 +117,9 @@ function annualDecision($gpa)
             $id = $student['id'];
             $name = $student['name'];
             $total_hours = 0;
-
-            //original percentage for the whole year, going to be incremented
-            $total_percentage = 0;
             $total_CGPA = 0.00;
+            $total_percentage = 0;
 
-            //array to hold the total percentages per term
-            $total_term_percentage = 0;
-            $total_term_percentage_array = array();
 
             /*
              * Each period has its own array to store each marks per subject per period/term
@@ -135,7 +142,7 @@ function annualDecision($gpa)
 
                 <tr style="border:none">
                     <td rowspan="3" style="border:none">
-                        <img src="../../../src/img/uploaded/<?php echo $school_info['image'] ?>" alt='' style="width: 100px;" />
+                        <img src="../../../src/img/uploaded/<?php echo $school_info['image'] ?>" alt='' style="width: 100px;height:100px;" />
 
                     </td>
 
@@ -221,7 +228,7 @@ function annualDecision($gpa)
 
                         $percentage = ($test_mark + $exam_mark) / 2;
                         echo '<td style="border:1px solid black;">' . $percentage . '</td>';
-                        echo '<td style="border:1px solid black;">' . grade($percentage) . '</td>';
+                        echo '<td style="border:1px solid black;">' . grade($school_id, (int) $percentage) . '</td>';
 
                         //add the total percentage for the term
                         $subject_percentage += $percentage;
@@ -233,9 +240,11 @@ function annualDecision($gpa)
                     //Annual
                     $number_of_terms = sizeof($periods);
                     $annual_subject_percentage = $subject_percentage / $number_of_terms;
-                    $annual_subject_CGPA = GPA($annual_subject_percentage) * getHours($subject);
+
+                    $annual_subject_CGPA = (float) GPA($school_id, $annual_subject_percentage) * getHours($subject);
+
                     echo '<td style="border:1px solid black;">' . round($annual_subject_percentage) . '</td>';
-                    echo '<td style="border:1px solid black;">' . grade($annual_subject_percentage) . '</td>';
+                    echo '<td style="border:1px solid black;">' . grade($school_id, (int) $annual_subject_percentage) . '</td>';
                     echo '<td style="border:1px solid black;">' . $annual_subject_CGPA . '</td>';
 
                     $total_percentage += $annual_subject_percentage;
@@ -249,6 +258,8 @@ function annualDecision($gpa)
                 <tr>
                     <td colspan="3" style="font-weight:bold;border:1px solid black;">TOTAL</td>
                     <td colspan="2" style="font-weight:bold;border:1px solid black;"><?php echo $total_hours; ?></td>
+
+
                     <?php
                     //columns for periods
                     foreach ($periods as $period) {
@@ -351,61 +362,14 @@ function annualDecision($gpa)
             </table>
             <br><br>
 
-            <table id="scale" style="width: 100%;font-size:8px;">
-                <tr>
-                    <td colspan="3" rowspan="3" style="border:1px solid black;">Grading scale</td>
-                    <td colspan="2" style="border:1px solid black;">scale</td>
-                    <td style="border:1px solid black;">0-59</td>
-                    <td style="border:1px solid black;">60-62</td>
-                    <td style="border:1px solid black;">62-66</td>
-                    <td style="border:1px solid black;">67-69</td>
-                    <td style="border:1px solid black;">70-72</td>
-                    <td style="border:1px solid black;">73-76</td>
-                    <td style="border:1px solid black;">77-79</td>
-                    <td style="border:1px solid black;">80-82</td>
-                    <td style="border:1px solid black;">83-86</td>
-                    <td style="border:1px solid black;">87-89</td>
-                    <td style="border:1px solid black;">90-92</td>
-                    <td style="border:1px solid black;">93-100</td>
-
-                </tr>
-
-                <tr>
-                    <td colspan="2">Grade</td>
-                    <td style="border:1px solid black;">F</td>
-                    <td style="border:1px solid black;">D-</td>
-                    <td style="border:1px solid black;">D</td>
-                    <td style="border:1px solid black;">D+</td>
-                    <td style="border:1px solid black;">C-</td>
-                    <td style="border:1px solid black;">C</td>
-                    <td style="border:1px solid black;">C+</td>
-                    <td style="border:1px solid black;">B-</td>
-                    <td style="border:1px solid black;">B</td>
-                    <td style="border:1px solid black;">B+</td>
-                    <td style="border:1px solid black;">A-</td>
-                    <td style="border:1px solid black;">A</td>
-
-                </tr>
-
-                <tr>
-                    <td colspan="2" style="border:1px solid black;">GPA</td>
-                    <td style="border:1px solid black;">0.00</td>
-                    <td style="border:1px solid black;">0.70</td>
-                    <td style="border:1px solid black;">1.00</td>
-                    <td style="border:1px solid black;">1.30</td>
-                    <td style="border:1px solid black;">1.70</td>
-                    <td style="border:1px solid black;">2.00</td>
-                    <td style="border:1px solid black;">2.30</td>
-                    <td style="border:1px solid black;">2.70</td>
-                    <td style="border:1px solid black;">3.00</td>
-                    <td style="border:1px solid black;">3.30</td>
-                    <td style="border:1px solid black;">3.70</td>
-                    <td style="border:1px solid black;">4.00</td>
-                </tr>
-            </table>
+            <?php
+            echo gradingTable($school_id);
+            ?>
 
     <?php
-
+       if (count($students) !== $number) {
+        echo '<div style="page-break-before: always;"></div>';
+    }
         }
     }
     ?>
@@ -436,4 +400,10 @@ $tcpdf->AddPage();
 $tcpdf->writeHTML($html, true, false, false, false, '');
 
 //Close and output PDF document
-$tcpdf->Output('report.pdf', 'I');
+
+if (isset($_GET['student']) && $_GET['student'] != $_SESSION['id']) {
+    $tcpdf->close();
+    echo "<script>window.close()</script>";
+} else {
+    $tcpdf->Output('report.pdf', 'I');
+}

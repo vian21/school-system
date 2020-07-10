@@ -6,13 +6,31 @@ function createSchool($name, $type)
 
     $connect->query("INSERT INTO schools(name,type) VALUES('$name',$type)");
 }
+
 function createAdmin($name, $email, $password)
 {
     include 'config.php';
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $create = $connect->query("INSERT INTO users(name,gender,email,password,type,status,school) VALUES('$name',0,'$email','$hashedPassword',0,1,1)");
+    $uniqueID = uniqid('', true);
+
+    $create = $connect->query("INSERT INTO users(name,uniqueID,gender,email,password,type,status) VALUES('$name','$uniqueID',0,'$email','$hashedPassword',0,1)");
+
+    if ($create) {
+        echo "<h1>Admin created.</h1>";
+    } else {
+        echo "Failed to create admin";
+    }
+}
+
+function createDean($name, $email, $password)
+{
+    include 'config.php';
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $create = $connect->query("INSERT INTO users(name,gender,email,password,type,status,school) VALUES('$name',0,'$email','$hashedPassword',1,1,1)");
 
     if ($create) {
         echo "<h1>Admin created.</h1>";
@@ -28,7 +46,7 @@ function createTeacher($name, $email, $password)
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $create = $connect->query("INSERT INTO users(name,gender,email,password,type,status,school) VALUES('$name',0,'$email','$hashedPassword',1,1,1)");
+    $create = $connect->query("INSERT INTO users(name,gender,email,password,type,status,school) VALUES('$name',0,'$email','$hashedPassword',2,1,1)");
 
     if ($create) {
         echo "<h1>teacher created.</h1>";
@@ -36,5 +54,7 @@ function createTeacher($name, $email, $password)
         echo "Failed to create teacher";
     }
 }
-//createTeacher('patrick', 'teacher@gmail.com', '123');
 createAdmin('admin', 'admin@gmail.com', '123');
+
+//createTeacher('patrick', 'teacher@gmail.com', '123');
+//createDean('admin', 'admin@gmail.com', '123');

@@ -50,25 +50,38 @@ function newPeriodForm() {
         }
 
         if (validStart == true && validEnd == true && validNumber == true) {
-            var periodName = periodTypes[periodType] + ' ' + periodNumber;
+            var name = periodTypes[periodType] + ' ' + periodNumber;
             $("#create").attr('disabled', true);
 
-            newPeriod(periodName, startYear, endYear);
+            var form = new FormData();
+            form.append("id", schoolId);
+            form.append("name", name);
+            form.append("start", startYear);
+            form.append("end", endYear);
+
+
+            if (start !== undefined) {
+                form.append("currentstart", start);
+                form.append("currentend", end);
+                form.append("currentperiod", currentPeriodId);
+
+
+            }
+
+            newPeriod(form);
         }
     })
 }
-function newPeriod(name, start, end) {
-    var url = "modules/dean/create/period.php"
+function newPeriod(data) {
+    var url = app_url + "modules/dean/create/period.php"
 
     $.ajax({
         url: url,
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
         method: "post",
-        data: {
-            id: schoolId,
-            name: name,
-            start: start,
-            end: end
-        },
+        data: data,
         success: function (response) {
             if (response == 'ok') {
                 fetchAcademicPeriods().then(function () {

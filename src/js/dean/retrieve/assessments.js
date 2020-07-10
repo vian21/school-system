@@ -1,5 +1,5 @@
 async function fetchTests() {
-    var url = "modules/dean/fetch/assessments.php"
+    var url = app_url+"modules/dean/fetch/assessments.php"
 
     await $.ajax({
         url: url,

@@ -2,8 +2,10 @@
 ob_start();
 if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
     include '../../functions.php';
+
     $grade = $_GET['grade'];
-    $students = fetchStudentsIn(($grade));
+    $period = $_GET['period'];
+    $students = fetchStudentsIn($grade, $period);
     $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
     $school = fetchSchoolInfo($_GET['school']);
     //number of check boxes
@@ -21,6 +23,7 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
             body {
                 width: 90%;
                 margin-left: 5%;
+                font-family: Arial, Helvetica, sans-serif;
             }
 
             .heading {
@@ -96,9 +99,9 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
         <table>
             <tr>
                 <!-- ⚠ Caution ⚠: use double quotes otherwise css rules won't apply -->
-                <th class="number">#</th>
-                <th class="name">Name</th>
-                <th class="id">ID</th>
+                <th class="number" style="font-weight:bold;border:1px solid black;">#</th>
+                <th class="name" style="font-weight:bold;border:1px solid black;">Name</th>
+                <th class="id" style="font-weight:bold;border:1px solid black;">ID</th>
                 <?php
                 $i = 0;
                 while ($i <= $boxes) {

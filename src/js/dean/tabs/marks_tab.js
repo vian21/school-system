@@ -118,7 +118,7 @@ function marksForm() {
                         $("#viewResults").attr('disabled', true);
 
                         $.ajax({
-                            url: "modules/dean/fetch/test.php",
+                            url: app_url + "modules/dean/fetch/test.php",
                             method: "post",
                             data: formData,
                             success: function (data) {
@@ -183,6 +183,8 @@ function addListeners() {
     $('#create').click(function () {
         event.preventDefault();
 
+        var grade = $('#grade').val();
+
         var subject = $('#subject').val();
         var type = $('#type').val();
         var month;
@@ -215,6 +217,8 @@ function addListeners() {
             var form = new FormData();
 
             form.append('school', schoolId);
+            form.append('grade', grade);
+
             form.append('subject', subject);
             form.append('type', type);
             form.append('period', currentPeriodId);
@@ -286,7 +290,8 @@ function reportsForm() {
     <select name='type' id='type'>\
     <option></option>\
     <option value='1'>Monthly</option>\
-    <option value='2'>Annual</option>\
+    <option value='2'>Periodic</option>\
+    <option value='3'>Annual</option>\
     </select><br>\
     <button class='new' id='generate'>Generate</button>\
 </form>");
@@ -296,16 +301,31 @@ function reportsForm() {
     $("#type").change(function () {
 
         var type = $("#type").val();
-        console.log(type)
         //Monthly reports
         if (type == 1) {
+
+            $("#periods").remove()
+
             $("#type").after("<select name='month' id='month'></select>")
             //createMonthOptions("month")
             $("#month").html(createMonthOptions());
         }
-        //Annual reports
+
+        //periodic reports
         if (type == 2) {
+
+
+            $("#month").remove();
+
+            $("#type").after("<select name='periods' id='periods'></select>")
+            $("#periods").html(createPeriodOptions());
+        }
+
+        //Annual reports
+        if (type == 3) {
             $("#month").remove()
+            $("#periods").remove()
+
         }
 
         return false;
@@ -323,8 +343,20 @@ function reportsForm() {
             month = $("#month").val()
         }
 
+        //periodic
+        if (type == 2) {
+            period = $("#periods").val()
+        }
+
+        //monthly report ajax
         if (grade != '' && type == 1) {
-            var url = "modules/dean/reports/monthly.php";
+            if (reportsFolder == "") {
+                var url = app_url + "modules/dean/reports/monthly.php";
+
+            }
+            else {
+                var url = app_url + "modules/dean/reports/" + reportsFolder + "/monthly.php"
+            }
 
             url += "?grade=" + grade;
             url += "&school=" + schoolId;
@@ -335,14 +367,40 @@ function reportsForm() {
             window.open(url)
         }
 
-        if (type == 2) {
-            //add 1 coz months are stored in an array
-            var url = "modules/dean/reports/annual.php";
+        //periodic report
 
+        if (type == 2) {
+            if (reportsFolder == "") {
+                var url = app_url + "modules/dean/reports/periodic.php";
+
+            }
+            else {
+                var url = app_url + "modules/dean/reports/" + reportsFolder + "/periodic.php"
+            }
             url += "?grade=" + grade;
-            url += "&period=" + currentPeriodId;
+            
+            url += "&period=" + period;
+            url += "&name=" + currentPeriod;
+
             url += "&school=" + schoolId;
-            // url += "&period=" +currentPeriodId ;
+
+            url += "&start=" + start;
+            url += "&end=" + end;
+
+            window.open(url)
+        }
+
+        if (type == 3) {
+            //add 1 coz months are stored in an array
+            if (reportsFolder == "") {
+                var url = app_url + "modules/dean/reports/annual.php";
+
+            }
+            else {
+                var url = app_url + "modules/dean/reports/" + reportsFolder + "/annual.php"
+            }
+            url += "?grade=" + grade;
+            url += "&school=" + schoolId;
 
             url += "&start=" + start;
             url += "&end=" + end;

@@ -56,7 +56,7 @@ function makeTeachersTable() {
 
     //Open new tab with a pdf of staff list
     $("#downloadStaffList").click(function () {
-        window.open("modules/dean/lists/staff.php?staff=" + schoolId);
+        window.open(app_url+"modules/dean/lists/staff.php?staff=" + schoolId);
 
         return false;
     })
@@ -74,7 +74,7 @@ function getTeacherInfo(position) {
     var teacherId = teachersArray[position]['id'];
     $('input').attr("autocomplete", 'off');
 
-    teacherInfoTemplate = "<br><img src='src/img/";
+    teacherInfoTemplate = "<br><img src='"+app_url+"src/img/";
     var img;
     if (teachersArray[position]['image'] == "") {
         img = "user.png";
@@ -99,7 +99,7 @@ function getTeacherInfo(position) {
     teacherInfoTemplate += "<b>Change password: </b><input type=password id='newPassword' autocomplete='new-password'>"
     teacherInfoTemplate += "<br><div id='msgBoard'></div>"
 
-    if (teachersArray[position]['type'] == 1) {
+    if (teachersArray[position]['type'] == 2 && userType!=0) {
 
         teacherInfoTemplate += `
         <h4>Subjects taught</h4>\
@@ -139,6 +139,20 @@ function getTeacherInfo(position) {
     //return false;
 }
 
+function addTeachersTosearchBox() {
+    $("#searchTeacherBox").html('')
+    $("#searchTeacherBox").append("<option></option>");
+
+    for (var i = 0; i < teachersArray.length; i++) {
+        $("#searchTeacherBox").select2({
+            data: [
+                { id: i, text: teachersArray[i]['name'] }
+            ]
+        });
+    }
+
+    return false;
+}
 
 function addTeacherChangeListeners(id) {
     $('#teacherName').change(() => {

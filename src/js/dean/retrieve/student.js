@@ -1,5 +1,5 @@
 async function fetchStudents() {
-    var url = "modules/dean/fetch/students.php";
+    var url = app_url + "modules/dean/fetch/students.php";
 
     await $.ajax({
         url: url,
@@ -30,8 +30,6 @@ function addToForm() {
         $("#searchStudent").select2({
             data: [
                 { id: i, text: studentsArray[i]['name'] + " " },
-                //subjects_gradeOptions()
-
             ]
         });
     }

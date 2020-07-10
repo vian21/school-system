@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <?php include 'modules/config.php' ?>
+
     <?php include 'modules/staticFiles.php' ?>
     <title>Login</title>
 </head>
@@ -35,6 +38,16 @@
 
         background-color: #428bca;
     }
+
+    #reset{
+        text-decoration: none;
+        padding-top: 30px;
+        font-size: 15px;
+    }
+
+    button {
+        border: 0;
+    }
 </style>
 
 <body>
@@ -44,6 +57,9 @@
             <input type="email" name="email" id='email' placeholder="Enter email" required><br><br>
             <input type="password" name="password" id='password' placeholder="Enter password" required><br><br>
             <button type="submit" id="submit">Login</button>
+            <h4 id='reset'>
+                <a href="reset/resetPassword.php">Activate account / Reset password</a>
+            </h4>
         </form>
     </center>
 </body>

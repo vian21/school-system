@@ -1,0 +1,140 @@
+html,
+body {
+    margin: 0;
+    margin: 0;
+    background-color: #efefef;
+    font-family: arial;
+    height: 100%;
+    width: 100%;
+}
+
+#logout {
+    padding-top: 5px;
+    width: 20%;
+    float: right;
+    text-align: right;
+}
+
+
+#sidebar {
+    background-color: #333;
+    width: 20%;
+    min-height: 100%;
+    color: white;
+}
+
+#user {
+    justify-content: center;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+img {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    width: 50px;
+    overflow: hidden;
+}
+
+#username {
+    display: block;
+}
+
+#jobTitle {
+    display: block;
+    background-color: #428bca;
+}
+
+.modal {
+    display: block;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+.modal form {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+
+}
+
+
+.select2-container--default .select2-results__option {
+    white-space: pre;
+}
+
+table {
+
+    border: 1px solid black;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    text-overflow: clip;
+}
+
+table th,
+tr,
+td {
+    border: 1px solid black;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 3px;
+}
+
+table th {
+    text-align: center;
+}
+
+#msgBoard {
+    color: #64ac5a;
+}
+
+button {
+    border-radius: 40px;
+}
+
+.new {
+    background-color: #4BCFFA;
+}
+
+.delete {
+    background-color: #dc3545;
+}
+
+label {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 750px) {
+
+
+    #sidebar {
+        display: none;
+    }
+
+}
+
+select {
+    border: 1px solid black;
+}

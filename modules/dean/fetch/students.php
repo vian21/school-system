@@ -12,6 +12,8 @@ if (!empty($students_array)) {
         $students_sub_array = array();
         $students_sub_array['id'] = $column['id'];
         $students_sub_array['name'] = $column['name'];
+        $students_sub_array['admission'] = $column['admissionID'];
+
         $students_sub_array['DOB'] = $column['DOB'];
         $students_sub_array['gender'] = $column['gender'];
         $grade = whatGrade($column['id'], $year);

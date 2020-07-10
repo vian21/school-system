@@ -52,9 +52,7 @@ function editPeriodForm() {
         }
 
         if (validStart == true && validEnd == true && validNumber == true) {
-            var academicYear = startYear + '-' + endYear;
             var periodName = periodTypes[periodType] + ' ' + periodNumber;
-            $("#create").attr('disabled', true);
 
             editPeriod(currentPeriodId, periodName, startYear, endYear);
         }
@@ -62,7 +60,7 @@ function editPeriodForm() {
 }
 
 function editPeriod(periodId, name, start, end) {
-    var url = "modules/dean/update/misc/period.php"
+    var url = app_url+"modules/dean/update/misc/period.php"
 
     $.ajax({
         url: url,

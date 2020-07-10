@@ -14,8 +14,10 @@ function showStaffForm() {
                          <input type='number' name='tel' id='staffTel' autocomplete='off'>\
                         <h4>Type</h4>\
                         <select id='staffType'>\
-                        <option value='0'>Dean</option>\
-                        <option value='1'>Teacher</option></select><br>\
+                        <option value='1'>Dean</option>\
+                        <option value='2'>Teacher</option>\
+                        <option value='3'>Accountant</option>\
+                        </select><br>\
                         <h4>password: </h4>\
                         <input type='password' id='password' autocomplete='new-password'><br>\
                         <button class='delete' id='cancelStaffForm'>Cancel</button>\
@@ -34,7 +36,7 @@ function showStaffForm() {
     })
 
     $("#staffType").change(() => {
-        if ($("#staffType").val() == 1) {
+        if ($("#staffType").val() == 2 && userType!=0) {
             $("#staffType").after("<select style='float:clear' id='grade'\
             data-placeholder='Subject(s)'\
             name='subjects[]' \
@@ -42,7 +44,7 @@ function showStaffForm() {
             $("#grade").html(subjectsGradeOptions()).select2()
         }
 
-        if ($("#staffType").val() == 0) {
+        if ($("#staffType").val() == 1) {
             $("#grade").remove();
             $(".select2-container").remove();
         }
@@ -60,7 +62,7 @@ function showStaffForm() {
         var password = $("#password").val();
 
         //var DOB = $("#studentDOB").val();
-        var validName, valideEmail, validType, validGrade, validPassword;
+        var validName, valideEmail, validType, validPassword;
 
         if (name == "") {
             alert("Please enter a name");
@@ -90,7 +92,7 @@ function showStaffForm() {
             validPassword = true;
         }
 
-        if ($("#staffType").val() == 1) {
+        if ($("#staffType").val() == 2 && userType!=0) {
             //Check that a grade(s) was provided for the teacher to teach
             if ($("#grade").select2('val') == null) {
                 alert("Please enter a grade");
@@ -110,11 +112,11 @@ function showStaffForm() {
             info.append('password', password);
 
             info.append('school', schoolId);
+            info.append('start', start);
+            info.append('end', end);
 
 
-            info.append('year', currentPeriodId);
-
-            if ($("#staffType").val() == 1) {
+            if ($("#staffType").val() == 2 && userType!=0) {
                 info.append('grade', grade);
             }
             $("#addStaff").attr('disabled', true);
@@ -129,7 +131,7 @@ function showStaffForm() {
 }
 
 function createStaff(data) {
-    var url = "modules/dean/create/staff.php";
+    var url = app_url+"modules/dean/create/staff.php";
     $.ajax({
         url: url,
         enctype: 'multipart/form-data',

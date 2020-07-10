@@ -39,7 +39,8 @@ function changeTermListener() {
             end = selectedTermEnd;
 
             fetchTests().then(function () {
-                if (userType == 0) {
+                //admin and dean
+                if (userType == 0 || userType == 1) {
 
                     fetchStudents().then(function () {
                         studentsTab();
@@ -47,7 +48,19 @@ function changeTermListener() {
 
                     })
                 }
-                if (userType == 1) {
+
+                //accountant
+                if (userType == 3) {
+
+                    fetchStudents().then(function () {
+                        accounting();
+                        alert("Term changed successfully")
+
+                    })
+                }
+
+                //teacher
+                if (userType == 2) {
                     fetchSubjectsTaught().then(function () {
                         marks();
                         alert("Term changed successfully")
@@ -115,6 +128,15 @@ function createMonthOptions() {
     return options;
 }
 
+function createPeriodOptions() {
+
+    var options;
+    for (var i = 0; i < periods.length; i++) {
+        options += "<option value=" + periods[i]['id'] + ">" + periods[i]['period_name'] + "</option>"
+    }
+    return options;
+}
+
 function deleteModal() {
     $(".modal").remove();
 }
@@ -134,4 +156,11 @@ function streamsOptions() {
         optionsTemplate += "<option value='" + streams[i]['id'] + "'>Grade " + streams[i]['grade'] + ' ' + streams[i]['stream'] + "</option>";
     }
     return optionsTemplate;
+}
+
+function checkPay() {
+    if (paid == false) {
+        alert("Subscription Over!")
+        window.open(app_url + "modules/logout.php", '_self');
+    }
 }

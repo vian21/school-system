@@ -9,6 +9,9 @@ if (
     $id = $_POST['id'];
 
     $delete = $connect->query("DELETE FROM academic_periods WHERE id=$id");
+    $delete = $connect->query("DELETE FROM marks WHERE period=$id");
+    $delete = $connect->query("DELETE FROM enrollment WHERE period=$id");
+
 
     if ($delete) {
         echo 'ok';

@@ -57,7 +57,7 @@ function newGradeForm() {
 
 function createGrade(data) {
     $.ajax({
-        url: "modules/dean/create/stream.php",
+        url: app_url+"modules/dean/create/stream.php",
         enctype: 'multipart/form-data',
         processData: false,
         contentType: false,

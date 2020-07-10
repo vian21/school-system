@@ -18,11 +18,12 @@ function addClass(teacher) {
 
         $.ajax({
             method: 'post',
-            url: "modules/dean/create/teaching.php",
+            url: app_url+"modules/dean/create/teaching.php",
             data: {
                 teacher: teacher,
                 subject: subject,
-                year: currentPeriodId
+                start: start,
+                end: end
 
             },
             success: function (response) {

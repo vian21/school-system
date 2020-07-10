@@ -1,16 +1,20 @@
 $(document).ready(function () {
     $('input').attr("autocomplete", 'off');
     fetchSchoolInfo().then(function () {
+
+        checkPay();
         //Fecth all teachers and add them to and array and make a table using the array
-        fetchTeachers();
 
         //fetch all student and add them to an array and add them to select option list using the student's array
         fetchAcademicPeriods().then(function () {
 
+            fetchTeachers();
 
             fetchStreams();
 
             fetchSubjects();
+
+            fetchGrading();
 
             fetchStudents().then(function () {
                 dashboard()
@@ -47,8 +51,16 @@ $(document).ready(function () {
         return false;
     })
 
-    //misc tab
+    //accounting tab
     $("#tab4").click(function () {
+        accounting();
+
+        return false;
+    })
+
+
+    //misc tab
+    $("#tab5").click(function () {
         misc('container');
 
         return false;

@@ -4,6 +4,8 @@ var subjects;
 $("document").ready(function () {
     marks();
     fetchSchoolInfo().then(function () {
+
+        checkPay();
         //Fecth all teachers and add them to and array and make a table using the array
 
 

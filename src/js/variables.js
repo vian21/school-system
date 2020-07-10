@@ -9,10 +9,15 @@ var numberOfStudents;
 var numberOfMaleStudents;
 var numberOfFemaleStudents;
 var numberOfTeachers;
+var reportsFolder='';
+var paid;
 
 var genders = ['Male', 'Female'];
+
 var schoolTypes = ['Day School', 'Boarding School'];
-var staffTypes = ['Dean', 'Teacher'];
+
+var staffTypes = ['Admin', 'Dean', 'Teacher','Accountant'];
+
 var subjectTypes = ['Compulsary', 'Elective'];
 var subjectEnrollmentStatus = ['not enrolled', 'enrolled'];
 var periodTypes = ['Term', 'Semester'];
@@ -31,3 +36,23 @@ var streams = [];
 var subjects = [];
 //Variable to contain the tests done
 var testsDone = [];
+
+var grading = [];
+
+var transactions = [];
+
+var transactionType = ['Out', 'In']
+
+
+//acoounting
+var currentStudentAccountingId;
+var currentStudentTransactions;
+
+//discipline
+var studentDisciplineInfo;
+var disciplineMarks = 100;
+var studentDisciplineId;
+var disciplineTypes = ['Deduction', 'Awarding']
+
+
+

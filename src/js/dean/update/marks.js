@@ -1,6 +1,6 @@
 function updateMark(info) {
     $.ajax({
-        url: "modules/dean/update/student/student_mark.php",
+        url: app_url+"modules/dean/update/student/student_mark.php",
         method: "post",
         data: info,
         success: function (data) {
