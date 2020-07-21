@@ -1,15 +1,13 @@
 <?php
 ob_start();
 if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
-    include '../../functions.php';
+    include '../../../config.php';
+    include("../../../functions.php");
 
-    $grade = $_GET['grade'];
-    $period = $_GET['period'];
-    $students = fetchStudentsIn($grade, $period);
+    $grade = sanitize($_GET['grade']);
+    $students = fetchStudentsIn($grade, sanitize($_GET['school']));
     $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
-    $school = fetchSchoolInfo($_GET['school']);
-    //number of check boxes
-    $boxes = 20;
+    $school = fetchSchoolInfo(sanitize($_GET['school']));
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -18,12 +16,11 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
+        <title>Balance</title>
         <style>
             body {
                 width: 90%;
                 margin-left: 5%;
-                font-family: Arial, Helvetica, sans-serif;
             }
 
             .heading {
@@ -71,7 +68,7 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
 
             <tr style="border:none">
                 <td rowspan="2" style="border:none">
-                    <img src="../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
+                    <img src="../../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
 
                 </td>
 
@@ -89,7 +86,7 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
         </table>
         <center>
             <!-- ⚠ Caution ⚠: use double quotes otherwise css rules won't apply -->
-            <h1 class="heading" style="text-align:center;padding:10px;">Class list</h1>
+            <h1 class="heading" style="text-align:center;padding:10px;">Balance</h1>
         </center>
 
         <!-- h1 to break line since br does not work -->
@@ -99,18 +96,12 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
         <table>
             <tr>
                 <!-- ⚠ Caution ⚠: use double quotes otherwise css rules won't apply -->
-                <th class="number" style="font-weight:bold;border:1px solid black;">#</th>
-                <th class="name" style="font-weight:bold;border:1px solid black;">Name</th>
-                <th class="id" style="font-weight:bold;border:1px solid black;">ID</th>
-                <?php
-                $i = 0;
-                while ($i <= $boxes) {
-                    $i++;
+                <th class="number">#</th>
+                <th class="name">Name</th>
+                <th class="id">ID</th>
+                <th class="balance">Balance</th>
 
-                    // ⚠ Caution ⚠: use double quotes otherwise css rules won't apply
-                    echo '<th class="box"></th>';
-                }
-                ?>
+
             </tr>
             <?php
             if (!empty($students) and $students !== ' ') {
@@ -122,11 +113,8 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
                     echo "<td>" . $number . "</td>";
                     echo "<td>" . $student['name'] . "</td>";
                     echo "<td>" . $student['id'] . "</td>";
-                    $i = 0;
-                    while ($i <= $boxes) {
-                        $i++;
-                        echo "<td></td>";
-                    }
+                    echo "<td>" . number_format(getBalance($student['id']), 0, '.', ',') . "</td>";
+
                     echo "</tr>";
 
                     $number++;
@@ -141,12 +129,12 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
 <?php
     $html = ob_get_clean();
 
-    require_once('../../tcpdf/tcpdf.php');
+    require_once('../../../tcpdf/tcpdf.php');
 
     $tcpdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
     // set title of pdf
-    $tcpdf->SetTitle('Class List');
+    $tcpdf->SetTitle('Balance List');
 
 
     // set header and footer in pdf
@@ -161,5 +149,5 @@ if (isset($_GET['grade']) and is_numeric($_GET['grade'])) {
     $tcpdf->writeHTML($html, true, false, false, false, '');
 
     //Close and output PDF document
-    $tcpdf->Output('class-list.pdf', 'I');
+    $tcpdf->Output('Balance-list.pdf', 'I');
 }

@@ -127,7 +127,14 @@ function misc(container) {
             var grade = $("#grade").val();
 
             if (grade !== '') {
-                var url = "modules/dean/lists/students.php?grade=" + grade + "&school=" + schoolId+"&period="+currentPeriodId;
+                if(reportsFolder==''){
+                    var url = "modules/pdf/general/lists/students.php?grade=" + grade + "&school=" + schoolId+"&period="+currentPeriodId;
+
+                }
+                else{
+                    var url = "modules/pdf/"+reportsFolder+"/lists/students.php?grade=" + grade + "&school=" + schoolId+"&period="+currentPeriodId;
+
+                }
                 window.open(url)
             }
         })

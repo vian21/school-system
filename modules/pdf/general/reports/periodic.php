@@ -1,27 +1,27 @@
 <?php
 ob_start();
 session_start();
-include '../../config.php';
-include '../../functions.php';
+include '../../../config.php';
+include("../../../functions.php");
 
 $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 
-$school = fetchSchoolInfo($_GET['school']);
-$period = $_GET['period'];
-$period_name = $_GET['name'];
-$start = $_GET['start'];
-$end = $_GET['end'];
+$school = fetchSchoolInfo(sanitize($_GET['school']));
+$period = sanitize($_GET['period']);
+$period_name = sanitize($_GET['name']);
+$start = sanitize($_GET['start']);
+$end = sanitize($_GET['end']);
 
-$grade = $_GET['grade'];
+$grade = sanitize($_GET['grade']);
 $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
 
 if(isset($_GET['student'])){
-    $student_id=$_GET['student'];
+    $student_id=sanitize($_GET['student']);
 }
 
 function subjectsTakenBy($student, $school_id, $period, $start, $end)
 {
-    include '../../config.php';
+    include '../../../config.php';
     $get_subjects = $connect->query("SELECT * FROM enrollment WHERE student_id=$student AND period=$period AND start=$start AND end=$end");
     $subjects = array();
     while ($column = mysqli_fetch_assoc($get_subjects)) {
@@ -32,7 +32,7 @@ function subjectsTakenBy($student, $school_id, $period, $start, $end)
 
 function academic_periods($school_id, $startYear, $endYear)
 {
-    include '../../config.php';
+    include '../../../config.php';
     $get_periods = $connect->query("SELECT*FROM academic_periods WHERE school=$school_id AND start=$startYear AND end=$endYear");
 
     $periods = array();
@@ -59,7 +59,7 @@ function annualDecision($gpa)
 
 function getSubjectName($subject_id)
 {
-    include '../../config.php';
+    include '../../../config.php';
     $get_name = mysqli_fetch_assoc($connect->query("SELECT*FROM subjects WHERE id=$subject_id"));
     return $get_name['subject_name'];
 }
@@ -67,7 +67,7 @@ function getSubjectName($subject_id)
 
 function getSumOfMarks($student_id, $subject, $assessment_type, $period_id)
 {
-    include("../../config.php");
+    include("../../../config.php");
 
     $getSumQuery = mysqli_fetch_assoc($connect->query("SELECT SUM(marks) AS mark FROM marks WHERE student_id=$student_id AND subject=$subject AND type=$assessment_type AND period=$period_id"));
     //$sumArray = mysqli_fetch_assoc($getSumQuery);
@@ -153,7 +153,7 @@ if(isset($_GET['student'])){
 
                 <tr style="border:none">
                     <td rowspan="2" style="border:none">
-                        <img src="../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
+                        <img src="../../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
 
                     </td>
 
@@ -396,7 +396,7 @@ if(isset($_GET['student'])){
 
 $html = ob_get_clean();
 
-require('../../tcpdf/tcpdf.php');
+require('../../../tcpdf/tcpdf.php');
 $tcpdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 // set title of pdf

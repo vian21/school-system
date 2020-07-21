@@ -56,7 +56,13 @@ function makeTeachersTable() {
 
     //Open new tab with a pdf of staff list
     $("#downloadStaffList").click(function () {
-        window.open(app_url+"modules/dean/lists/staff.php?staff=" + schoolId);
+        if(reportsFolder==''){
+            window.open(app_url+"modules/pdf/general/lists/staff.php?staff=" + schoolId);
+
+        }else{
+            window.open(app_url+"modules/pdf/"+reportsFolder+"/lists/staff.php?staff=" + schoolId);
+
+        }
 
         return false;
     })
@@ -116,7 +122,7 @@ function getTeacherInfo(position) {
             var number = i + 1;
             table += "<tr>";
             table += "<td>" + number + "</td>"
-            table += "<td>" + index['subject'] + ' ' + index['stream']['grade'] + index['stream']['stream'] + "</td>";
+            table += "<td>" + index['subject'] + "  " + index['stream']['grade'] + index['stream']['stream'] + "</td>";
             table += "<td><button class='delete' onclick=removeClass(" + teachersArray[position]['id'] + ',' + index['id'] + ")>Delete</button></td>"
             table += "<tr>";
             template += table;

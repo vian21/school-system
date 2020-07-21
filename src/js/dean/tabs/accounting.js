@@ -1,3 +1,4 @@
+
 function accounting() {
     $("#container").html('<button id="students">students</button>\
     <button id="accountingReports">Reports</button>\
@@ -27,7 +28,9 @@ function accountingStudents() {
 
     $("#searchStudent").change(function () {
         var position = $("#searchStudent").select2('val');
-        currentStudentAccountingId = studentsArray[position]['id']
+        currentStudentAccountingId = studentsArray[position]['id'];
+        currentStudentAccountingPos = studentsArray[position];
+
 
         fetchTransactions(currentStudentAccountingId)
 
@@ -66,13 +69,26 @@ function accountingReports() {
             console.log(grade)
             //Balance reports
             if (type == 0) {
-                var url = app_url + "modules/dean/accounting/balance.php?school=" + schoolId + "&grade=" + grade;
+                if (reportsFolder == '') {
+                    var url = app_url + "modules/pdf/general/accounting/balance.php?school=" + schoolId + "&grade=" + grade;
+
+                } else {
+                    var url = app_url + "modules/pdf/" + reportsFolder + "/accounting/balance.php?school=" + schoolId + "&grade=" + grade;
+
+                }
                 window.open(url)
             }
 
             //transaction reports
             if (type == 1) {
-                var url = app_url + "modules/dean/accounting/transactions.php?school=" + schoolId + "&grade=" + grade;
+                if (reportsFolder == '') {
+                    var url = app_url + "modules/pdf/general/accounting/transactions.php?school=" + schoolId + "&grade=" + grade;
+
+                }
+                else {
+                    var url = app_url + "modules/pdf/" + reportsFolder + "/accounting/transactions.php?school=" + schoolId + "&grade=" + grade;
+
+                }
                 window.open(url)
             }
         }
@@ -82,11 +98,10 @@ function accountingReports() {
 
 function makeTransactionsTbl(data) {
     if (currentStudentTransactions == '') {
-        console.log("no" + data)
         var balance = 0;
 
         $("#accountingCont").html("<button id='new'>New</button><button id='print'>Print</button><br>")
-        $("#accountingCont").append("Balance: <div id='balance'>" + balance.toLocaleString() + "</div>")
+        $("#accountingCont").append("<div style='display:flex;font-weight:bold;'>Balance: <div id='balance'>" + balance.toLocaleString() + "</div></div>")
 
         var table = "<table><tr><th>#</th><th>Date</th><th>Item</th><th>Amount</th><th>Type</th><th></th></tr></table>";
         $("#accountingCont").append(table)
@@ -98,7 +113,17 @@ function makeTransactionsTbl(data) {
 
 
         $("#print").click(function () {
-            var url = app_url + "modules/dean/accounting/transactions.php?id=" + currentStudentAccountingId+"&year="+currentPeriodId;
+            if (reportsFolder == '') {
+                var url = app_url + "modules/pdf/general/accounting/transactions.php?id=" + currentStudentAccountingId;
+
+            }
+            else {
+                var url = app_url + "modules/pdf/" + reportsFolder + "accounting/transactions.php?id=" + currentStudentAccountingId;
+
+            }
+            //url += "&year=" + currentPeriodId
+            url += "&grade=" + currentStudentAccountingPos['stream']['id']
+            url += "&school=" + schoolId;
 
             window.open(url);
         })
@@ -138,7 +163,16 @@ function makeTransactionsTbl(data) {
 
 
         $("#print").click(function () {
-            var url = app_url + "modules/dean/accounting/transactions.php?school="+schoolId+"&id=" + data[0]['student_id']+"&year="+currentPeriodId;;
+            if (reportsFolder == '') {
+                var url = app_url + "modules/pdf/general/accounting/transactions.php?id=" + currentStudentAccountingId;
+
+            } else {
+                var url = app_url + "modules/pdf/" + reportsFolder + "/accounting/transactions.php?id=" + currentStudentAccountingId;
+
+            }
+            //url += "&year=" + currentPeriodId
+            url += "&grade=" + currentStudentAccountingPos['stream']['id']
+            url += "&school=" + schoolId;
 
             window.open(url);
         })

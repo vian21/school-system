@@ -44,6 +44,7 @@ function changeTermListener() {
 
                     fetchStudents().then(function () {
                         studentsTab();
+                        fetchTeachers();
                         alert("Term changed successfully")
 
                     })

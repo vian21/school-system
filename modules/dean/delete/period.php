@@ -5,8 +5,9 @@ if (
     is_numeric($_POST['id'])
 ) {
     include("../../config.php");
+    include("../../functions.php");
 
-    $id = $_POST['id'];
+    $id = sanitize($_POST['id']);
 
     $delete = $connect->query("DELETE FROM academic_periods WHERE id=$id");
     $delete = $connect->query("DELETE FROM marks WHERE period=$id");

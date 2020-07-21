@@ -60,6 +60,38 @@ function updateStudentAdmission(studentId, newAdmission) {
     })
 }
 
+function updateStudentEmail(studentId, newEmail) {
+    var url = app_url+"modules/dean/update/student/student_email.php";
+    $.ajax({
+        url: url,
+        method: "post",
+        data: {
+            email: newEmail,
+            id: studentId
+        },
+        success: function (response) {
+            if (response == 'ok') {
+                fetchStudents().then(function () {
+                    addToForm();
+                })
+
+                $("#msgBoard").html('');
+                $("#msgBoard").append("Data saved successfully")
+                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+
+
+
+            }
+            else {
+                $("#msgBoard").html('');
+                $("#msgBoard").append("Failed to save data")
+                $("#msgBoard").fadeIn().delay(2000).fadeOut();
+            }
+        }
+    })
+}
+
+
 function updateStudentGrade(studentId, newGrade) {
     var url = app_url+"modules/dean/update/student/student_grade.php";
     $.ajax({

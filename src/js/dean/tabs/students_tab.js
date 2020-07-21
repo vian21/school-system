@@ -77,7 +77,7 @@ function studentsTab() {
                             <button id='studentDiscipline'>Discipline</button><br>\
                             <div id='studentDesk'></div>")
 
-        function student_info(){
+        function student_info() {
 
             var studentInfoTemplate = "";
             var studentSelectedImage = studentSelected['image'];
@@ -92,15 +92,17 @@ function studentsTab() {
             studentInfoTemplate += "<center><img id='studentImage' src='" + studentSelectedImage + "'></center>";
 
             studentInfoTemplate += "<b>Name : </b><input type='text' id='studentInfoName'  value='" + studentSelectedName + "'></br>";
-    
+
             studentInfoTemplate += "<b>Admission Number : </b><input type='text' id='studentInfoAdmission'  value='" + studentSelectedAdmission + "'></br>";
+
+            studentInfoTemplate += "<b>Email : </b><input type='text' id='studentInfoEmail'  value='" + studentSelectedEmail + "'></br>";
 
 
             studentInfoTemplate += "<b>Gender:</b> <select id='studentInfoGender'>";
             studentInfoTemplate += "<option value='0'>Male</option>";
             studentInfoTemplate += "<option value='1'>Female</option>";
             studentInfoTemplate += "</select><br>";
-    
+
             studentInfoTemplate += "<b>DOB : </b><input type='date' id='studentInfoDOB'  value='" + studentSelectedDOB + "'></br>";
             studentInfoTemplate += "<b>Grade : </b>";
             studentInfoTemplate += "<select id='studentInfoGrade'>";
@@ -108,61 +110,65 @@ function studentsTab() {
             studentInfoTemplate += "<option></option>"
             studentInfoTemplate += streamsOptions();
             studentInfoTemplate += "</select>";
-            studentInfoTemplate+="<br><br><button class='delete' onclick='deleteStudent(" + studentSelected['id'] + ")'>Delete</button>";
+            studentInfoTemplate += "<br><br><button class='delete' onclick='deleteStudent(" + studentSelected['id'] + ")'>Delete</button>";
             studentInfoTemplate += "<br><div id='msgBoard'></div>"
-    
+
             $("#studentDesk").html(studentInfoTemplate);
 
             //Make the gender selected
-        $("#studentInfoGender").val(studentSelected['gender']).trigger('change');
+            $("#studentInfoGender").val(studentSelected['gender']).trigger('change');
 
-        //Add listeners for change in student info
-        $("#studentInfoName").change(function () {
-            updateStudentName(studentSelected['id'], $("#studentInfoName").val())
-        })
+            //Add listeners for change in student info
+            $("#studentInfoName").change(function () {
+                updateStudentName(studentSelected['id'], $("#studentInfoName").val())
+            })
 
-        $("#studentInfoAdmission").change(function () {
-            updateStudentAdmission(studentSelected['id'], $("#studentInfoAdmission").val())
-        })
+            $("#studentInfoAdmission").change(function () {
+                updateStudentAdmission(studentSelected['id'], $("#studentInfoAdmission").val())
+            })
 
-        //change gender
-        $("#studentInfoGender").change(function () {
-            updateStudentGender(studentSelected['id'], $("#studentInfoGender").val())
-        })
+            $("#studentInfoEmail").change(function () {
+                updateStudentEmail(studentSelected['id'], $("#studentInfoEmail").val())
+            })
 
-        $("#studentInfoGrade").change(function () {
-            if (studentSelected['stream']['id'] !== $("#studentInfoGrade").val()) {
-                updateStudentGrade(studentSelected['id'], $("#studentInfoGrade").val())
+            //change gender
+            $("#studentInfoGender").change(function () {
+                updateStudentGender(studentSelected['id'], $("#studentInfoGender").val())
+            })
 
+            $("#studentInfoGrade").change(function () {
+                if (studentSelected['stream']['id'] !== $("#studentInfoGrade").val()) {
+                    updateStudentGrade(studentSelected['id'], $("#studentInfoGrade").val())
+
+                }
+            })
+
+            $("#studentInfoDOB").on('blur', function () {
+                updateStudentDOB(studentSelected['id'], $("#studentInfoDOB").val())
             }
-        })
-
-        $("#studentInfoDOB").on('blur', function () {
-            updateStudentDOB(studentSelected['id'], $("#studentInfoDOB").val())
-        }
-        )
+            )
         }
 
         //by default show student info
         student_info();
 
-        $("#studentInfo").click(function(){
+        $("#studentInfo").click(function () {
             student_info();
         })
 
-        $("#studentSubjects").click(function(){
-            
+        $("#studentSubjects").click(function () {
+
             $("#studentDesk").html("<br><br>\
                                         <h5 style='text-decoration:underline;'>Subjects</h5>\
                                         <div id='subject_enrollment_table'></div>")
-        //the subject table is added after the div has been created first
-        subjectsLearntTable(position);
+            //the subject table is added after the div has been created first
+            subjectsLearntTable(position);
         })
-        $("#studentDiscipline").click(function(){
+        $("#studentDiscipline").click(function () {
             fetchStudentDiscipline(studentSelected['id']);
-            studentDisciplineId=studentSelected['id'];
+            studentDisciplineId = studentSelected['id'];
         })
-        
+
     })
 
     $("#addStudentButton").click(function () { showStudentForm() });

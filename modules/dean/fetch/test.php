@@ -2,9 +2,10 @@
 
 if (isset($_POST['test'])) {
     if ($_POST['test'] !== "" and is_numeric($_POST['test'])) {
+        include("../../config.php");
         include("../../functions.php");
 
-        $test_id = $_POST['test'];
+        $test_id = sanitize($_POST['test']);
         $result = fetchStudentsMarks($test_id);
         $form_data = array();
 

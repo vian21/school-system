@@ -1,13 +1,13 @@
 <?php
 if (isset($_POST['id'])) {
     include '../../config.php';
-    include '../../functions.php';
+    include("../../functions.php");
 
-    $student = $_POST['id'];
-    $period = $_POST['period'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
-    $school = $_POST['school'];
+    $student = sanitize($_POST['id']);
+    $period = sanitize($_POST['period']);
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
+    $school = sanitize($_POST['school']);
 
     $info = array();
 

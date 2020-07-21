@@ -53,24 +53,21 @@ if (!isset($_SESSION['id'])) {
         </div>
     </div>
 </body>
-<script src="src/js/functions.js"></script>
 
 <script>
     var userType = 4;
     var userId = <?php echo $id . ";\n"; ?>
 
     <?php
-    if (isset($_GET['admin'])) {
-        $school_id = $_GET['school'];
-    } else {
-        $school_id = getSchoolId(2, $id);
-    }
+
+    $school_id = getSchoolId(2, $id);
+
     ?>
 
     var schoolId = <?php echo $school_id; ?>;
 
-    <?php echo file_get_contents('./src/js/variables.js'); ?>
-    <?php echo file_get_contents('./src/js/functions.js'); ?>
+    <?php echo minify(file_get_contents('./src/js/variables.js')); ?>
+    <?php echo minify(file_get_contents('./src/js/functions.js')); ?>
     <?php echo compressCodeIn('./src/js/dean/retrieve/') ?>
     <?php echo compressCodeIn('./src/js/student/retrieve/') ?>
 </script>

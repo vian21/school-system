@@ -3,21 +3,26 @@
 //Creating a new staff
 if (isset($_POST['type']) and is_numeric($_POST['type'])) {
     include("../../config.php");
+    include("../../functions.php");
 
-    $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
-    $gender = strip_tags(mysqli_real_escape_string($connect, $_POST['gender']));
-    $school_id = strip_tags(mysqli_real_escape_string($connect, $_POST['school']));
-    $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
-    $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
-    $type = $_POST['type'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
 
-    $password = $_POST['password'];
+    $name = sanitize($_POST['name']);
+    $gender = sanitize($_POST['gender']);
+    $school_id = sanitize($_POST['school']);
+    $email = sanitize($_POST['email']);
+    $tel = sanitize($_POST['tel']);
+    $type = sanitize($_POST['type']);
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
+
+    $password = '';
+    if (isset($_POST['password'])) {
+        $password = sanitize($_POST['password']);
+    }
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $uniqueID=uniqid('',true);
+    $uniqueID = uniqid('', true);
 
 
     //If new staff is a dean
@@ -71,7 +76,6 @@ if (isset($_POST['type']) and is_numeric($_POST['type'])) {
                     $inserted = false;
                 }
             }
-
         }
     }
 }

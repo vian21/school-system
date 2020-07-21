@@ -6,8 +6,10 @@ if (
 ) {
     if ($_POST['name'] != "") {
         include("../../../config.php");
-        $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
-        $id = $_POST['id'];
+        include("../../../functions.php");
+
+        $name = sanitize($_POST['name']);
+        $id = sanitize($_POST['id']);
         $change_name = $connect->query("UPDATE users SET name='$name' WHERE id=$id");
         if (!$change_name) {
             echo "ko";

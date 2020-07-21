@@ -3,7 +3,7 @@
         header("location:../../login.php");
     }
 
-    if ($_SESSION['type']!=0) {
+    if ($_SESSION['type'] != 0) {
         header("location:../../modules/logout.php");
     }
     ?>

@@ -85,12 +85,6 @@ function showStaffForm() {
             validType = true;
         }
 
-        if (password == "") {
-            alert("Please enter a password");
-        }
-        else {
-            validPassword = true;
-        }
 
         if ($("#staffType").val() == 2 && userType!=0) {
             //Check that a grade(s) was provided for the teacher to teach
@@ -102,14 +96,17 @@ function showStaffForm() {
             }
         }
 
-        if (validName == true && validType == true && valideEmail == true && validPassword == true) {
+        if (validName == true && validType == true && valideEmail == true) {
             var info = new FormData();
             info.append('name', name);
             info.append('gender', gender);
             info.append('type', type);
             info.append('email', email);
             info.append('tel', tel);
-            info.append('password', password);
+            if(password!==''){
+                info.append('password', password);
+
+            }
 
             info.append('school', schoolId);
             info.append('start', start);

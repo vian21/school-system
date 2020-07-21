@@ -2,8 +2,9 @@
 //delete staff
 if (is_numeric($_GET['staff'])) {
     include("../../config.php");
+    include("../../functions.php");
 
-    $id = $_GET['staff'];
+    $id = sanitize($_GET['staff']);
 
     $delete = $connect->query("DELETE FROM users WHERE id =$id");
 

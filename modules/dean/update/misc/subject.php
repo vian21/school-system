@@ -7,13 +7,15 @@ if (
     isset($_POST['type']) and
     isset($_POST['hours'])
 ) {
-    $id = $_POST['id'];
-    $name = $_POST['name'];
-    $grade = $_POST['grade'];
-    $type = $_POST['type'];
-    $hours = $_POST['hours'];
-
     include("../../../config.php");
+    include("../../../functions.php");
+
+    $id = sanitize($_POST['id']);
+    $name = sanitize($_POST['name']);
+    $grade = sanitize($_POST['grade']);
+    $type = sanitize($_POST['type']);
+    $hours = sanitize($_POST['hours']);
+
 
     $update = $connect->query("UPDATE subjects SET subject_name='$name', stream=$grade, hours=$hours, type=$type WHERE id=$id");
 

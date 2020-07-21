@@ -1,15 +1,16 @@
 <?php
 
 if (isset($_POST['id']) and is_numeric($_POST['id'])) {
-    if ($_POST['name'] != "") {
+    if ($_POST['email'] != "") {
         include("../../../config.php");
         include("../../../functions.php");
 
-        $name = sanitize($_POST['name']);
+
+        $email = sanitize($_POST['email']);
         $id = sanitize($_POST['id']);
 
-        $change_name = $connect->query("UPDATE students SET name='$name' WHERE id=$id");
-        if (!$change_name) {
+        $change_email = $connect->query("UPDATE students SET email='$email' WHERE id=$id");
+        if (!$change_email) {
             echo "ko";
         } else {
             echo "ok";

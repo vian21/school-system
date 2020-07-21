@@ -15,17 +15,17 @@ if (
     include("../../functions.php");
 
     $school_id = $_POST['school'];
-    $grade = mysqli_real_escape_string($connect, $_POST['grade']);
+    $grade = sanitize($_POST['grade']);
 
-    $subject = mysqli_real_escape_string($connect, $_POST['subject']);
-    $type = mysqli_real_escape_string($connect, $_POST['type']);
-    $period_id = mysqli_real_escape_string($connect, $_POST['period']);
-    $assessment_name = mysqli_real_escape_string($connect, $_POST['name']);
+    $subject = sanitize($_POST['subject']);
+    $type = sanitize($_POST['type']);
+    $period_id = sanitize($_POST['period']);
+    $assessment_name = sanitize($_POST['name']);
     $students_taking_that_subject = fetchStudentsTaking($subject, $period_id);
     $month = " ";
     // 1 for test
     if ($type == 1) {
-        $month = mysqli_real_escape_string($connect, $_POST['month']) + 1;
+        $month = sanitize($_POST['month']) + 1;
 
         $create_assessment = $connect->query("INSERT INTO assessments(school,period,name,month,type,subject,grade) VALUES($school_id,$period_id,'$assessment_name',$month,$type,$subject,$grade)");
     }

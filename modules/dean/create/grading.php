@@ -6,13 +6,14 @@ if (
     isset($_POST['school'])
 ) {
 
-    $school = $_POST['school'];
-    $max = $_POST['max'];
-    $min = $_POST['min'];
-    $grade = $_POST['grade'];
-    $gpa = $_POST['gpa'];
+    $school = sanitize($_POST['school']);
+    $max = sanitize($_POST['max']);
+    $min = sanitize($_POST['min']);
+    $grade = sanitize($_POST['grade']);
+    $gpa = sanitize($_POST['gpa']);
 
     include("../../config.php");
+    include("../../functions.php");
 
     $insert = $connect->query("INSERT INTO grading(max,school_id,min,grade,gpa) VALUES($max,$school,$min,'$grade',$gpa)");
 

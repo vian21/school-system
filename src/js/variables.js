@@ -9,14 +9,14 @@ var numberOfStudents;
 var numberOfMaleStudents;
 var numberOfFemaleStudents;
 var numberOfTeachers;
-var reportsFolder='';
+var reportsFolder = '';
 var paid;
 
 var genders = ['Male', 'Female'];
 
 var schoolTypes = ['Day School', 'Boarding School'];
 
-var staffTypes = ['Admin', 'Dean', 'Teacher','Accountant'];
+var staffTypes = ['Admin', 'Dean', 'Teacher', 'Accountant'];
 
 var subjectTypes = ['Compulsary', 'Elective'];
 var subjectEnrollmentStatus = ['not enrolled', 'enrolled'];
@@ -45,6 +45,7 @@ var transactionType = ['Out', 'In']
 
 
 //acoounting
+var currentStudentAccountingPos;
 var currentStudentAccountingId;
 var currentStudentTransactions;
 

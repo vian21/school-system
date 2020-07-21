@@ -5,9 +5,10 @@ if (
 
 ) {
     include("../../config.php");
+    include("../../functions.php");
 
-    $student = $_POST['student'];
-    $subject = $_POST['subject'];
+    $student = sanitize($_POST['student']);
+    $subject = sanitize($_POST['subject']);
 
     $disenroll = $connect->query("DELETE FROM enrollment WHERE student_id=$student AND subject=$subject");
 

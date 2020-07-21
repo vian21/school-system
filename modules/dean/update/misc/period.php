@@ -6,11 +6,13 @@ if (
     isset($_POST['end'])
 ) {
     include("../../../config.php");
-    $period = $_POST['period'];
-    $school = $_POST['school'];
-    $name = $_POST['name'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+    include("../../../functions.php");
+
+    $period = sanitize($_POST['period']);
+    $school = sanitize($_POST['school']);
+    $name = sanitize($_POST['name']);
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
 
 
     $update = $connect->query("UPDATE academic_periods SET start=$start , end=$end , name='$name' WHERE id=$period");

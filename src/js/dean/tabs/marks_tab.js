@@ -296,7 +296,7 @@ function reportsForm() {
     <button class='new' id='generate'>Generate</button>\
 </form>");
 
-    $("#grade").html("<option></option>" + streamsOptions())
+    $("#grade").html("<option></option>" + streamsOptions()).select2();
 
     $("#type").change(function () {
 
@@ -305,6 +305,7 @@ function reportsForm() {
         if (type == 1) {
 
             $("#periods").remove()
+            
 
             $("#type").after("<select name='month' id='month'></select>")
             //createMonthOptions("month")
@@ -351,11 +352,11 @@ function reportsForm() {
         //monthly report ajax
         if (grade != '' && type == 1) {
             if (reportsFolder == "") {
-                var url = app_url + "modules/dean/reports/monthly.php";
+                var url = app_url + "modules/pdf/general/reports/monthly.php";
 
             }
             else {
-                var url = app_url + "modules/dean/reports/" + reportsFolder + "/monthly.php"
+                var url = app_url + "modules/pdf/" + reportsFolder + "/reports/monthly.php"
             }
 
             url += "?grade=" + grade;
@@ -371,11 +372,11 @@ function reportsForm() {
 
         if (type == 2) {
             if (reportsFolder == "") {
-                var url = app_url + "modules/dean/reports/periodic.php";
+                var url = app_url + "modules/pdf/general/reports/periodic.php";
 
             }
             else {
-                var url = app_url + "modules/dean/reports/" + reportsFolder + "/periodic.php"
+                var url = app_url + "modules/pdf/" + reportsFolder + "/reports/periodic.php"
             }
             url += "?grade=" + grade;
             
@@ -393,11 +394,11 @@ function reportsForm() {
         if (type == 3) {
             //add 1 coz months are stored in an array
             if (reportsFolder == "") {
-                var url = app_url + "modules/dean/reports/annual.php";
+                var url = app_url + "modules/pdf/general/reports/annual.php";
 
             }
             else {
-                var url = app_url + "modules/dean/reports/" + reportsFolder + "/annual.php"
+                var url = app_url + "modules/pdf/" + reportsFolder + "/reports/annual.php"
             }
             url += "?grade=" + grade;
             url += "&school=" + schoolId;

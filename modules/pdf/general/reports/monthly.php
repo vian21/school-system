@@ -1,25 +1,25 @@
 <?php
 ob_start();
 session_start();
-include '../../config.php';
-include '../../functions.php';
+include '../../../config.php';
+include("../../../functions.php");
 
 $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 
-$school = fetchSchoolInfo($_GET['school']);
-$period = $_GET['period'];
-$start = $_GET['start'];
-$end = $_GET['end'];
+$school = fetchSchoolInfo(sanitize($_GET['school']));
+$period = sanitize($_GET['period']);
+$start = sanitize($_GET['start']);
+$end = sanitize($_GET['end']);
 
-$grade = $_GET['grade'];
+$grade = sanitize($_GET['grade']);
 $stream = fetchStreamName($grade)['grade'] . ' ' . fetchStreamName($grade)['stream'];
 
 if(isset($_GET['student'])){
-    $student_id=$_GET['student'];
+    $student_id=sanitize($_GET['student']);
 }
 function subjectsTakenBy($student, $period)
 {
-    include '../../config.php';
+    include '../../../config.php';
     $get_subjects = $connect->query("SELECT * FROM enrollment WHERE student_id=$student AND period=$period");
     $subjects = array();
     while ($column = mysqli_fetch_assoc($get_subjects)) {
@@ -30,21 +30,21 @@ function subjectsTakenBy($student, $period)
 
 function getAssessmentIdOf($subject, $period, $month)
 {
-    include '../../config.php';
+    include '../../../config.php';
     $get_id = mysqli_fetch_assoc($connect->query("SELECT*FROM assessments WHERE subject=$subject AND period=$period AND month=$month"));
     return $get_id['id'];
 }
 
 function getMark($student, $assessment_id)
 {
-    include '../../config.php';
+    include '../../../config.php';
     $mark = mysqli_fetch_assoc($connect->query("SELECT*FROM marks WHERE student_id=$student AND test_id=$assessment_id"));
     return $mark['marks'];
 }
 
 function getSubjectName($subject_id)
 {
-    include '../../config.php';
+    include '../../../config.php';
     $get_name = mysqli_fetch_assoc($connect->query("SELECT*FROM subjects WHERE id=$subject_id"));
     return $get_name['subject_name'];
 } ?>
@@ -56,7 +56,7 @@ function getSubjectName($subject_id)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Monthly</title>
     <style>
         body {
             width: 90%;
@@ -111,7 +111,7 @@ function getSubjectName($subject_id)
 
                 <tr style="border:none">
                     <td rowspan="2" style="border:none">
-                        <img src="../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
+                        <img src="../../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
 
                     </td>
 
@@ -345,7 +345,7 @@ function getSubjectName($subject_id)
 
 $html = ob_get_clean();
 
-require('../../tcpdf/tcpdf.php');
+require('../../../tcpdf/tcpdf.php');
 $tcpdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 // set title of pdf

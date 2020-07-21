@@ -9,14 +9,14 @@ if (
     include("../../../config.php");
     include("../../../functions.php");
 
-    $school = $_POST['school'];
+    $school = sanitize($_POST['school']);
 
-    $id = $_POST['id'];
-    $grade = $_POST['grade'];
-    $period = mysqli_real_escape_string($connect, $_POST['period']);
+    $id = sanitize($_POST['id']);
+    $grade = sanitize($_POST['grade']);
+    $period = sanitize($_POST['period']);
 
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
 
     //check if the student is enrolled in the desired year
     if (mysqli_num_rows($connect->query("SELECT* FROM academic_enrollments WHERE student=$id and year=$period and start=start and end=$end")) !== 0) {

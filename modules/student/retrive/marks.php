@@ -2,7 +2,6 @@
 
 if (isset($_POST['period'])) {
     include '../../config.php';
-    include '../../functions.php';
 
     $period = $_POST['period'];
     $student = $_POST['student'];

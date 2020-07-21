@@ -4,13 +4,16 @@ if (
     isset($_POST['subject'])
 ) {
     include("../../config.php");
+    include("../../functions.php");
 
-    $teacher = $_POST['teacher'];
-    $subject = $_POST['subject'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+    $teacher = sanitize($_POST['teacher']);
+    $subject = sanitize($_POST['subject']);
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
+    $period = sanitize($_POST['period']);
 
-    $enroll = $connect->query("INSERT INTO teaches(teacher,subject,start,end) VALUES($teacher,$subject,$start,$end)");
+
+    $enroll = $connect->query("INSERT INTO teaches(teacher,subject,start,end,period) VALUES($teacher,$subject,$start,$end,$period)");
 
     if ($enroll) {
         echo "ok";

@@ -1,10 +1,11 @@
 <?php
 ob_start();
 if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff'])) {
-    include '../../config.php';
-    include '../../functions.php';
-    $school = fetchSchoolInfo($_GET['staff']);
-    $teachers = fetchAllTeachers($school['id']);
+    include '../../../config.php';
+    include '../../../functions.php';
+
+    $school = fetchSchoolInfo(sanitize($_GET['staff']));
+    $teachers = fetchAllTeachers(sanitize($school['id']));
     if (!empty($teachers) and $teachers !== ' ') {
 ?>
         <!DOCTYPE html>
@@ -83,7 +84,7 @@ if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff
 
                 <tr style="border:none">
                     <td rowspan="2" style="border:none">
-                        <img src="../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
+                        <img src="../../../../src/img/uploaded/<?php echo $school['image']; ?>" alt='' style="width: 90px;" />
 
                     </td>
 
@@ -146,7 +147,7 @@ if (isset($_GET['staff']) and is_numeric($_GET['staff']) and !empty($_GET['staff
 
     $html = ob_get_clean();
 
-    require('../../tcpdf/tcpdf.php');
+    require('../../../tcpdf/tcpdf.php');
     $tcpdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
     // set title of pdf

@@ -14,14 +14,15 @@ if (
     && $_POST['type'] !== ''
     && !empty($_POST['hours'])
 ) {
-
-    $school_id = $_POST['id'];
-    $subject_name = $_POST['name'];
-    $grade = $_POST['grade'];
-    $hours = $_POST['hours'];
-    $type = $_POST['type'];
-
     include("../../config.php");
+    include("../../functions.php");
+
+    $school_id = sanitize($_POST['id']);
+    $subject_name = sanitize($_POST['name']);
+    $grade = sanitize($_POST['grade']);
+    $hours = sanitize($_POST['hours']);
+    $type = sanitize($_POST['type']);
+
 
     $insert = $connect->query("INSERT INTO subjects(subject_name,school,stream,hours,type) VALUES('$subject_name',$school_id,$grade,$hours,$type)");
 

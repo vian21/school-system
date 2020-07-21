@@ -6,7 +6,9 @@ function removeClass(teacher, subject) {
             data: {
                 teacher: teacher,
                 subject: subject,
-                year: currentPeriodId
+                period: currentPeriodId,
+                start: start,
+                end: end
             },
             success: function (data) {
                 if (data == 'ok') {

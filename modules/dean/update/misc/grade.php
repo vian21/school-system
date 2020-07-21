@@ -7,10 +7,11 @@ if (
     is_numeric($_POST['grade'])
 ) {
     include("../../../config.php");
+    include("../../../functions.php");
 
-    $id = $_POST['id'];
-    $grade = $_POST['grade'];
-    $stream = $_POST['stream'];
+    $id = sanitize($_POST['id']);
+    $grade = sanitize($_POST['grade']);
+    $stream = sanitize($_POST['stream']);
 
     $update = $connect->query("UPDATE streams SET grade=$grade, stream='$stream' WHERE id=$id");
 

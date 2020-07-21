@@ -12,12 +12,12 @@ $id = $_SESSION['id'];
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <?php include '../../modules/config.php' ?>
+    <?php include '../../modules/functions.php' ?>
 
     <?php include '../../modules/staticFiles.php' ?>
 
     <link rel="stylesheet" href="<?php echo $app_url; ?>src/css/dean.css">
 
-    <?php include '../../modules/functions.php' ?>
 
     <title>Admin</title>
 </head>
@@ -40,15 +40,15 @@ $id = $_SESSION['id'];
 
     //fetch and compress all js files
 
-    <?php echo file_get_contents('../../src/js/variables.js'); ?>
-    <?php echo file_get_contents('../../src/js/functions.js'); ?>
+    <?php echo minify(file_get_contents('../../src/js/variables.js')); ?>
+    <?php echo minify(file_get_contents('../../src/js/functions.js')); ?>
 
     <?php echo compressCodeIn('../../src/js/admin/delete/') ?>
 
     <?php echo compressCodeIn('../../src/js/admin/create/') ?>
 
     <?php echo compressCodeIn('../../src/js/admin/retrieve/') ?>
-    <?php echo file_get_contents('../../src/js/admin/main.js'); ?>
+    <?php echo minify(file_get_contents('../../src/js/admin/main.js')); ?>
 
     <?php //echo compressCodeIn('../../src/js/admin/create/') 
     ?>

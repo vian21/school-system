@@ -4,9 +4,10 @@ if (
     isset($_POST['id'])
 ) {
     include("../../../config.php");
+    include("../../../functions.php");
 
-    $type = $_POST['type'];
-    $id = $_POST['id'];
+    $type = sanitize($_POST['type']);
+    $id = sanitize($_POST['id']);
 
     $change = $connect->query("UPDATE schools SET type='$type' WHERE id=$id");
 

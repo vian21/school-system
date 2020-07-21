@@ -7,8 +7,10 @@ if (
 ) {
     if ($_POST['title'] != "") {
         include("../../../config.php");
-        $title = strip_tags(mysqli_real_escape_string($connect, $_POST['title']));
-        $id = $_POST['id'];
+        include("../../../functions.php");
+
+        $title = sanitize($_POST['title']);
+        $id = sanitize($_POST['id']);
         $change_title = $connect->query("UPDATE users SET type='$title' WHERE id=$id");
         if (!$change_title) {
             echo "ko";

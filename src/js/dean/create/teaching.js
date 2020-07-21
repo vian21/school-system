@@ -9,7 +9,12 @@ function addClass(teacher) {
                 </form></div>`
 
     $('body').append(form);
-    $("#subject").html("<option></option>" + subjectsGradeOptions())
+    $("#subject").html("<option></option>" + subjectsGradeOptions()).select2();
+
+    $("#cancel").click(function () {
+        event.preventDefault();
+        deleteModal();
+    })
 
     $("#add").click(function () {
         event.preventDefault();
@@ -18,12 +23,13 @@ function addClass(teacher) {
 
         $.ajax({
             method: 'post',
-            url: app_url+"modules/dean/create/teaching.php",
+            url: app_url + "modules/dean/create/teaching.php",
             data: {
                 teacher: teacher,
                 subject: subject,
                 start: start,
-                end: end
+                end: end,
+                period:currentPeriodId
 
             },
             success: function (response) {

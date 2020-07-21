@@ -9,11 +9,14 @@ if (
     && !empty($_POST['stream'])
 
 ) {
-    $school=$_POST['school'];
-    $grade = $_POST['grade'];
-    $stream = $_POST['stream'];
-
     include("../../config.php");
+    include("../../functions.php");
+
+
+    $school = sanitize($_POST['school']);
+    $grade = sanitize($_POST['grade']);
+    $stream = sanitize($_POST['stream']);
+
 
     $insert = $connect->query("INSERT INTO streams(grade,stream,school) VALUES($grade,'$stream',$school)");
 

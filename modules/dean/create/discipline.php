@@ -3,16 +3,18 @@ if (
     isset($_POST['student'])
 ) {
     include("../../config.php");
+    include("../../functions.php");
 
-    $student = $_POST['student'];
-    $type = $_POST['type'];
-    $marks = $_POST['marks'];
-    $educator = $_POST['educator'];
-    $comment = $_POST['comment'];
-    $period = $_POST['period'];
-    $period = $_POST['period'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+
+    $student = sanitize($_POST['student']);
+    $type = sanitize($_POST['type']);
+    $marks = sanitize($_POST['marks']);
+    $educator = sanitize($_POST['educator']);
+    $comment = sanitize($_POST['comment']);
+    $period = sanitize($_POST['period']);
+    $period = sanitize($_POST['period']);
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
 
     $date = date('Y-m-d');
 

@@ -1,9 +1,10 @@
 <?php
 
+include("../../config.php");
 include("../../functions.php");
 
-$year = $_POST['year'];
-$school = $_POST['school_id'];
+$year = sanitize($_POST['year']);
+$school = sanitize($_POST['school_id']);
 $students = array();
 
 $students_array = fetchAllStudents('all', $school);

@@ -2,7 +2,7 @@
 session_start();
 $id = $_SESSION['id'];
 if (!isset($_SESSION['id'])) {
-	header("location:../login.php");
+    header("location:../login.php");
 }
 ?>
 <!DOCTYPE html>
@@ -13,14 +13,15 @@ if (!isset($_SESSION['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php include '../../modules/config.php' ?>
+    <?php include '../../modules/functions.php' ?>
+
     <?php include '../../modules/staticFiles.php' ?>
     <link rel="stylesheet" href="<?php echo $app_url; ?>src/css/dean.css">
 
     <link rel="stylesheet" href="<?php echo $app_url; ?>src/css/select2.css">
-    
+
     <script src="<?php echo $app_url; ?>src/js/select2.js"></script>
 
-    <?php include '../../modules/functions.php' ?>
     <title>Admin</title>
 </head>
 
@@ -30,7 +31,7 @@ if (!isset($_SESSION['id'])) {
 
     <div id="workplace">
         <div id="desk">
-    <div id="table"></div>
+            <div id="table"></div>
         </div>
     </div>
     <!-- closing main div from sidebar.php -->
@@ -43,8 +44,8 @@ if (!isset($_SESSION['id'])) {
 
     //fetch and compress all js files
 
-    <?php echo file_get_contents('../../src/js/variables.js'); ?>
-    <?php echo file_get_contents('../../src/js/functions.js'); ?>
+    <?php echo minify(file_get_contents('../../src/js/variables.js')); ?>
+    <?php echo minify(file_get_contents('../../src/js/functions.js')); ?>
 
     <?php echo compressCodeIn('../../src/js/admin/delete/') ?>
 
@@ -52,9 +53,7 @@ if (!isset($_SESSION['id'])) {
     <?php echo compressCodeIn('../../src/js/admin/retrieve/') ?>
 
 
-    <?php echo file_get_contents('../../src/js/admin/transactions.js') ?>
-
-
+    <?php echo minify(file_get_contents('../../src/js/admin/transactions.js')) ?>
 </script>
 
 </html>

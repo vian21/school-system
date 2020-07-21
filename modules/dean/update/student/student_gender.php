@@ -8,9 +8,11 @@ if (
     is_numeric($_POST['id'])
 ) {
     include("../../../config.php");
+    include("../../../functions.php");
 
-    $id = $_POST['id'];
-    $gender = $_POST['gender'];
+
+    $id = sanitize($_POST['id']);
+    $gender = sanitize($_POST['gender']);
 
     $change_gender = $connect->query("UPDATE students SET gender=$gender WHERE id=$id");
 

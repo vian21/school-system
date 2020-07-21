@@ -50,7 +50,8 @@ function newPeriodForm() {
         }
 
         if (validStart == true && validEnd == true && validNumber == true) {
-            var name = periodTypes[periodType] + ' ' + periodNumber;
+
+            var name = periodTypes[periodType] + " " + periodNumber;
             $("#create").attr('disabled', true);
 
             var form = new FormData();

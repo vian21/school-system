@@ -1,5 +1,4 @@
 <?php
-include("../../functions.php");
 //Creating a student
 //if (isset($_GET['student'])) {
 if (
@@ -10,21 +9,22 @@ if (
 ) {
     //echo "ok";
     include("../../config.php");
+    include("../../functions.php");
 
-    $name = strip_tags(mysqli_real_escape_string($connect, $_POST['name']));
-    $gender = mysqli_real_escape_string($connect, $_POST['gender']);
-    $email = strip_tags(mysqli_real_escape_string($connect, $_POST['email']));
-    $tel = strip_tags(mysqli_real_escape_string($connect, $_POST['tel']));
-    $grade = mysqli_real_escape_string($connect, $_POST['grade']);
-    $DOB = $_POST['DOB'];
-    $year = mysqli_real_escape_string($connect, $_POST['year']);
-    $school = mysqli_real_escape_string($connect, $_POST['school']);
+    $name = sanitize($_POST['name']);
+    $gender = sanitize($_POST['gender']);
+    $email = sanitize($_POST['email']);
+    $tel = sanitize($_POST['tel']);
+    $grade = sanitize($_POST['grade']);
+    $DOB = sanitize($_POST['DOB']);
+    $year = sanitize($_POST['year']);
+    $school = sanitize($_POST['school']);
 
 
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
 
-    $uniqueID=uniqid('',true);
+    $uniqueID = uniqid('', true);
 
     $insert = $connect->query("INSERT INTO students(name,uniqueID,gender,email,tel,DOB,school) VALUES('$name','$uniqueID',$gender,'$email','$tel','$DOB',$school)");
 

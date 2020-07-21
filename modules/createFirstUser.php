@@ -11,7 +11,7 @@ function createAdmin($name, $email, $password)
 {
     include 'config.php';
 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $hashedPassword =  
 
     $uniqueID = uniqid('', true);
 
@@ -54,7 +54,7 @@ function createTeacher($name, $email, $password)
         echo "Failed to create teacher";
     }
 }
-createAdmin('admin', 'admin@gmail.com', '123');
+//createAdmin('admin', 'admin@gmail.com', '123');
 
 //createTeacher('patrick', 'teacher@gmail.com', '123');
 //createDean('admin', 'admin@gmail.com', '123');

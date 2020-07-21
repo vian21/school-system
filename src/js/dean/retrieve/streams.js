@@ -5,7 +5,9 @@ async function fetchStreams() {
         url: url,
         method: "post",
         data: {
-            school: schoolId
+            school: schoolId,
+            start:start,
+            end:end
         },
         success: function (response) {
             if (isJSON(response)) {

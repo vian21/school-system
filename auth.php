@@ -2,12 +2,13 @@
 //Authentication page
 if (isset($_POST['email']) and $_POST['password']) {
     include 'modules/config.php';
-    
-    $student=false;
+    include 'modules/functions.php';
+
+    $student = false;
 
     //Avoid SQL injection by escaping SQL characters sent
-    $email = mysqli_real_escape_string($connect, $_POST['email']);
-    $password = mysqli_real_escape_string($connect, $_POST['password']);
+    $email = sanitize($_POST['email']);
+    $password = sanitize($_POST['password']);
 
     //Fetch the user corresponding to the email received in an array
     $fetchUser = mysqli_fetch_array($connect->query("SELECT*FROM users where email='$email'  LIMIT 1"));

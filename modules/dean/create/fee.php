@@ -4,11 +4,11 @@ if (isset($_POST['school'])) {
     include("../../config.php");
     include("../../functions.php");
 
-    $school = $_POST['school'];
-    $item = $_POST['item'];
-    $amount = $_POST['amount'];
-    $type = $_POST['type'];
-    $to = $_POST['to'];
+    $school = sanitize($_POST['school']);
+    $item = sanitize($_POST['item']);
+    $amount = sanitize($_POST['amount']);
+    $type = sanitize($_POST['type']);
+    $to = sanitize($_POST['to']);
 
     $date = date('Y-m-d');
 

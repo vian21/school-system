@@ -17,11 +17,11 @@ if (
      * currentend current end of year
      * currentperiod : current academic period
      */
-    $school_id = $_POST['id'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+    $school_id = sanitize($_POST['id']);
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
 
-    $name = $_POST['name'];
+    $name = sanitize($_POST['name']);
 
     //if no period already exists
     if (!isset($_POST['currentstart'])) {
@@ -36,9 +36,9 @@ if (
 
     //creating a period within the same year
     if (isset($_POST['currentstart']) and $_POST['currentstart'] == $start) {
-        $currentstart = $_POST['currentstart'];
-        $currentend = $_POST['currentend'];
-        $currentperiod = $_POST['currentperiod'];
+        $currentstart = sanitize($_POST['currentstart']);
+        $currentend = sanitize($_POST['currentend']);
+        $currentperiod = sanitize($_POST['currentperiod']);
 
 
         $insert = $connect->query("INSERT INTO academic_periods(start,end,school,name) VALUES($start,$end,$school_id,'$name')");
@@ -50,6 +50,10 @@ if (
         }
 
         $id = $connect->insert_id;
+
+
+        //students
+
 
         //fetch all students enrolled in current period
         $query = $connect->query("SELECT * FROM academic_enrollments WHERE start=$currentstart and end=$currentend and year=$currentperiod");
@@ -68,9 +72,9 @@ if (
 
     //new academi year
     if (isset($_POST['currentstart']) and $_POST['currentstart'] !== $start) {
-        $currentstart = $_POST['currentstart'];
-        $currentend = $_POST['currentend'];
-        $currentperiod = $_POST['currentperiod'];
+        $currentstart = sanitize($_POST['currentstart']);
+        $currentend = sanitize($_POST['currentend']);
+        $currentperiod = sanitize($_POST['currentperiod']);
 
 
         $insert = $connect->query("INSERT INTO academic_periods(start,end,school,name) VALUES($start,$end,$school_id,'$name')");
@@ -83,6 +87,10 @@ if (
 
         $id = $connect->insert_id;
 
+
+        //students
+
+
         //fetch all students enrolled in current period
         $query = $connect->query("SELECT * FROM academic_enrollments WHERE start=$currentstart and end=$currentend and year=$currentperiod");
 
@@ -94,13 +102,13 @@ if (
                 $student = $row['student'];
                 $grade = $row['grade'];
 
-                $grade_info_query = mysqli_fetch_assoc($connect->query("SELECT * FROM streams where id=$grade"));
+                $grade_info_query = mysqli_fetch_assoc($connect->query("SELECT * FROM streams where id=$grade and school=$school_id"));
 
                 $currentStream = $grade_info_query['stream'];
 
                 $nextStream = (int) $grade_info_query['grade'] + 1;
 
-                $nextStreamId = mysqli_fetch_assoc($connect->query("SELECT * FROM streams where grade=$nextStream and stream='$currentStream'"));
+                $nextStreamId = mysqli_fetch_assoc($connect->query("SELECT * FROM streams where grade=$nextStream and stream='$currentStream and school=$school_id'"));
 
                 $gradeId = (int) $nextStreamId['id'];
 
@@ -115,6 +123,23 @@ if (
                 foreach ($compulsary_courses as $subject) {
                     $connect->query("INSERT INTO enrollment(student_id,subject,period,start,end) VALUES($student,$subject,$id,$start,$end)");
                 }
+            }
+        }
+
+        //teachers
+
+        //fetch all teachers
+        $teachers_query = $connect->query("SELECT * FROM teaches WHERE start=$currentstart and end=$currentend");
+
+        //only run when there is a list of students
+        if (mysqli_num_rows($teachers_query) !== 0) {
+
+            while ($row = mysqli_fetch_assoc($teachers_query)) {
+                //we now have a list of teachers to loop throgh
+                $teacher = $row['teacher'];
+                $subject = $row['subject'];
+
+                $insertTeaching = $connect->query("INSERT into teaches(subject,teacher,start,end,period) VALUES($subject,$teacher,$start,$end,$id)");
             }
         }
     }

@@ -24,6 +24,8 @@ function fetchName($level, $id)
         return returnValue($getName['name']);
     }
 }
+
+
 function fetchImage($level, $id)
 {
     include 'config.php';
@@ -270,7 +272,7 @@ function fetchStudentsTaking($subject_id, $period)
 //function to count students
 // 1 : count all students in the school
 // 2 : students in a certain grade
-function countStudents($in, $stream_id, $school)
+function countStudents($in, $stream_id, $school, $start = 0, $end = 0)
 {
     include 'config.php';
 
@@ -280,7 +282,7 @@ function countStudents($in, $stream_id, $school)
     }
 
     if ($in == 2) {
-        $count = mysqli_num_rows($connect->query("SELECT*FROM academic_enrollments WHERE grade=$stream_id and school=$school"));
+        $count = mysqli_num_rows($connect->query("SELECT*FROM academic_enrollments WHERE grade=$stream_id and school=$school and start=$start and end=$end"));
         return $count;
     }
 }
@@ -313,9 +315,10 @@ function fetchAllTeachers($school_id)
     }
     return returnValue($teachers);
 }
-function fetchAllStreams($school)
+function fetchAllStreams($school, $start = 0, $end = 0)
 {
     include 'config.php';
+
     $get_streams = $connect->query("SELECT*FROM streams where school=$school ORDER BY `streams`.`grade` DESC");
 
     $streams = array();
@@ -325,7 +328,7 @@ function fetchAllStreams($school)
         $stream_array['id'] = $column['id'];
         $stream_array['grade'] = $column['grade'];
         $stream_array['stream'] = $column['stream'];
-        $stream_array['students'] = countStudents(2, $column['id'], $school);
+        $stream_array['students'] = countStudents(2, $column['id'], $school, $start, $end);
         $streams[] = $stream_array;
     }
 
@@ -385,7 +388,6 @@ function fetchPeriodName($id)
 
 
     $getName = mysqli_fetch_assoc($connect->query("SELECT*FROM academic_periods where id=$id"));
-    //echo $getName['name'];
     return returnValue($getName['name']);
 }
 function getStudentInfo($id)
@@ -403,6 +405,9 @@ function getStudentInfo($id)
     return returnValue($student_info);
 }
 
+/**
+ * Fetch compulsary subjects taken by a specific grade
+ */
 function fetchCompulsarySubjects($grade, $school)
 {
     include 'config.php';
@@ -418,6 +423,9 @@ function fetchCompulsarySubjects($grade, $school)
     return $subjects;
 }
 
+/**
+ * Fetch information about a school
+ */
 function fetchSchoolInfo($id)
 {
     include 'config.php';
@@ -425,6 +433,15 @@ function fetchSchoolInfo($id)
     return returnValue($get_info);
 }
 
+/**
+ * Get school Id of a user
+ * 
+ * $level
+ * 
+ * 1 : staff user
+ * 
+ * 2 : student
+ */
 function getSchoolId($level, $userId)
 {
     include 'config.php';
@@ -440,17 +457,28 @@ function getSchoolId($level, $userId)
     return returnValue($get_info['school']);
 }
 
-
-function fetchStudentsIn($grade,$period=0)
+/**
+ * Fetch students in a grade
+ * 
+ * $student(optional) : fetch only one student -> this is used for generating one students report
+ * 
+ * $period(optional) : to fetch students enrolled in that period
+ */
+function fetchStudentsIn($grade, $school, $period = 0, $student = 0)
 {
     include 'config.php';
-    if($period==0){
-        $get_students = $connect->query("SELECT distinct student FROM academic_enrollments WHERE grade=$grade");
+    $query = "SELECT distinct student FROM academic_enrollments WHERE grade=$grade and school=$school ";
 
-    }else{
-        $get_students = $connect->query("SELECT distinct student FROM academic_enrollments WHERE grade=$grade and year=$period");
-
+    if ($period !== 0) {
+        $query .= "and year=$period";
     }
+
+    if ($student !== 0) {
+        $query .= "and student=$student";
+    }
+
+    $get_students = $connect->query($query);
+
     $students = array();
     while ($column = mysqli_fetch_assoc($get_students)) {
 
@@ -458,6 +486,10 @@ function fetchStudentsIn($grade,$period=0)
     }
     return returnValue($students);
 }
+
+/**
+ * Get hours learnt per week for a subject
+ */
 function getHours($subject)
 {
     include 'config.php';
@@ -465,6 +497,9 @@ function getHours($subject)
     return $get_hours['hours'];
 }
 
+/**
+ * Get Grade for a mark compared to grading scale in database
+ */
 function grade($school, $marks)
 {
     include 'config.php';
@@ -474,6 +509,9 @@ function grade($school, $marks)
     return returnValue($getGrade['grade']);
 }
 
+/**
+ * Get GPA for a given mark comparing it to the grading scale in database
+ */
 function GPA($school, $marks)
 {
     //rounding off to accomodate marks in between
@@ -502,7 +540,19 @@ function countFemaleStudents($school)
 
     return $number;
 }
+/**
+ *  Sanitize a given input for msql attacks and strip html and php tags
+ */
+function sanitize($input)
+{
+    include 'config.php';
 
+    return mysqli_real_escape_string($connect, htmlentities($input));
+}
+
+/**
+ * Compress and minify javascript or CSS code in a folder
+ */
 function compressCodeIn($folder)
 {
     $files = array_diff(scandir($folder), array('..', '.', 'index.php'));
@@ -514,9 +564,22 @@ function compressCodeIn($folder)
         $code .= "\n" . $sub_code;
         //$code.=$sub_code;
     }
+    return minify($code);
+}
+
+/**
+ * Minify code input
+ */
+function minify($code)
+{
+
+    $code = preg_replace("/\s*\n\s*/", "\n", $code);
     return $code;
 }
 
+/**
+ * Get balance of a student
+ */
 function getBalance($student)
 {
     include 'config.php';
@@ -528,6 +591,9 @@ function getBalance($student)
     return $sum;
 }
 
+/**
+ * Function to generate a table to be used on reports for the grading scale
+ */
 function gradingTable($school)
 {
 

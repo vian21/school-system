@@ -3,8 +3,9 @@
 //delete assessment
 if (isset($_POST['id'])) {
     include("../../config.php");
+    include("../../functions.php");
 
-    $id = $_POST['id'];
+    $id = sanitize($_POST['id']);
 
     $delete_assement = $connect->query("DELETE FROM assessments WHERE id=$id");
 

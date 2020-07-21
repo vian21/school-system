@@ -1,7 +1,7 @@
 <?php
 $id = $_SESSION['id'];
 if (!isset($_SESSION['id'])) {
-	header("location:../login.php");
+    header("location:../login.php");
 }
 ?>
 <!DOCTYPE html>
@@ -33,7 +33,7 @@ if (!isset($_SESSION['id'])) {
             <button id='addTerm'>+</button>
         </div>
         <div id="logout">
-        <a href="<?php echo $app_url; ?>modules/logout.php"><button>Logout</button></a>
+            <a href="<?php echo $app_url; ?>modules/logout.php"><button>Logout</button></a>
         </div>
     </div>
     <!-- Main div -->
@@ -62,19 +62,18 @@ if (!isset($_SESSION['id'])) {
     var userType = 1;
     var userId = <?php echo $id . ";\n"; ?>
     <?php
-    if(isset($_GET['admin'])){
-        $school_id = $_GET['school'];
-    }
-    else{
-        $school_id = getSchoolId(1,$id);
+    if (isset($_GET['admin'])) {
+        $school_id = sanitize($_GET['school']);
+    } else {
+        $school_id = getSchoolId(1, $id);
     }
     ?>
-    var schoolId=<?php echo $school_id;?>;
+    var schoolId = <?php echo $school_id; ?>;
 
 
     //fetch and compress all js files
-    <?php echo file_get_contents('./src/js/variables.js'); ?>
-    <?php echo file_get_contents('./src/js/functions.js'); ?>
+    <?php echo minify(file_get_contents('./src/js/variables.js')); ?>
+    <?php echo minify(file_get_contents('./src/js/functions.js')); ?>
 
     <?php echo compressCodeIn('./src/js/dean/runner/') ?>
     <?php echo compressCodeIn('./src/js/dean/tabs/') ?>

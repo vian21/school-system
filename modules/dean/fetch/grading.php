@@ -1,9 +1,9 @@
 <?php
 include '../../config.php';
-include '../../functions.php';
+include("../../functions.php");
 
 
-$school_id=$_POST['id'];
+$school_id = sanitize($_POST['id']);
 
 $get_grading = $connect->query("SELECT*FROM grading WHERE school_id=$school_id");
 $grading = array();

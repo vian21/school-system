@@ -1,11 +1,12 @@
 <?php
+include("../../config.php");
 include("../../functions.php");
 
-$school_id = $_POST['school_id'];
+$school_id = sanitize($_POST['school_id']);
 if (isset($_POST['start']) and isset($_POST['end'])) {
 
-    $start = $_POST['start'];
-    $end = $_POST['end'];
+    $start = sanitize($_POST['start']);
+    $end = sanitize($_POST['end']);
 }
 
 $teachers = array();
