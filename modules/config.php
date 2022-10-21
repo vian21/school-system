@@ -2,11 +2,11 @@
 //Configuration file
 
 //Database
-$connect = mysqli_connect('localhost', 'root', '', 'bridge');
+$connect = mysqli_connect('localhost', 'patrick', 'Pat31@root', 'bridge');
 
 //Configurations 
 $app_url = "http://localhost/bridge/";
-$app_name = "SMS";
+$app_name = "Bridge";
 $app_email = "igiranezapatrick31@gmail.com";
 $app_password = "pat31@solmail.com";
 

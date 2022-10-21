@@ -1,15 +1,18 @@
 <?php
-include("../../config.php");
-include("../../functions.php");
+include_once("../../config.php");
+include_once("../../functions.php");
 
 $school_id = sanitize($_POST['school_id']);
+
 if (isset($_POST['start']) and isset($_POST['end'])) {
 
     $start = sanitize($_POST['start']);
     $end = sanitize($_POST['end']);
 }
 
+//array to contain an associative array of teachers
 $teachers = array();
+
 $teachers_array = fetchAllTeachers($school_id);
 
 foreach ($teachers_array as $column) {

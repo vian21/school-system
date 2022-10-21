@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 20, 2020 at 09:04 PM
--- Server version: 10.1.34-MariaDB
--- PHP Version: 7.2.7
+-- Generation Time: Oct 20, 2022 at 09:46 PM
+-- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
+-- PHP Version: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -38,6 +37,14 @@ CREATE TABLE `academic_enrollments` (
   `school` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `academic_enrollments`
+--
+
+INSERT INTO `academic_enrollments` (`id`, `student`, `grade`, `year`, `start`, `end`, `school`) VALUES
+(1, 0, 1, 1, 2022, 2023, 2),
+(2, 0, 1, 1, 2022, 2023, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -51,6 +58,13 @@ CREATE TABLE `academic_periods` (
   `school` int(11) NOT NULL,
   `name` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `academic_periods`
+--
+
+INSERT INTO `academic_periods` (`id`, `start`, `end`, `school`, `name`) VALUES
+(1, 2022, 2023, 2, 'Semester 1');
 
 -- --------------------------------------------------------
 
@@ -176,16 +190,23 @@ CREATE TABLE `marks` (
 CREATE TABLE `schools` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `motto` text NOT NULL,
+  `motto` text DEFAULT NULL,
   `type` int(11) NOT NULL,
-  `email` text NOT NULL,
-  `image` text NOT NULL,
-  `website` text NOT NULL,
-  `last_paid` text NOT NULL,
-  `end` text NOT NULL,
-  `time` int(11) NOT NULL,
-  `reports` text NOT NULL
+  `email` text DEFAULT NULL,
+  `image` text DEFAULT NULL,
+  `website` text DEFAULT NULL,
+  `last_paid` text DEFAULT NULL,
+  `end` text DEFAULT NULL,
+  `time` int(11) DEFAULT NULL,
+  `reports` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `schools`
+--
+
+INSERT INTO `schools` (`id`, `name`, `motto`, `type`, `email`, `image`, `website`, `last_paid`, `end`, `time`, `reports`) VALUES
+(2, 'School 101', 'Teaching to suffer', 0, 'school.com', NULL, 'school.com', '2022-10-13', '2023-06-13', 8, '');
 
 -- --------------------------------------------------------
 
@@ -199,6 +220,13 @@ CREATE TABLE `streams` (
   `stream` text NOT NULL,
   `school` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `streams`
+--
+
+INSERT INTO `streams` (`id`, `grade`, `stream`, `school`) VALUES
+(1, 7, 'A', 2);
 
 -- --------------------------------------------------------
 
@@ -267,6 +295,13 @@ CREATE TABLE `transactions` (
   `end` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `school_id`, `school_name`, `date`, `period`, `end`) VALUES
+(1, 2, 'School 101', '2022-10-13', 8, '2023-06-13');
+
 -- --------------------------------------------------------
 
 --
@@ -277,15 +312,23 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
   `uniqueID` text NOT NULL,
-  `gender` int(11) NOT NULL,
+  `gender` int(11) NOT NULL DEFAULT 0,
   `email` text NOT NULL,
-  `tel` text NOT NULL,
-  `image` text NOT NULL,
+  `tel` text DEFAULT NULL,
+  `image` text DEFAULT NULL,
   `password` text NOT NULL,
   `type` text NOT NULL,
   `status` int(11) NOT NULL,
   `school` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `uniqueID`, `gender`, `email`, `tel`, `image`, `password`, `type`, `status`, `school`) VALUES
+(4, 'patrick', '', 0, 'patrick@gmail.com', NULL, NULL, '$2y$10$MY8.lHfykQNQF9xhUO6k1eniYfopr6LHo/qA84dqLCa/LFI57NRhm', '0', 1, 0),
+(5, 'admin', '', 0, 'admin@gmail.com', ' ', NULL, '$2y$10$OKO0YYOc3pT2gBCi5QkXseG6roS/S/POdXP5MCT.wca6.WmadwgEG', '1', 1, 2);
 
 --
 -- Indexes for dumped tables
@@ -395,13 +438,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `academic_enrollments`
 --
 ALTER TABLE `academic_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `academic_periods`
 --
 ALTER TABLE `academic_periods`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `accounting`
@@ -449,13 +492,13 @@ ALTER TABLE `marks`
 -- AUTO_INCREMENT for table `schools`
 --
 ALTER TABLE `schools`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `streams`
 --
 ALTER TABLE `streams`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `students`
@@ -479,13 +522,13 @@ ALTER TABLE `teaches`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

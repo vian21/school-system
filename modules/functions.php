@@ -127,6 +127,10 @@ function fetchTestsDone($subject_id, $school_id, $period)
         return returnValue($tests);
     }
 }
+/**
+ * returns the data inputed or an empty string
+ * (any) -> any | ""
+ */
 function returnValue($data)
 {
     if (!empty($data)) {
@@ -294,11 +298,15 @@ function countTeachers($school)
     $count = mysqli_num_rows($connect->query("SELECT*FROM users WHERE school=$school"));
     return $count;
 }
+
+/**
+ * fetch all staff users from a specific school
+ */
 function fetchAllTeachers($school_id)
 {
     include 'config.php';
-    // $get_teachers = $connect->query("SELECT*FROM users WHERE type=2");
-    $get_teachers = $connect->query("SELECT*FROM users where school=$school_id");
+
+    $get_teachers = $connect->query("SELECT*FROM users where school=$school_id and type =1 or type =2");
 
     $teachers = array();
 
@@ -313,6 +321,7 @@ function fetchAllTeachers($school_id)
         $teacher_array['type'] = $row['type'];
         $teachers[] = $teacher_array;
     }
+
     return returnValue($teachers);
 }
 function fetchAllStreams($school, $start = 0, $end = 0)
