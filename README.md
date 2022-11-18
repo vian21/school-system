@@ -10,5 +10,3 @@ This is a school management system written in php and much javascript for front 
 4) Insert other data such as academic periods. You will be able to create students, teachers, and assessments using your admin account.
 
 # Thank you 😇
-
-## For Jesus, I code
