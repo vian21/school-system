@@ -4,6 +4,7 @@ This is a school management system written in php and much javascript for front 
 
 **NOTE**: THE APP IS CURRENTLY BEING REWRITTEN IN NODEJS/TYPESCRIPT USING A CLEANER ARCHITECTURE FOR MAINTANABILITY AND PRODUCTION
 
+**Link**: https://vian21.github.io/project-0/
 ## Setting up
 
 1) Create a database
